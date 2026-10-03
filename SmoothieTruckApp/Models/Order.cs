@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SmoothieTruckApp.Models;
+public class Order
 {
     //only the values needed for subtotals added here
     public List<OrderLine> Lines { get; set; } = new();
