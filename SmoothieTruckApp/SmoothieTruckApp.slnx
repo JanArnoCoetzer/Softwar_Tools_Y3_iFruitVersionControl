@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../SmoothieTruckApp.Tests/SmoothieTruckApp.Tests.csproj" Id="7d4ea316-4907-4aad-a4ac-5e783785ef7e" />
   <Project Path="SmoothieTruckApp.csproj" />
 </Solution>
