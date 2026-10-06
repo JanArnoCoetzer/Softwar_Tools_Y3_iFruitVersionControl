@@ -83,6 +83,16 @@ namespace SmoothieTruckApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap iblendfinal {
+            get {
+                object obj = ResourceManager.GetObject("iblendfinal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Menu_Hover {
             get {
                 object obj = ResourceManager.GetObject("Menu Hover", resourceCulture);

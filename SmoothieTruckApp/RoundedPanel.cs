@@ -3,7 +3,6 @@ using System.Drawing.Drawing2D;
 
 namespace SmoothieTruckApp
 {
-
     public class RoundedPanel : Panel
     {
         int _radius = 20;
@@ -11,16 +10,17 @@ namespace SmoothieTruckApp
         Color _borderColor = Color.FromArgb(229, 231, 235);
         int _borderSize = 1;
         bool _dashed;
+        bool _useGradient;
+        Color _gradStart = Color.FromArgb(124, 58, 237);
+        Color _gradEnd = Color.FromArgb(6, 182, 212);
 
         [Category("Rounded"), DefaultValue(20)]
         public int CornerRadius { get => _radius; set { _radius = value; Invalidate(); } }
 
-        [Category("Rounded")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Category("Rounded"), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public Color FillColor { get => _fill; set { _fill = value; Invalidate(); } }
 
-        [Category("Rounded")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Category("Rounded"), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public Color BorderColor { get => _borderColor; set { _borderColor = value; Invalidate(); } }
 
         [Category("Rounded"), DefaultValue(1)]
@@ -29,12 +29,21 @@ namespace SmoothieTruckApp
         [Category("Rounded"), DefaultValue(false)]
         public bool Dashed { get => _dashed; set { _dashed = value; Invalidate(); } }
 
+        [Category("Rounded"), DefaultValue(false)]
+        public bool UseGradient { get => _useGradient; set { _useGradient = value; Invalidate(); } }
+
+        [Category("Rounded"), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public Color GradientStart { get => _gradStart; set { _gradStart = value; Invalidate(); } }
+
+        [Category("Rounded"), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public Color GradientEnd { get => _gradEnd; set { _gradEnd = value; Invalidate(); } }
+
         public RoundedPanel()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint |
                      ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw |
                      ControlStyles.SupportsTransparentBackColor, true);
-            BackColor = Color.Transparent;   // lets the parent's colour show in the corners
+            BackColor = Color.Transparent;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -47,8 +56,17 @@ namespace SmoothieTruckApp
             var rect = new RectangleF(half, half, Width - _borderSize, Height - _borderSize);
 
             using var path = RoundedRect(rect, _radius);
-            using var fill = new SolidBrush(_fill);
-            g.FillPath(fill, path);
+
+            if (_useGradient && rect.Width > 0 && rect.Height > 0)
+            {
+                using var gb = new LinearGradientBrush(rect, _gradStart, _gradEnd, 45f);
+                g.FillPath(gb, path);
+            }
+            else
+            {
+                using var fill = new SolidBrush(_fill);
+                g.FillPath(fill, path);
+            }
 
             if (_borderSize > 0)
             {

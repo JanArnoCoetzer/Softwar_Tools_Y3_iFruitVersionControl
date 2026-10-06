@@ -19,6 +19,13 @@ namespace SmoothieTruckApp.Front_End
 
             // Start with Home selected
             NavButton_Click(btnHome, EventArgs.Empty);
+
+            void CenterCard() =>
+            pnlHome.Location = new Point((pnlContent.Width - pnlHome.Width) / 2,
+                                 (pnlContent.Height - pnlHome.Height) / 2);
+
+            pnlContent.Resize += (s, e) => CenterCard();
+            CenterCard();
         }
 
         private void lblClock_Click(object sender, EventArgs e)
@@ -70,6 +77,16 @@ namespace SmoothieTruckApp.Front_End
         {
             var b = (Button)sender;
             b.Image = GetIcon(b, b == activeButton);   // stays coloured only if it's the active one
+        }
+
+        private void Logo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblBrand_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
