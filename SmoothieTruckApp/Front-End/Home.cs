@@ -13,6 +13,11 @@ namespace SmoothieTruckApp.Front_End
 {
     public partial class Home : Form
     {
+        // Pages are created once and reused, so nothing is lost when switching tabs
+        private readonly HomePage homePage = new();
+        private readonly MenuPage menuPage = new();
+        private readonly OrdersPage ordersPage = new();
+
         // Remembers which nav button is currently selected
         private Button? activeButton;
 
@@ -51,6 +56,14 @@ namespace SmoothieTruckApp.Front_End
 
         }
 
+        // Puts a page into the content area
+        private void ShowPage(UserControl page)
+        {
+            pnlContent.Controls.Clear();     // removes the old page without destroying it
+            page.Dock = DockStyle.Fill;
+            pnlContent.Controls.Add(page);
+        }
+
         // Returns the coloured (hover) icon or the normal icon for a given button
         private Image GetIcon(Button b, bool coloured)
         {
@@ -73,6 +86,11 @@ namespace SmoothieTruckApp.Front_End
             }
 
             pnlAccent.Top = activeButton.Top + (activeButton.Height - pnlAccent.Height) / 2;
+
+            // Swap the page shown in the content area
+            if (activeButton == btnHome) ShowPage(homePage);
+            else if (activeButton == btnMenu) ShowPage(menuPage);
+            else ShowPage(ordersPage);
         }
 
         private void NavButton_MouseEnter(object sender, EventArgs e)

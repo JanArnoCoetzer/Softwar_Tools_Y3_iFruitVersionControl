@@ -13,6 +13,7 @@ namespace SmoothieTruckApp
         bool _useGradient;
         Color _gradStart = Color.FromArgb(124, 58, 237);
         Color _gradEnd = Color.FromArgb(6, 182, 212);
+        int _shadowSize;
 
         [Category("Rounded"), DefaultValue(20)]
         public int CornerRadius { get => _radius; set { _radius = value; Invalidate(); } }
@@ -38,6 +39,10 @@ namespace SmoothieTruckApp
         [Category("Rounded"), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public Color GradientEnd { get => _gradEnd; set { _gradEnd = value; Invalidate(); } }
 
+        // Margin reserved around the card for the shadow. 0 = no shadow.
+        [Category("Rounded"), DefaultValue(0)]
+        public int ShadowSize { get => _shadowSize; set { _shadowSize = Math.Max(0, value); Invalidate(); } }
+
         public RoundedPanel()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint |
@@ -53,13 +58,31 @@ namespace SmoothieTruckApp
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
             float half = _borderSize / 2f;
-            var rect = new RectangleF(half, half, Width - _borderSize, Height - _borderSize);
+            var card = new RectangleF(_shadowSize + half, _shadowSize + half,
+                                      Width - 2 * _shadowSize - _borderSize,
+                                      Height - 2 * _shadowSize - _borderSize);
+            if (card.Width <= 0 || card.Height <= 0) return;
 
-            using var path = RoundedRect(rect, _radius);
-
-            if (_useGradient && rect.Width > 0 && rect.Height > 0)
+            // Soft shadow: stacked, faint rounded rectangles that grow outwards
+            if (_shadowSize > 0)
             {
-                using var gb = new LinearGradientBrush(rect, _gradStart, _gradEnd, 45f);
+                int offset = Math.Max(1, _shadowSize / 4);      // pushes the shadow slightly downwards
+                int layers = Math.Max(1, _shadowSize - offset);
+                int alpha = Math.Max(1, 70 / layers);
+                using var shadowBrush = new SolidBrush(Color.FromArgb(alpha, 40, 30, 80));
+                for (int i = layers; i >= 1; i--)
+                {
+                    var r = new RectangleF(card.X - i, card.Y - i + offset, card.Width + 2 * i, card.Height + 2 * i);
+                    using var sp = RoundedRect(r, _radius + i);
+                    g.FillPath(shadowBrush, sp);
+                }
+            }
+
+            using var path = RoundedRect(card, _radius);
+
+            if (_useGradient)
+            {
+                using var gb = new LinearGradientBrush(card, _gradStart, _gradEnd, 45f);
                 g.FillPath(gb, path);
             }
             else

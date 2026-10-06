@@ -37,26 +37,19 @@
             btnHome = new Button();
             btnOrders = new Button();
             TopPanel = new Panel();
+            pnlAdmin = new RoundedPanel();
+            lblAdminLtr = new Label();
             lblBrand = new GradientLabel();
-            roundedPanel2 = new RoundedPanel();
-            label1 = new Label();
             lblAdmin = new Label();
             lblClock = new Label();
             lblA = new Label();
             pnlContent = new Panel();
-            pnlHome = new RoundedPanel();
             timer1 = new System.Windows.Forms.Timer(components);
-            roundedPanel1 = new RoundedPanel();
-            Logo = new PictureBox();
             panel1.SuspendLayout();
             roundedPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             TopPanel.SuspendLayout();
-            roundedPanel2.SuspendLayout();
-            pnlContent.SuspendLayout();
-            pnlHome.SuspendLayout();
-            roundedPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)Logo).BeginInit();
+            pnlAdmin.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -170,8 +163,8 @@
             // 
             // TopPanel
             // 
+            TopPanel.Controls.Add(pnlAdmin);
             TopPanel.Controls.Add(lblBrand);
-            TopPanel.Controls.Add(roundedPanel2);
             TopPanel.Controls.Add(lblAdmin);
             TopPanel.Controls.Add(lblClock);
             TopPanel.Dock = DockStyle.Top;
@@ -179,6 +172,33 @@
             TopPanel.Name = "TopPanel";
             TopPanel.Size = new Size(1039, 56);
             TopPanel.TabIndex = 1;
+            // 
+            // pnlAdmin
+            // 
+            pnlAdmin.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            pnlAdmin.BackColor = Color.Transparent;
+            pnlAdmin.BorderColor = Color.FromArgb(229, 231, 235);
+            pnlAdmin.Controls.Add(lblAdminLtr);
+            pnlAdmin.CornerRadius = 14;
+            pnlAdmin.FillColor = Color.White;
+            pnlAdmin.GradientEnd = Color.FromArgb(6, 182, 212);
+            pnlAdmin.GradientStart = Color.FromArgb(124, 58, 237);
+            pnlAdmin.Location = new Point(929, 14);
+            pnlAdmin.Name = "pnlAdmin";
+            pnlAdmin.Size = new Size(28, 28);
+            pnlAdmin.TabIndex = 6;
+            pnlAdmin.UseGradient = true;
+            // 
+            // lblAdminLtr
+            // 
+            lblAdminLtr.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblAdminLtr.AutoSize = true;
+            lblAdminLtr.ForeColor = Color.White;
+            lblAdminLtr.Location = new Point(7, 6);
+            lblAdminLtr.Name = "lblAdminLtr";
+            lblAdminLtr.Size = new Size(15, 15);
+            lblAdminLtr.TabIndex = 0;
+            lblAdminLtr.Text = "A";
             // 
             // lblBrand
             // 
@@ -192,31 +212,6 @@
             lblBrand.TabIndex = 5;
             lblBrand.Text = "iBlendit";
             lblBrand.Click += lblBrand_Click;
-            // 
-            // roundedPanel2
-            // 
-            roundedPanel2.BackColor = Color.Transparent;
-            roundedPanel2.BorderColor = Color.FromArgb(229, 231, 235);
-            roundedPanel2.Controls.Add(label1);
-            roundedPanel2.CornerRadius = 14;
-            roundedPanel2.FillColor = Color.White;
-            roundedPanel2.GradientEnd = Color.FromArgb(6, 182, 212);
-            roundedPanel2.GradientStart = Color.FromArgb(124, 58, 237);
-            roundedPanel2.Location = new Point(929, 12);
-            roundedPanel2.Name = "roundedPanel2";
-            roundedPanel2.Size = new Size(28, 28);
-            roundedPanel2.TabIndex = 4;
-            roundedPanel2.UseGradient = true;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(7, 6);
-            label1.Name = "label1";
-            label1.Size = new Size(15, 15);
-            label1.TabIndex = 0;
-            label1.Text = "A";
             // 
             // lblAdmin
             // 
@@ -253,61 +248,17 @@
             // pnlContent
             // 
             pnlContent.BackColor = Color.FromArgb(244, 245, 247);
-            pnlContent.Controls.Add(pnlHome);
             pnlContent.Dock = DockStyle.Fill;
             pnlContent.Location = new Point(56, 56);
             pnlContent.Name = "pnlContent";
             pnlContent.Size = new Size(983, 541);
             pnlContent.TabIndex = 2;
             // 
-            // pnlHome
-            // 
-            pnlHome.Anchor = AnchorStyles.None;
-            pnlHome.BackColor = Color.Transparent;
-            pnlHome.BorderColor = Color.FromArgb(229, 231, 235);
-            pnlHome.Controls.Add(roundedPanel1);
-            pnlHome.CornerRadius = 24;
-            pnlHome.FillColor = Color.White;
-            pnlHome.GradientEnd = Color.FromArgb(6, 182, 212);
-            pnlHome.GradientStart = Color.FromArgb(124, 58, 237);
-            pnlHome.Location = new Point(296, 90);
-            pnlHome.Name = "pnlHome";
-            pnlHome.Size = new Size(390, 360);
-            pnlHome.TabIndex = 1;
-            // 
             // timer1
             // 
             timer1.Enabled = true;
             timer1.Interval = 1000;
             timer1.Tick += timer1_Tick;
-            // 
-            // roundedPanel1
-            // 
-            roundedPanel1.BackColor = Color.Transparent;
-            roundedPanel1.BorderColor = Color.FromArgb(229, 231, 235);
-            roundedPanel1.BorderSize = 0;
-            roundedPanel1.Controls.Add(Logo);
-            roundedPanel1.CornerRadius = 18;
-            roundedPanel1.FillColor = Color.White;
-            roundedPanel1.GradientEnd = Color.FromArgb(6, 182, 212);
-            roundedPanel1.GradientStart = Color.FromArgb(124, 58, 237);
-            roundedPanel1.Location = new Point(162, 40);
-            roundedPanel1.Name = "roundedPanel1";
-            roundedPanel1.Padding = new Padding(12);
-            roundedPanel1.Size = new Size(66, 66);
-            roundedPanel1.TabIndex = 1;
-            roundedPanel1.UseGradient = true;
-            // 
-            // Logo
-            // 
-            Logo.Dock = DockStyle.Fill;
-            Logo.Image = Properties.Resources.iblendfinal;
-            Logo.Location = new Point(12, 12);
-            Logo.Name = "Logo";
-            Logo.Size = new Size(42, 42);
-            Logo.SizeMode = PictureBoxSizeMode.Zoom;
-            Logo.TabIndex = 0;
-            Logo.TabStop = false;
             // 
             // Home
             // 
@@ -324,12 +275,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             TopPanel.ResumeLayout(false);
             TopPanel.PerformLayout();
-            roundedPanel2.ResumeLayout(false);
-            roundedPanel2.PerformLayout();
-            pnlContent.ResumeLayout(false);
-            pnlHome.ResumeLayout(false);
-            roundedPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)Logo).EndInit();
+            pnlAdmin.ResumeLayout(false);
+            pnlAdmin.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -347,13 +294,10 @@
         private Panel pnlAccent;
         private Button btnMenu;
         private Button btnOrders;
-        private RoundedPanel roundedPanel2;
-        private Label label1;
         private RoundedPanel roundedPanel3;
         private PictureBox pictureBox1;
         private GradientLabel lblBrand;
-        private RoundedPanel pnlHome;
-        private RoundedPanel roundedPanel1;
-        private PictureBox Logo;
+        private RoundedPanel pnlAdmin;
+        private Label lblAdminLtr;
     }
 }
