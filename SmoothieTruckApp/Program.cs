@@ -16,8 +16,8 @@ namespace SmoothieTruckApp
             ApplicationConfiguration.Initialize();
             Application.Run(new Home());
 
-            //expected result should be Success - DataBaseContext.TableDefinitions.DbResultEnum.Success;
-            //DataBaseContext.DataBaseSetup.InitializeDatabase();
+
+           
         }
     }
 } 

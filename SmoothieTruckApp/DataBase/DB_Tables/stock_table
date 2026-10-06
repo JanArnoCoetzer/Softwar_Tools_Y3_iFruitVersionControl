@@ -1,1 +1,7 @@
 ﻿stock_index PK:INTEGER | name:STRING | quantity:DECIMAL | unit:STRING
+1|Strawberries|5.50|kg
+2|Strawberries|5.50|kg
+2|Test|1|kg
+4|Strawberries|5.50|kg
+5|Strawberries|5.50|kg
+6|Strawberries|5.50|kg

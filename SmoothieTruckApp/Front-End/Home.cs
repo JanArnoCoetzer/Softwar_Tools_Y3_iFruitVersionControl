@@ -1,4 +1,5 @@
 ﻿using SmoothieTruckApp.DataBaseContext;
+using SmoothieTruckApp.DataBaseContext.TableDefinitions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +21,19 @@ namespace SmoothieTruckApp.Front_End
             InitializeComponent();
 
             NavButton_Click(btnHome, EventArgs.Empty);
+            
+            //expected result should be Success - DataBaseContext.TableDefinitions.DbResultEnum.Success;
+            //DataBaseContext.DataBaseSetup.InitializeDatabase();
+            /*
+            RowValue[] testdata = new RowValue[]
+            {
+             new RowValue(DataType.STRING, "Test"),
+             new RowValue(DataType.DECIMAL, "1"),
+             new RowValue(DataType.STRING,"kg")
+            };
+
+            Debug.WriteLine(DataBase.add_new_row_at_index("stock_table",testdata,2));
+            */
         }
 
         private void lblClock_Click(object sender, EventArgs e)
