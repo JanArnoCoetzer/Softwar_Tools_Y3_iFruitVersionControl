@@ -1,7 +1,9 @@
-﻿using System;
+﻿using SmoothieTruckApp.DataBaseContext;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -17,15 +19,7 @@ namespace SmoothieTruckApp.Front_End
         {
             InitializeComponent();
 
-            // Start with Home selected
             NavButton_Click(btnHome, EventArgs.Empty);
-
-            void CenterCard() =>
-            pnlHome.Location = new Point((pnlContent.Width - pnlHome.Width) / 2,
-                                 (pnlContent.Height - pnlHome.Height) / 2);
-
-            pnlContent.Resize += (s, e) => CenterCard();
-            CenterCard();
         }
 
         private void lblClock_Click(object sender, EventArgs e)

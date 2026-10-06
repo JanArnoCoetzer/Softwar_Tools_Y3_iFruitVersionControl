@@ -1,0 +1,1 @@
+﻿item_index PK:INTEGER | name:STRING | price:DECIMAL

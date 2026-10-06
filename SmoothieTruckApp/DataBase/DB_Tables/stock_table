@@ -1,0 +1,1 @@
+﻿stock_index PK:INTEGER | name:STRING | quantity:DECIMAL | unit:STRING

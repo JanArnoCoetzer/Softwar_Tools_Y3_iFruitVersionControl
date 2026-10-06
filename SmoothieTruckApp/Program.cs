@@ -1,4 +1,7 @@
 using SmoothieTruckApp.Front_End;
+using SmoothieTruckApp.DataBaseContext;
+using SmoothieTruckApp.DataBaseContext.TableDefinitions;
+using System.Diagnostics;
 
 namespace SmoothieTruckApp
 {
@@ -10,10 +13,11 @@ namespace SmoothieTruckApp
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new Home());
+
+            //expected result should be Success - DataBaseContext.TableDefinitions.DbResultEnum.Success;
+            //DataBaseContext.DataBaseSetup.InitializeDatabase();
         }
     }
-}
+} 

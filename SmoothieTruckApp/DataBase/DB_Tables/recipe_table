@@ -1,0 +1,1 @@
+﻿recipe_index PK:INTEGER | item_index FK:INTEGER | stock_index FK:INTEGER | quantity_required:DECIMAL

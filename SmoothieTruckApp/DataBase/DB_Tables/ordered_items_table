@@ -1,0 +1,1 @@
+﻿order_index PK:INTEGER | item_index FK:INTEGER | quantity:INTEGER
