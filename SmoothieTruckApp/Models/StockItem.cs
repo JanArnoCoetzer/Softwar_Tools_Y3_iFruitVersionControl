@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 namespace SmoothieTruckApp.Models;
-public class MenuItem
+public class StockItem
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public decimal Price { get; set; }
+    public decimal Quantity { get; set; }
+    public string Unit { get; set; } = string.Empty;
 }
