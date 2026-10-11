@@ -46,5 +46,12 @@ namespace SmoothieTruckApp.Front_End
             btnRemove.Enabled = currentOrder.ItemCount > 0;
             btnClearAll.Enabled = currentOrder.ItemCount > 0;
         }
+
+        //this label is the text in the order screen all you rly need to have for it is just to lblEmpty.Visible = false
+        //when an item is added and the flowOrder will be uncovered by the text and that will have the items in it vise versa when the list is empty just make the lable visibe again
+        private void lblEmpty_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
