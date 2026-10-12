@@ -41,4 +41,21 @@ public class Order
     {
         Lines.Clear();
     }
+
+    public string GetReceipt()
+    {
+        var receipt = new StringBuilder();
+
+        foreach (OrderLine line in Lines)
+        {
+            receipt.AppendLine($"{line.Quantity} × {line.Item.Name}   ${line.LineTotal:0.00}");
+        }
+
+        receipt.AppendLine();
+        receipt.AppendLine($"Subtotal: ${Subtotal:0.00}");
+        receipt.AppendLine($"Tax (8%): ${Tax:0.00}");
+        receipt.Append($"Total: ${Total:0.00}");
+
+        return receipt.ToString();
+    }
 }

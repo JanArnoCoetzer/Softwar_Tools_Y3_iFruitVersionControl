@@ -1,4 +1,5 @@
 ﻿using SmoothieTruckApp.Models;
+using MenuItem = SmoothieTruckApp.Models.MenuItem;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,54 @@ namespace SmoothieTruckApp.Front_End
 
             btnRemove.Click += btnRemove_Click;
             btnClearAll.Click += btnClearAll_Click;
+            btnAddOrder.Click += btnAddOrder_Click;
+
+            ShowMenu(new List<MenuItem>
+            {
+                new MenuItem { Id = 1, Name = "Tropical Sunrise", Price = 9.50m },
+                new MenuItem { Id = 2, Name = "Berry Blast", Price = 8.75m },
+                new MenuItem { Id = 3, Name = "Green Machine", Price = 10.00m },
+                new MenuItem { Id = 4, Name = "Mango Tango", Price = 9.00m }
+            });
+
+            RefreshOrder();
+        }
+
+        private void ShowMenu(List<MenuItem> items)
+        {
+            FlowMenu.Controls.Clear();
+
+            foreach (MenuItem item in items)
+            {
+                var card = new ItemCard
+                {
+                    Margin = new Padding(0, 0, 16, 16)
+                };
+
+                card.SetItem(item);
+                card.AddClicked += ItemCard_AddClicked;
+                FlowMenu.Controls.Add(card);
+            }
+
+            lblBlends.Text = $"{items.Count} Blends";
+        }
+
+        private void ItemCard_AddClicked(object? sender, EventArgs e)
+        {
+            if (sender is ItemCard card && card.Item != null)
+            {
+                currentOrder.AddItem(card.Item);
+                RefreshOrder();
+            }
+        }
+
+        private void btnAddOrder_Click(object? sender, EventArgs e)
+        {
+            if (currentOrder.Lines.Count == 0) return;
+
+            MessageBox.Show(currentOrder.GetReceipt(), "Receipt", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            currentOrder.Clear();
             RefreshOrder();
         }
 
@@ -45,6 +94,45 @@ namespace SmoothieTruckApp.Front_End
             lblEmpty.Visible = currentOrder.ItemCount == 0;
             btnRemove.Enabled = currentOrder.ItemCount > 0;
             btnClearAll.Enabled = currentOrder.ItemCount > 0;
+            btnAddOrder.Enabled = currentOrder.ItemCount > 0;
+            ShowOrderLines();
+        }
+
+        private void ShowOrderLines()
+        {
+            foreach (Panel oldRow in flowOrder.Controls.OfType<Panel>().ToList())
+            {
+                flowOrder.Controls.Remove(oldRow);
+                oldRow.Dispose();
+            }
+
+            foreach (OrderLine line in currentOrder.Lines)
+            {
+                var row = new Panel
+                {
+                    Width = flowOrder.ClientSize.Width - 6,
+                    Height = 28
+                };
+
+                var lblLineName = new Label
+                {
+                    Text = $"{line.Quantity} × {line.Item.Name}",
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleLeft
+                };
+
+                var lblLinePrice = new Label
+                {
+                    Text = $"${line.LineTotal:0.00}",
+                    Dock = DockStyle.Right,
+                    Width = 60,
+                    TextAlign = ContentAlignment.MiddleRight
+                };
+
+                row.Controls.Add(lblLineName);
+                row.Controls.Add(lblLinePrice);
+                flowOrder.Controls.Add(row);
+            }
         }
 
         //this label is the text in the order screen all you rly need to have for it is just to lblEmpty.Visible = false

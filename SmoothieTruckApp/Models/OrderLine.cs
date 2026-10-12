@@ -7,4 +7,5 @@ public class OrderLine
 {
     public MenuItem Item { get; set; } = null!;
     public int Quantity { get; set; } = 1;
+    public decimal LineTotal => Item.Price * Quantity;
 }
