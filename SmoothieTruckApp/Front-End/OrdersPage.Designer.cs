@@ -36,7 +36,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(244, 245, 247);
             Name = "OrdersPage";
-            Size = new Size(515, 544);
+            Size = new Size(878, 543);
             ResumeLayout(false);
         }
 

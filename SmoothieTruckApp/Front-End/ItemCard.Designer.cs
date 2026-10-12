@@ -29,16 +29,15 @@
         private void InitializeComponent()
         {
             pnlCard = new RoundedPanel();
-            picPhoto = new PictureBox();
-            lblTag = new Label();
-            lblName = new Label();
-            lblIngredients = new Label();
-            lblPrice = new Label();
             pnlAdd = new RoundedPanel();
             btnAdd = new Button();
+            lblPrice = new Label();
+            lblIngredients = new Label();
+            lblName = new Label();
+            picPhoto = new PictureBox();
             pnlCard.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picPhoto).BeginInit();
             pnlAdd.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picPhoto).BeginInit();
             SuspendLayout();
             // 
             // pnlCard
@@ -49,7 +48,6 @@
             pnlCard.Controls.Add(lblPrice);
             pnlCard.Controls.Add(lblIngredients);
             pnlCard.Controls.Add(lblName);
-            pnlCard.Controls.Add(lblTag);
             pnlCard.Controls.Add(picPhoto);
             pnlCard.CornerRadius = 14;
             pnlCard.Dock = DockStyle.Fill;
@@ -60,60 +58,6 @@
             pnlCard.Name = "pnlCard";
             pnlCard.Size = new Size(320, 290);
             pnlCard.TabIndex = 0;
-            // 
-            // picPhoto
-            // 
-            picPhoto.Dock = DockStyle.Top;
-            picPhoto.Location = new Point(0, 0);
-            picPhoto.Name = "picPhoto";
-            picPhoto.Size = new Size(320, 150);
-            picPhoto.SizeMode = PictureBoxSizeMode.Zoom;
-            picPhoto.TabIndex = 0;
-            picPhoto.TabStop = false;
-            // 
-            // lblTag
-            // 
-            lblTag.AutoSize = true;
-            lblTag.BackColor = Color.Blue;
-            lblTag.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTag.ForeColor = Color.White;
-            lblTag.Location = new Point(15, 14);
-            lblTag.Name = "lblTag";
-            lblTag.Size = new Size(53, 15);
-            lblTag.TabIndex = 1;
-            lblTag.Text = "ItemTag";
-            // 
-            // lblName
-            // 
-            lblName.AutoSize = true;
-            lblName.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblName.Location = new Point(14, 163);
-            lblName.Name = "lblName";
-            lblName.Size = new Size(72, 17);
-            lblName.TabIndex = 2;
-            lblName.Text = "ItemName";
-            // 
-            // lblIngredients
-            // 
-            lblIngredients.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblIngredients.ForeColor = SystemColors.GrayText;
-            lblIngredients.Location = new Point(14, 191);
-            lblIngredients.Name = "lblIngredients";
-            lblIngredients.Size = new Size(97, 35);
-            lblIngredients.TabIndex = 3;
-            lblIngredients.Text = "Item Ingredients";
-            // 
-            // lblPrice
-            // 
-            lblPrice.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            lblPrice.AutoSize = true;
-            lblPrice.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblPrice.ForeColor = Color.Purple;
-            lblPrice.Location = new Point(14, 255);
-            lblPrice.Name = "lblPrice";
-            lblPrice.Size = new Size(55, 23);
-            lblPrice.TabIndex = 4;
-            lblPrice.Text = "$0.00";
             // 
             // pnlAdd
             // 
@@ -149,6 +93,48 @@
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
             // 
+            // lblPrice
+            // 
+            lblPrice.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblPrice.AutoSize = true;
+            lblPrice.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPrice.ForeColor = Color.Purple;
+            lblPrice.Location = new Point(14, 255);
+            lblPrice.Name = "lblPrice";
+            lblPrice.Size = new Size(55, 23);
+            lblPrice.TabIndex = 4;
+            lblPrice.Text = "$0.00";
+            // 
+            // lblIngredients
+            // 
+            lblIngredients.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblIngredients.ForeColor = SystemColors.GrayText;
+            lblIngredients.Location = new Point(14, 191);
+            lblIngredients.Name = "lblIngredients";
+            lblIngredients.Size = new Size(97, 35);
+            lblIngredients.TabIndex = 3;
+            lblIngredients.Text = "Item Ingredients";
+            // 
+            // lblName
+            // 
+            lblName.AutoSize = true;
+            lblName.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblName.Location = new Point(14, 163);
+            lblName.Name = "lblName";
+            lblName.Size = new Size(72, 17);
+            lblName.TabIndex = 2;
+            lblName.Text = "ItemName";
+            // 
+            // picPhoto
+            // 
+            picPhoto.Dock = DockStyle.Top;
+            picPhoto.Location = new Point(0, 0);
+            picPhoto.Name = "picPhoto";
+            picPhoto.Size = new Size(320, 150);
+            picPhoto.SizeMode = PictureBoxSizeMode.Zoom;
+            picPhoto.TabIndex = 0;
+            picPhoto.TabStop = false;
+            // 
             // ItemCard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -158,15 +144,14 @@
             Size = new Size(320, 290);
             pnlCard.ResumeLayout(false);
             pnlCard.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)picPhoto).EndInit();
             pnlAdd.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picPhoto).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private RoundedPanel pnlCard;
-        private Label lblTag;
         private PictureBox picPhoto;
         private Label lblName;
         private Label lblPrice;
