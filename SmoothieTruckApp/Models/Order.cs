@@ -65,6 +65,9 @@ public class Order
     {
         var receipt = new StringBuilder();
 
+        receipt.AppendLine($"Ticket #{Id}");
+        receipt.AppendLine();
+
         foreach (OrderLine line in Lines)
         {
             receipt.AppendLine($"{line.Quantity} × {line.Item.Name}   ${line.LineTotal:0.00}");

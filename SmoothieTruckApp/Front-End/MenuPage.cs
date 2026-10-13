@@ -12,7 +12,7 @@ namespace SmoothieTruckApp.Front_End
 {
     public partial class MenuPage : UserControl
     {
-        private readonly Order currentOrder = new();
+        private readonly Order currentOrder = new() { Id = 1 };
 
         public MenuPage()
         {
@@ -68,6 +68,7 @@ namespace SmoothieTruckApp.Front_End
             MessageBox.Show(currentOrder.GetReceipt(), "Receipt", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             currentOrder.Clear();
+            currentOrder.Id++;
             RefreshOrder();
         }
 
@@ -87,6 +88,7 @@ namespace SmoothieTruckApp.Front_End
 
         private void RefreshOrder()
         {
+            lblTicket.Text = $"Ticket #{currentOrder.Id}";
             lblCount.Text = $"{currentOrder.ItemCount} Items";
             lblSubtotal.Text = $"${currentOrder.Subtotal:0.00}";
             lblTax.Text = $"${currentOrder.Tax:0.00}";
