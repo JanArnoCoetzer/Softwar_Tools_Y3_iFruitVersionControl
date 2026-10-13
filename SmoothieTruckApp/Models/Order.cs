@@ -37,6 +37,25 @@ public class Order
         return Lines.RemoveAll(l => l.Item.Id == itemId) > 0;
     }
 
+    public bool RemoveOne(int itemId)
+    {
+        OrderLine? line = Lines.FirstOrDefault(l => l.Item.Id == itemId);
+
+        if (line == null)
+        {
+            return false;
+        }
+
+        line.Quantity--;
+
+        if (line.Quantity == 0)
+        {
+            Lines.Remove(line);
+        }
+
+        return true;
+    }
+
     public void Clear()
     {
         Lines.Clear();

@@ -111,7 +111,9 @@ namespace SmoothieTruckApp.Front_End
                 var row = new Panel
                 {
                     Width = flowOrder.ClientSize.Width - 6,
-                    Height = 28
+                    Height = 28,
+                    Cursor = Cursors.Hand,
+                    Tag = line.Item.Id
                 };
 
                 var lblLineName = new Label
@@ -131,7 +133,27 @@ namespace SmoothieTruckApp.Front_End
 
                 row.Controls.Add(lblLineName);
                 row.Controls.Add(lblLinePrice);
+
+                row.Click += OrderLine_Click;
+                lblLineName.Click += OrderLine_Click;
+                lblLinePrice.Click += OrderLine_Click;
+
                 flowOrder.Controls.Add(row);
+            }
+        }
+
+        private void OrderLine_Click(object? sender, EventArgs e)
+        {
+            Control? clicked = sender as Control;
+            Panel? row = clicked as Panel ?? clicked?.Parent as Panel;
+
+            if (row?.Tag is int itemId)
+            {
+                BeginInvoke(() =>
+                {
+                    currentOrder.RemoveOne(itemId);
+                    RefreshOrder();
+                });
             }
         }
 
