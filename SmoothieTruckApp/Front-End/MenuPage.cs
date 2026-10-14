@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -22,6 +23,10 @@ namespace SmoothieTruckApp.Front_End
             btnClearAll.Click += btnClearAll_Click;
             btnAddOrder.Click += btnAddOrder_Click;
 
+            // Optional: Force double buffering on the flow panels to prevent minor artifacts
+            EnableDoubleBuffering(FlowMenu);
+            EnableDoubleBuffering(flowOrder);
+
             ShowMenu(new List<MenuItem>
             {
                 new MenuItem { Id = 1, Name = "Tropical Sunrise", Price = 9.50m },
@@ -35,6 +40,18 @@ namespace SmoothieTruckApp.Front_End
 
         private void ShowMenu(List<MenuItem> items)
         {
+            // Freeze calculations before clearing and populating
+            FlowMenu.SuspendLayout();
+
+            // Clear old click handlers to prevent memory retention leaks
+            foreach (Control control in FlowMenu.Controls)
+            {
+                if (control is ItemCard oldCard)
+                {
+                    oldCard.AddClicked -= ItemCard_AddClicked;
+                }
+                control.Dispose();
+            }
             FlowMenu.Controls.Clear();
 
             foreach (MenuItem item in items)
@@ -50,6 +67,9 @@ namespace SmoothieTruckApp.Front_End
             }
 
             lblBlends.Text = $"{items.Count} Blends";
+
+            // Resume rendering instantly in a single frame sweep
+            FlowMenu.ResumeLayout(true);
         }
 
         private void ItemCard_AddClicked(object? sender, EventArgs e)
@@ -93,17 +113,31 @@ namespace SmoothieTruckApp.Front_End
             lblSubtotal.Text = $"${currentOrder.Subtotal:0.00}";
             lblTax.Text = $"${currentOrder.Tax:0.00}";
             lblTotal.Text = $"${currentOrder.Total:0.00}";
+
+            // Toggles empty state indicator
             lblEmpty.Visible = currentOrder.ItemCount == 0;
+            flowOrder.Visible = currentOrder.ItemCount > 0;
+
             btnRemove.Enabled = currentOrder.ItemCount > 0;
             btnClearAll.Enabled = currentOrder.ItemCount > 0;
             btnAddOrder.Enabled = currentOrder.ItemCount > 0;
+
             ShowOrderLines();
         }
 
         private void ShowOrderLines()
         {
+            // Suspend order sidebar rendering to kill drawing spikes
+            flowOrder.SuspendLayout();
+
+            // Safely clear out old panels completely
             foreach (Panel oldRow in flowOrder.Controls.OfType<Panel>().ToList())
             {
+                oldRow.Click -= OrderLine_Click;
+                foreach (Control sub in oldRow.Controls)
+                {
+                    sub.Click -= OrderLine_Click;
+                }
                 flowOrder.Controls.Remove(oldRow);
                 oldRow.Dispose();
             }
@@ -142,6 +176,9 @@ namespace SmoothieTruckApp.Front_End
 
                 flowOrder.Controls.Add(row);
             }
+
+            // Draw clean lines instantly
+            flowOrder.ResumeLayout(true);
         }
 
         private void OrderLine_Click(object? sender, EventArgs e)
@@ -151,19 +188,36 @@ namespace SmoothieTruckApp.Front_End
 
             if (row?.Tag is int itemId)
             {
-                BeginInvoke(() =>
-                {
-                    currentOrder.RemoveOne(itemId);
-                    RefreshOrder();
-                });
+                currentOrder.RemoveOne(itemId);
+                RefreshOrder();
             }
         }
 
-        //this label is the text in the order screen all you rly need to have for it is just to lblEmpty.Visible = false
-        //when an item is added and the flowOrder will be uncovered by the text and that will have the items in it vise versa when the list is empty just make the lable visibe again
+        private static void EnableDoubleBuffering(Control control)
+        {
+            System.Reflection.PropertyInfo? property = typeof(Control).GetProperty(
+                "DoubleBuffered",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            property?.SetValue(control, true, null);
+        }
+
         private void lblEmpty_Click(object sender, EventArgs e)
         {
+        }
 
+        //Fixes the first load flickering using double buffering 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                // Turns on WS_EX_COMPOSITED
+                cp.ExStyle |= 0x02000000;
+                return cp;
+            }
         }
     }
+
+
 }
