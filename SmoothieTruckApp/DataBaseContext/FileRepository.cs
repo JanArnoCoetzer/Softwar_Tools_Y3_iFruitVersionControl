@@ -64,12 +64,18 @@ namespace SmoothieTruckApp.DataBaseContext
             try
             {
 
-                string combinedPath = Path.Combine(RootDirectory, fileName);
-
-
+                string absoluteRoot = Path.GetFullPath(RootDirectory);
+                string combinedPath = Path.Combine(absoluteRoot, fileName);
                 string fullPath = Path.GetFullPath(combinedPath);
 
-                if (!fullPath.StartsWith(RootDirectory, StringComparison.OrdinalIgnoreCase))
+
+                if (!absoluteRoot.EndsWith(Path.DirectorySeparatorChar.ToString()))
+                {
+                    absoluteRoot += Path.DirectorySeparatorChar;
+                }
+
+
+                if (!fullPath.StartsWith(absoluteRoot, StringComparison.OrdinalIgnoreCase))
                 {
                     return FileResult.InvalidPath;
                 }
@@ -79,6 +85,7 @@ namespace SmoothieTruckApp.DataBaseContext
                     File.Delete(fullPath);
                     return FileResult.Success;
                 }
+
                 return FileResult.FileNotFound;
             }
             catch (IOException)
