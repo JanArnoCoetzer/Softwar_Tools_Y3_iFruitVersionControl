@@ -19,6 +19,10 @@ namespace SmoothieTruckApp.Front_End
         private readonly MenuPage menuPage = new();
         private readonly OrdersPage ordersPage = new();
         private Button? activeButton;
+        private bool isFullScreen = false;
+        private Rectangle previousBounds;
+        private FormBorderStyle previousBorderStyle;
+        private FormWindowState previousWindowState;
 
         // --- NATIVE WINDOWS API HOOKS FOR ROUNDING & SHADOWS ---
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -79,6 +83,7 @@ namespace SmoothieTruckApp.Front_End
         {
             base.OnResize(e);
             ApplyWindowRounding();
+            UpdateAccentPosition();
         }
 
         // Drags your custom form workspace across your monitor safely using native handles
@@ -127,12 +132,29 @@ namespace SmoothieTruckApp.Front_End
                 b.ForeColor = isActive ? Color.FromArgb(167, 139, 250) : Color.FromArgb(150, 154, 175);
             }
 
-            pnlAccent.Top = activeButton.Top + (activeButton.Height - pnlAccent.Height) / 2;
+            UpdateAccentPosition();
 
             if (activeButton == btnHome) ShowPage(homePage);
             else if (activeButton == btnMenu) ShowPage(menuPage);
             else ShowPage(ordersPage);
         }
+
+        private void UpdateAccentPosition()
+        {
+            if (activeButton == null)
+                return;
+
+            // Get the selected button's position on the screen
+            Point buttonPosition = activeButton.Parent.PointToScreen(activeButton.Location);
+
+            // Convert that position to the accent panel's parent coordinates
+            Point accentPosition = pnlAccent.Parent.PointToClient(buttonPosition);
+
+            // Centre the accent beside the selected button
+            pnlAccent.Top = accentPosition.Y +
+                (activeButton.Height - pnlAccent.Height) / 2;
+        }
+
 
         private void NavButton_MouseEnter(object sender, EventArgs e)
         {
@@ -150,5 +172,46 @@ namespace SmoothieTruckApp.Front_End
         private void lblBrand_Click(object sender, EventArgs e) { }
         private void pnlContent_Paint(object sender, PaintEventArgs e) { }
         private void panel1_Paint_1(object sender, PaintEventArgs e) { }
+
+        private void lblAdmin_Click(object sender, EventArgs e)
+        {
+            ctxUser.Show(lblAdmin, new Point(lblAdmin.Width, lblAdmin.Height + 4),
+               ToolStripDropDownDirection.BelowLeft);
+        }
+
+        private void mnuExit_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Close iBlendit?", "Exit", MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question) == DialogResult.Yes)
+                Application.Exit();
+        }
+
+        private void mnuFullScreen_Click(object sender, EventArgs e)
+        {
+            if (!isFullScreen)
+            {
+                // Save the current window settings
+                previousBounds = this.Bounds;
+                previousBorderStyle = this.FormBorderStyle;
+                previousWindowState = this.WindowState;
+
+                // Switch to fullscreen
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.WindowState = FormWindowState.Normal;
+                this.Bounds = Screen.FromControl(this).Bounds;
+
+                isFullScreen = true;
+            }
+            else
+            {
+                // Restore the previous window settings
+                this.WindowState = FormWindowState.Normal;
+                this.Bounds = previousBounds;
+                this.FormBorderStyle = previousBorderStyle;
+                this.WindowState = previousWindowState;
+
+                isFullScreen = false;
+            }
+        }
     }
 }
