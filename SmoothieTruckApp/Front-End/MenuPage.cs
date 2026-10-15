@@ -1,4 +1,5 @@
 ﻿using SmoothieTruckApp.Models;
+using SmoothieTruckApp.Repositories;
 using MenuItem = SmoothieTruckApp.Models.MenuItem;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace SmoothieTruckApp.Front_End
 {
     public partial class MenuPage : UserControl
     {
-        private readonly Order currentOrder = new() { Id = 1 };
+        private readonly Order currentOrder = new();
 
         public MenuPage()
         {
@@ -27,14 +28,10 @@ namespace SmoothieTruckApp.Front_End
             EnableDoubleBuffering(FlowMenu);
             EnableDoubleBuffering(flowOrder);
 
-            ShowMenu(new List<MenuItem>
-            {
-                new MenuItem { Id = 1, Name = "Tropical Sunrise", Price = 9.50m },
-                new MenuItem { Id = 2, Name = "Berry Blast", Price = 8.75m },
-                new MenuItem { Id = 3, Name = "Green Machine", Price = 10.00m },
-                new MenuItem { Id = 4, Name = "Mango Tango", Price = 9.00m }
-            });
+            MenuItemRepository.SeedIfEmpty();
+            ShowMenu(MenuItemRepository.GetAll());
 
+            currentOrder.Id = OrderRepository.GetNextOrderNumber();
             RefreshOrder();
         }
 
@@ -85,10 +82,19 @@ namespace SmoothieTruckApp.Front_End
         {
             if (currentOrder.Lines.Count == 0) return;
 
+            int savedOrderNumber = OrderRepository.Save(currentOrder);
+
+            if (savedOrderNumber == 0)
+            {
+                MessageBox.Show("The order could not be saved.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            currentOrder.Id = savedOrderNumber;
             MessageBox.Show(currentOrder.GetReceipt(), "Receipt", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             currentOrder.Clear();
-            currentOrder.Id++;
+            currentOrder.Id = OrderRepository.GetNextOrderNumber();
             RefreshOrder();
         }
 
