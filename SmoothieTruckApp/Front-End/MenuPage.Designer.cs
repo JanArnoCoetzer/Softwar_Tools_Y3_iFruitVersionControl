@@ -30,8 +30,8 @@
         {
             pnlOrder = new RoundedPanel();
             pnlOrderBody = new Panel();
-            flowOrder = new FlowLayoutPanel();
             lblEmpty = new Label();
+            flowOrder = new FlowLayoutPanel();
             pnlOrderButtons = new Panel();
             pnlButtonsInner = new Panel();
             tblButtons = new TableLayoutPanel();
@@ -63,10 +63,6 @@
             lblBlends = new Label();
             lblMenuName = new Label();
             FlowMenu = new FlowLayoutPanel();
-            itemCard1 = new ItemCard();
-            itemCard2 = new ItemCard();
-            itemCard3 = new ItemCard();
-            itemCard4 = new ItemCard();
             pnlOrder.SuspendLayout();
             pnlOrderBody.SuspendLayout();
             pnlOrderButtons.SuspendLayout();
@@ -81,7 +77,6 @@
             pnlOrderHeader.SuspendLayout();
             pnlCount.SuspendLayout();
             pnlHeader.SuspendLayout();
-            FlowMenu.SuspendLayout();
             SuspendLayout();
             // 
             // pnlOrder
@@ -99,11 +94,12 @@
             pnlOrder.FillColor = Color.White;
             pnlOrder.GradientEnd = Color.FromArgb(6, 182, 212);
             pnlOrder.GradientStart = Color.FromArgb(124, 58, 237);
-            pnlOrder.Location = new Point(750, 0);
+            pnlOrder.Location = new Point(1072, 0);
+            pnlOrder.Margin = new Padding(4, 5, 4, 5);
             pnlOrder.Name = "pnlOrder";
-            pnlOrder.Padding = new Padding(12);
+            pnlOrder.Padding = new Padding(17, 20, 17, 20);
             pnlOrder.ShadowSize = 12;
-            pnlOrder.Size = new Size(250, 650);
+            pnlOrder.Size = new Size(357, 1083);
             pnlOrder.TabIndex = 0;
             // 
             // pnlOrderBody
@@ -111,21 +107,11 @@
             pnlOrderBody.Controls.Add(lblEmpty);
             pnlOrderBody.Controls.Add(flowOrder);
             pnlOrderBody.Dock = DockStyle.Fill;
-            pnlOrderBody.Location = new Point(12, 72);
+            pnlOrderBody.Location = new Point(17, 120);
+            pnlOrderBody.Margin = new Padding(4, 5, 4, 5);
             pnlOrderBody.Name = "pnlOrderBody";
-            pnlOrderBody.Size = new Size(226, 358);
+            pnlOrderBody.Size = new Size(323, 597);
             pnlOrderBody.TabIndex = 4;
-            // 
-            // flowOrder
-            // 
-            flowOrder.AutoScroll = true;
-            flowOrder.Dock = DockStyle.Fill;
-            flowOrder.FlowDirection = FlowDirection.TopDown;
-            flowOrder.Location = new Point(0, 0);
-            flowOrder.Name = "flowOrder";
-            flowOrder.Size = new Size(226, 358);
-            flowOrder.TabIndex = 0;
-            flowOrder.WrapContents = false;
             // 
             // lblEmpty
             // 
@@ -135,11 +121,23 @@
             lblEmpty.Location = new Point(0, 0);
             lblEmpty.Margin = new Padding(0);
             lblEmpty.Name = "lblEmpty";
-            lblEmpty.Size = new Size(226, 358);
+            lblEmpty.Size = new Size(323, 597);
             lblEmpty.TabIndex = 0;
             lblEmpty.Text = "Tap an item to add it to the order";
             lblEmpty.TextAlign = ContentAlignment.MiddleCenter;
             lblEmpty.Click += lblEmpty_Click;
+            // 
+            // flowOrder
+            // 
+            flowOrder.AutoScroll = true;
+            flowOrder.Dock = DockStyle.Fill;
+            flowOrder.FlowDirection = FlowDirection.TopDown;
+            flowOrder.Location = new Point(0, 0);
+            flowOrder.Margin = new Padding(4, 5, 4, 5);
+            flowOrder.Name = "flowOrder";
+            flowOrder.Size = new Size(323, 597);
+            flowOrder.TabIndex = 0;
+            flowOrder.WrapContents = false;
             // 
             // pnlOrderButtons
             // 
@@ -147,19 +145,21 @@
             pnlOrderButtons.Controls.Add(pnlButtonsLineBottom);
             pnlOrderButtons.Controls.Add(pnlButtonsLineTop);
             pnlOrderButtons.Dock = DockStyle.Bottom;
-            pnlOrderButtons.Location = new Point(12, 430);
+            pnlOrderButtons.Location = new Point(17, 717);
+            pnlOrderButtons.Margin = new Padding(4, 5, 4, 5);
             pnlOrderButtons.Name = "pnlOrderButtons";
-            pnlOrderButtons.Size = new Size(226, 44);
+            pnlOrderButtons.Size = new Size(323, 73);
             pnlOrderButtons.TabIndex = 3;
             // 
             // pnlButtonsInner
             // 
             pnlButtonsInner.Controls.Add(tblButtons);
             pnlButtonsInner.Dock = DockStyle.Fill;
-            pnlButtonsInner.Location = new Point(0, 1);
+            pnlButtonsInner.Location = new Point(0, 2);
+            pnlButtonsInner.Margin = new Padding(4, 5, 4, 5);
             pnlButtonsInner.Name = "pnlButtonsInner";
-            pnlButtonsInner.Padding = new Padding(14, 7, 14, 7);
-            pnlButtonsInner.Size = new Size(226, 42);
+            pnlButtonsInner.Padding = new Padding(20, 12, 20, 12);
+            pnlButtonsInner.Size = new Size(323, 69);
             pnlButtonsInner.TabIndex = 2;
             // 
             // tblButtons
@@ -170,11 +170,12 @@
             tblButtons.Controls.Add(pnlButtonClear, 1, 0);
             tblButtons.Controls.Add(pnlButtonRemove, 0, 0);
             tblButtons.Dock = DockStyle.Fill;
-            tblButtons.Location = new Point(14, 7);
+            tblButtons.Location = new Point(20, 12);
+            tblButtons.Margin = new Padding(4, 5, 4, 5);
             tblButtons.Name = "tblButtons";
             tblButtons.RowCount = 1;
             tblButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tblButtons.Size = new Size(198, 28);
+            tblButtons.Size = new Size(283, 45);
             tblButtons.TabIndex = 0;
             // 
             // pnlButtonClear
@@ -187,10 +188,10 @@
             pnlButtonClear.FillColor = Color.FromArgb(247, 248, 250);
             pnlButtonClear.GradientEnd = Color.FromArgb(6, 182, 212);
             pnlButtonClear.GradientStart = Color.FromArgb(124, 58, 237);
-            pnlButtonClear.Location = new Point(103, 0);
-            pnlButtonClear.Margin = new Padding(4, 0, 0, 0);
+            pnlButtonClear.Location = new Point(147, 0);
+            pnlButtonClear.Margin = new Padding(6, 0, 0, 0);
             pnlButtonClear.Name = "pnlButtonClear";
-            pnlButtonClear.Size = new Size(95, 28);
+            pnlButtonClear.Size = new Size(136, 45);
             pnlButtonClear.TabIndex = 1;
             // 
             // btnClearAll
@@ -202,8 +203,9 @@
             btnClearAll.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnClearAll.ForeColor = Color.FromArgb(170, 175, 190);
             btnClearAll.Location = new Point(0, 0);
+            btnClearAll.Margin = new Padding(4, 5, 4, 5);
             btnClearAll.Name = "btnClearAll";
-            btnClearAll.Size = new Size(95, 28);
+            btnClearAll.Size = new Size(136, 45);
             btnClearAll.TabIndex = 1;
             btnClearAll.Text = "Clear All";
             btnClearAll.UseVisualStyleBackColor = true;
@@ -219,9 +221,9 @@
             pnlButtonRemove.GradientEnd = Color.FromArgb(6, 182, 212);
             pnlButtonRemove.GradientStart = Color.FromArgb(124, 58, 237);
             pnlButtonRemove.Location = new Point(0, 0);
-            pnlButtonRemove.Margin = new Padding(0, 0, 4, 0);
+            pnlButtonRemove.Margin = new Padding(0, 0, 6, 0);
             pnlButtonRemove.Name = "pnlButtonRemove";
-            pnlButtonRemove.Size = new Size(95, 28);
+            pnlButtonRemove.Size = new Size(135, 45);
             pnlButtonRemove.TabIndex = 0;
             // 
             // btnRemove
@@ -233,8 +235,9 @@
             btnRemove.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnRemove.ForeColor = Color.FromArgb(170, 175, 190);
             btnRemove.Location = new Point(0, 0);
+            btnRemove.Margin = new Padding(4, 5, 4, 5);
             btnRemove.Name = "btnRemove";
-            btnRemove.Size = new Size(95, 28);
+            btnRemove.Size = new Size(135, 45);
             btnRemove.TabIndex = 0;
             btnRemove.Text = "Remove";
             btnRemove.UseVisualStyleBackColor = true;
@@ -243,9 +246,10 @@
             // 
             pnlButtonsLineBottom.BackColor = Color.FromArgb(238, 240, 244);
             pnlButtonsLineBottom.Dock = DockStyle.Bottom;
-            pnlButtonsLineBottom.Location = new Point(0, 43);
+            pnlButtonsLineBottom.Location = new Point(0, 71);
+            pnlButtonsLineBottom.Margin = new Padding(4, 5, 4, 5);
             pnlButtonsLineBottom.Name = "pnlButtonsLineBottom";
-            pnlButtonsLineBottom.Size = new Size(226, 1);
+            pnlButtonsLineBottom.Size = new Size(323, 2);
             pnlButtonsLineBottom.TabIndex = 1;
             // 
             // pnlButtonsLineTop
@@ -253,18 +257,20 @@
             pnlButtonsLineTop.BackColor = Color.FromArgb(238, 240, 244);
             pnlButtonsLineTop.Dock = DockStyle.Top;
             pnlButtonsLineTop.Location = new Point(0, 0);
+            pnlButtonsLineTop.Margin = new Padding(4, 5, 4, 5);
             pnlButtonsLineTop.Name = "pnlButtonsLineTop";
-            pnlButtonsLineTop.Size = new Size(226, 1);
+            pnlButtonsLineTop.Size = new Size(323, 2);
             pnlButtonsLineTop.TabIndex = 0;
             // 
             // pnlTotals
             // 
             pnlTotals.Controls.Add(pnlTotalsBox);
             pnlTotals.Dock = DockStyle.Bottom;
-            pnlTotals.Location = new Point(12, 474);
+            pnlTotals.Location = new Point(17, 790);
+            pnlTotals.Margin = new Padding(4, 5, 4, 5);
             pnlTotals.Name = "pnlTotals";
-            pnlTotals.Padding = new Padding(14, 12, 14, 0);
-            pnlTotals.Size = new Size(226, 102);
+            pnlTotals.Padding = new Padding(20, 20, 20, 0);
+            pnlTotals.Size = new Size(323, 170);
             pnlTotals.TabIndex = 2;
             // 
             // pnlTotalsBox
@@ -283,9 +289,10 @@
             pnlTotalsBox.FillColor = Color.White;
             pnlTotalsBox.GradientEnd = Color.FromArgb(6, 182, 212);
             pnlTotalsBox.GradientStart = Color.FromArgb(124, 58, 237);
-            pnlTotalsBox.Location = new Point(14, 12);
+            pnlTotalsBox.Location = new Point(20, 20);
+            pnlTotalsBox.Margin = new Padding(4, 5, 4, 5);
             pnlTotalsBox.Name = "pnlTotalsBox";
-            pnlTotalsBox.Size = new Size(198, 90);
+            pnlTotalsBox.Size = new Size(283, 150);
             pnlTotalsBox.TabIndex = 0;
             // 
             // lblTotal
@@ -293,9 +300,10 @@
             lblTotal.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblTotal.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTotal.ForeColor = Color.FromArgb(124, 58, 237);
-            lblTotal.Location = new Point(66, 57);
+            lblTotal.Location = new Point(94, 95);
+            lblTotal.Margin = new Padding(4, 0, 4, 0);
             lblTotal.Name = "lblTotal";
-            lblTotal.Size = new Size(120, 28);
+            lblTotal.Size = new Size(171, 47);
             lblTotal.TabIndex = 6;
             lblTotal.Text = "$0.00";
             lblTotal.TextAlign = ContentAlignment.MiddleRight;
@@ -304,9 +312,10 @@
             // 
             lblTotalText.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTotalText.ForeColor = Color.FromArgb(17, 17, 27);
-            lblTotalText.Location = new Point(12, 62);
+            lblTotalText.Location = new Point(17, 103);
+            lblTotalText.Margin = new Padding(4, 0, 4, 0);
             lblTotalText.Name = "lblTotalText";
-            lblTotalText.Size = new Size(33, 15);
+            lblTotalText.Size = new Size(47, 25);
             lblTotalText.TabIndex = 5;
             lblTotalText.Text = "Total";
             // 
@@ -315,18 +324,20 @@
             pnlTotalsLine.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pnlTotalsLine.BackColor = Color.FromArgb(238, 240, 244);
             pnlTotalsLine.ForeColor = Color.FromArgb(238, 240, 244);
-            pnlTotalsLine.Location = new Point(12, 50);
+            pnlTotalsLine.Location = new Point(17, 83);
+            pnlTotalsLine.Margin = new Padding(4, 5, 4, 5);
             pnlTotalsLine.Name = "pnlTotalsLine";
-            pnlTotalsLine.Size = new Size(174, 1);
+            pnlTotalsLine.Size = new Size(249, 2);
             pnlTotalsLine.TabIndex = 4;
             // 
             // lblTax
             // 
             lblTax.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTax.ForeColor = Color.FromArgb(17, 17, 27);
-            lblTax.Location = new Point(106, 30);
+            lblTax.Location = new Point(151, 50);
+            lblTax.Margin = new Padding(4, 0, 4, 0);
             lblTax.Name = "lblTax";
-            lblTax.Size = new Size(80, 16);
+            lblTax.Size = new Size(114, 27);
             lblTax.TabIndex = 3;
             lblTax.Text = "$0.00";
             lblTax.TextAlign = ContentAlignment.MiddleRight;
@@ -336,9 +347,10 @@
             lblTaxText.AutoSize = true;
             lblTaxText.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblTaxText.ForeColor = Color.FromArgb(120, 124, 145);
-            lblTaxText.Location = new Point(12, 30);
+            lblTaxText.Location = new Point(17, 50);
+            lblTaxText.Margin = new Padding(4, 0, 4, 0);
             lblTaxText.Name = "lblTaxText";
-            lblTaxText.Size = new Size(46, 13);
+            lblTaxText.Size = new Size(72, 23);
             lblTaxText.TabIndex = 2;
             lblTaxText.Text = "Tax (8%)";
             // 
@@ -346,9 +358,10 @@
             // 
             lblSubtotal.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblSubtotal.ForeColor = Color.FromArgb(17, 17, 27);
-            lblSubtotal.Location = new Point(106, 10);
+            lblSubtotal.Location = new Point(151, 17);
+            lblSubtotal.Margin = new Padding(4, 0, 4, 0);
             lblSubtotal.Name = "lblSubtotal";
-            lblSubtotal.Size = new Size(80, 16);
+            lblSubtotal.Size = new Size(114, 27);
             lblSubtotal.TabIndex = 1;
             lblSubtotal.Text = "$0.00";
             lblSubtotal.TextAlign = ContentAlignment.MiddleRight;
@@ -358,9 +371,10 @@
             lblSubtotalText.AutoSize = true;
             lblSubtotalText.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSubtotalText.ForeColor = Color.FromArgb(120, 124, 145);
-            lblSubtotalText.Location = new Point(12, 10);
+            lblSubtotalText.Location = new Point(17, 17);
+            lblSubtotalText.Margin = new Padding(4, 0, 4, 0);
             lblSubtotalText.Name = "lblSubtotalText";
-            lblSubtotalText.Size = new Size(51, 13);
+            lblSubtotalText.Size = new Size(74, 23);
             lblSubtotalText.TabIndex = 0;
             lblSubtotalText.Text = "Subtotal";
             // 
@@ -368,10 +382,11 @@
             // 
             pnlAddOrder.Controls.Add(pnlAddOrderFill);
             pnlAddOrder.Dock = DockStyle.Bottom;
-            pnlAddOrder.Location = new Point(12, 576);
+            pnlAddOrder.Location = new Point(17, 960);
+            pnlAddOrder.Margin = new Padding(4, 5, 4, 5);
             pnlAddOrder.Name = "pnlAddOrder";
-            pnlAddOrder.Padding = new Padding(14, 10, 14, 12);
-            pnlAddOrder.Size = new Size(226, 62);
+            pnlAddOrder.Padding = new Padding(20, 17, 20, 20);
+            pnlAddOrder.Size = new Size(323, 103);
             pnlAddOrder.TabIndex = 1;
             // 
             // pnlAddOrderFill
@@ -385,9 +400,10 @@
             pnlAddOrderFill.FillColor = Color.FromArgb(236, 232, 252);
             pnlAddOrderFill.GradientEnd = Color.FromArgb(6, 182, 212);
             pnlAddOrderFill.GradientStart = Color.FromArgb(124, 58, 237);
-            pnlAddOrderFill.Location = new Point(14, 10);
+            pnlAddOrderFill.Location = new Point(20, 17);
+            pnlAddOrderFill.Margin = new Padding(4, 5, 4, 5);
             pnlAddOrderFill.Name = "pnlAddOrderFill";
-            pnlAddOrderFill.Size = new Size(198, 40);
+            pnlAddOrderFill.Size = new Size(283, 66);
             pnlAddOrderFill.TabIndex = 0;
             // 
             // btnAddOrder
@@ -400,8 +416,9 @@
             btnAddOrder.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAddOrder.ForeColor = Color.FromArgb(176, 165, 220);
             btnAddOrder.Location = new Point(0, 0);
+            btnAddOrder.Margin = new Padding(4, 5, 4, 5);
             btnAddOrder.Name = "btnAddOrder";
-            btnAddOrder.Size = new Size(198, 40);
+            btnAddOrder.Size = new Size(283, 66);
             btnAddOrder.TabIndex = 0;
             btnAddOrder.Text = "Add Order / Print Receipt";
             btnAddOrder.UseVisualStyleBackColor = true;
@@ -413,18 +430,20 @@
             pnlOrderHeader.Controls.Add(lblTicket);
             pnlOrderHeader.Controls.Add(lblOrderTitle);
             pnlOrderHeader.Dock = DockStyle.Top;
-            pnlOrderHeader.Location = new Point(12, 12);
+            pnlOrderHeader.Location = new Point(17, 20);
+            pnlOrderHeader.Margin = new Padding(4, 5, 4, 5);
             pnlOrderHeader.Name = "pnlOrderHeader";
-            pnlOrderHeader.Size = new Size(226, 60);
+            pnlOrderHeader.Size = new Size(323, 100);
             pnlOrderHeader.TabIndex = 0;
             // 
             // pnlHeaderLine
             // 
             pnlHeaderLine.BackColor = Color.FromArgb(229, 231, 235);
             pnlHeaderLine.Dock = DockStyle.Bottom;
-            pnlHeaderLine.Location = new Point(0, 59);
+            pnlHeaderLine.Location = new Point(0, 98);
+            pnlHeaderLine.Margin = new Padding(4, 5, 4, 5);
             pnlHeaderLine.Name = "pnlHeaderLine";
-            pnlHeaderLine.Size = new Size(226, 1);
+            pnlHeaderLine.Size = new Size(323, 2);
             pnlHeaderLine.TabIndex = 3;
             // 
             // pnlCount
@@ -438,9 +457,10 @@
             pnlCount.FillColor = Color.FromArgb(238, 240, 244);
             pnlCount.GradientEnd = Color.FromArgb(6, 182, 212);
             pnlCount.GradientStart = Color.FromArgb(124, 58, 237);
-            pnlCount.Location = new Point(152, 8);
+            pnlCount.Location = new Point(217, 13);
+            pnlCount.Margin = new Padding(4, 5, 4, 5);
             pnlCount.Name = "pnlCount";
-            pnlCount.Size = new Size(70, 22);
+            pnlCount.Size = new Size(100, 37);
             pnlCount.TabIndex = 2;
             // 
             // lblCount
@@ -449,8 +469,9 @@
             lblCount.Font = new Font("Segoe UI", 6.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCount.ForeColor = Color.FromArgb(107, 114, 128);
             lblCount.Location = new Point(0, 0);
+            lblCount.Margin = new Padding(4, 0, 4, 0);
             lblCount.Name = "lblCount";
-            lblCount.Size = new Size(70, 22);
+            lblCount.Size = new Size(100, 37);
             lblCount.TabIndex = 0;
             lblCount.Text = "0 Items";
             lblCount.TextAlign = ContentAlignment.MiddleCenter;
@@ -460,9 +481,10 @@
             lblTicket.AutoSize = true;
             lblTicket.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblTicket.ForeColor = Color.FromArgb(120, 124, 145);
-            lblTicket.Location = new Point(5, 30);
+            lblTicket.Location = new Point(7, 50);
+            lblTicket.Margin = new Padding(4, 0, 4, 0);
             lblTicket.Name = "lblTicket";
-            lblTicket.Size = new Size(102, 13);
+            lblTicket.Size = new Size(152, 23);
             lblTicket.TabIndex = 1;
             lblTicket.Text = "Ticket #1 - Walk-in";
             // 
@@ -471,9 +493,10 @@
             lblOrderTitle.AutoSize = true;
             lblOrderTitle.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblOrderTitle.ForeColor = Color.FromArgb(17, 17, 27);
-            lblOrderTitle.Location = new Point(5, 8);
+            lblOrderTitle.Location = new Point(7, 13);
+            lblOrderTitle.Margin = new Padding(4, 0, 4, 0);
             lblOrderTitle.Name = "lblOrderTitle";
-            lblOrderTitle.Size = new Size(93, 17);
+            lblOrderTitle.Size = new Size(143, 28);
             lblOrderTitle.TabIndex = 0;
             lblOrderTitle.Text = "Current Order";
             // 
@@ -483,16 +506,18 @@
             pnlHeader.Controls.Add(lblMenuName);
             pnlHeader.Dock = DockStyle.Top;
             pnlHeader.Location = new Point(0, 0);
+            pnlHeader.Margin = new Padding(4, 5, 4, 5);
             pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(750, 60);
+            pnlHeader.Size = new Size(1072, 100);
             pnlHeader.TabIndex = 1;
             // 
             // lblBlends
             // 
             lblBlends.AutoSize = true;
-            lblBlends.Location = new Point(26, 36);
+            lblBlends.Location = new Point(37, 60);
+            lblBlends.Margin = new Padding(4, 0, 4, 0);
             lblBlends.Name = "lblBlends";
-            lblBlends.Size = new Size(51, 15);
+            lblBlends.Size = new Size(79, 25);
             lblBlends.TabIndex = 1;
             lblBlends.Text = "0 Blends";
             // 
@@ -500,68 +525,36 @@
             // 
             lblMenuName.AutoSize = true;
             lblMenuName.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblMenuName.Location = new Point(20, 11);
+            lblMenuName.Location = new Point(29, 18);
+            lblMenuName.Margin = new Padding(4, 0, 4, 0);
             lblMenuName.Name = "lblMenuName";
-            lblMenuName.Size = new Size(128, 21);
+            lblMenuName.Size = new Size(188, 32);
             lblMenuName.TabIndex = 0;
             lblMenuName.Text = "SmoothieMenu";
             // 
             // FlowMenu
             // 
             FlowMenu.AutoScroll = true;
-            FlowMenu.Controls.Add(itemCard1);
-            FlowMenu.Controls.Add(itemCard2);
-            FlowMenu.Controls.Add(itemCard3);
-            FlowMenu.Controls.Add(itemCard4);
+            FlowMenu.BackColor = Color.FromArgb(232, 234, 242);
             FlowMenu.Dock = DockStyle.Fill;
-            FlowMenu.Location = new Point(0, 60);
+            FlowMenu.Location = new Point(0, 100);
+            FlowMenu.Margin = new Padding(4, 5, 4, 5);
             FlowMenu.Name = "FlowMenu";
-            FlowMenu.Padding = new Padding(20, 10, 20, 10);
-            FlowMenu.Size = new Size(750, 590);
+            FlowMenu.Padding = new Padding(29, 17, 29, 17);
+            FlowMenu.Size = new Size(1072, 983);
             FlowMenu.TabIndex = 2;
-            // 
-            // itemCard1
-            // 
-            itemCard1.Location = new Point(20, 10);
-            itemCard1.Margin = new Padding(0, 0, 16, 16);
-            itemCard1.Name = "itemCard1";
-            itemCard1.Size = new Size(320, 290);
-            itemCard1.TabIndex = 0;
-            // 
-            // itemCard2
-            // 
-            itemCard2.Location = new Point(356, 10);
-            itemCard2.Margin = new Padding(0, 0, 16, 16);
-            itemCard2.Name = "itemCard2";
-            itemCard2.Size = new Size(320, 290);
-            itemCard2.TabIndex = 1;
-            // 
-            // itemCard3
-            // 
-            itemCard3.Location = new Point(20, 316);
-            itemCard3.Margin = new Padding(0, 0, 16, 16);
-            itemCard3.Name = "itemCard3";
-            itemCard3.Size = new Size(320, 290);
-            itemCard3.TabIndex = 2;
-            // 
-            // itemCard4
-            // 
-            itemCard4.Location = new Point(356, 316);
-            itemCard4.Margin = new Padding(0, 0, 16, 16);
-            itemCard4.Name = "itemCard4";
-            itemCard4.Size = new Size(320, 290);
-            itemCard4.TabIndex = 3;
             // 
             // MenuPage
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(244, 245, 247);
             Controls.Add(FlowMenu);
             Controls.Add(pnlHeader);
             Controls.Add(pnlOrder);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "MenuPage";
-            Size = new Size(1000, 650);
+            Size = new Size(1429, 1083);
             pnlOrder.ResumeLayout(false);
             pnlOrderBody.ResumeLayout(false);
             pnlOrderButtons.ResumeLayout(false);
@@ -579,7 +572,6 @@
             pnlCount.ResumeLayout(false);
             pnlHeader.ResumeLayout(false);
             pnlHeader.PerformLayout();
-            FlowMenu.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -590,10 +582,6 @@
         private Label lblMenuName;
         private Label lblBlends;
         private FlowLayoutPanel FlowMenu;
-        private ItemCard itemCard1;
-        private ItemCard itemCard2;
-        private ItemCard itemCard3;
-        private ItemCard itemCard4;
         private Panel pnlOrderHeader;
         private Label lblOrderTitle;
         private Label lblTicket;

@@ -25,7 +25,7 @@ namespace SmoothieTruckApp.Front_End
             btnClearAll.Click += btnClearAll_Click;
             btnAddOrder.Click += btnAddOrder_Click;
 
-            // Optional: Force double buffering on the flow panels to prevent minor artifacts
+            //Force double buffering on the flow panels to prevent minor artifacts
             EnableDoubleBuffering(FlowMenu);
             EnableDoubleBuffering(flowOrder);
 
@@ -60,6 +60,7 @@ namespace SmoothieTruckApp.Front_End
                 };
 
                 card.SetItem(item);
+
                 card.AddClicked += ItemCard_AddClicked;
                 FlowMenu.Controls.Add(card);
             }

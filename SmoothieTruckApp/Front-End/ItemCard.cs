@@ -27,11 +27,19 @@ namespace SmoothieTruckApp.Front_End
             lblName.Text = item.Name;
             lblPrice.Text = $"${item.Price:0.00}";
             lblIngredients.Text = string.Empty;
+            ItemCatagory(item.CatagoryName, item.CatagoryColor);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             AddClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void ItemCatagory(string CatagoryName, Color CatagoryColor) 
+        {
+            txtCatagoryLabel.Text = CatagoryName;
+            rbCatagoryNameBackground.FillColor = CatagoryColor;
+            CatagoryDivisionLine.BackColor = CatagoryColor;
         }
     }
 }

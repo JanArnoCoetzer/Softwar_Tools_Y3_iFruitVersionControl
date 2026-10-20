@@ -16,17 +16,21 @@ internal static class MenuItemRepository
             {
                 Id = (int)row[0],
                 Name = (string)row[1],
-                Price = (decimal)row[2]
+                Price = (decimal)row[2],
+                CatagoryName = (string)row[3],
+                CatagoryColor = ColorTranslator.FromHtml((string)row[4])
             })
             .ToList();
     }
 
-    public static bool Add(string name, decimal price)
+    public static bool Add(string name, decimal price,string catagoryname,string catagorycolor)
     {
         DbResult result = DataBase.add_new_row(TableName, new[]
         {
             new RowValue(DataType.STRING, name),
-            new RowValue(DataType.DECIMAL, price.ToString(CultureInfo.InvariantCulture))
+            new RowValue(DataType.DECIMAL, price.ToString(CultureInfo.InvariantCulture)),
+            new RowValue(DataType.STRING, catagoryname),
+            new RowValue(DataType.STRING, catagorycolor),
         });
 
         return result == DbResult.Success;
@@ -36,9 +40,9 @@ internal static class MenuItemRepository
     {
         if (GetAll().Count > 0) return;
 
-        Add("Tropical Sunrise", 9.50m);
-        Add("Berry Blast", 8.75m);
-        Add("Green Machine", 10.00m);
-        Add("Mango Tango", 9.00m);
+        Add("Tropical Sunrise", 9.50m,"Fruit", "#f5b244");
+        Add("Berry Blast", 8.75m,"Berry", "#9252a0");
+        Add("Green Machine", 10.00m,"Green", "#52915e");
+        Add("Mango Tango", 9.00m,"Fruit", "#ea944a");
     }
 }
