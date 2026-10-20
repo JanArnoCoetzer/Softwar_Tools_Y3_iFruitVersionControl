@@ -1,1 +1,3 @@
 ﻿order_index PK:INTEGER | item_index FK:INTEGER | quantity:INTEGER
+1|2|1
+1|4|2

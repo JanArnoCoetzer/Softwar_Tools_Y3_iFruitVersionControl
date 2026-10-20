@@ -1,1 +1,5 @@
 ﻿item_index PK:INTEGER | name:STRING | price:DECIMAL
+1|Tropical Sunrise|9.50
+2|Berry Blast|8.75
+3|Green Machine|10.00
+4|Mango Tango|9.00

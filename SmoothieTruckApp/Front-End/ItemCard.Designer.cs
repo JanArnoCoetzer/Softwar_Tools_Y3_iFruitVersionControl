@@ -29,35 +29,71 @@
         private void InitializeComponent()
         {
             pnlCard = new RoundedPanel();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            lblName = new Label();
             pnlAdd = new RoundedPanel();
             btnAdd = new Button();
-            lblPrice = new Label();
             lblIngredients = new Label();
-            lblName = new Label();
-            picPhoto = new PictureBox();
+            lblPrice = new Label();
             pnlCard.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             pnlAdd.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picPhoto).BeginInit();
             SuspendLayout();
             // 
             // pnlCard
             // 
             pnlCard.BackColor = Color.Transparent;
             pnlCard.BorderColor = Color.White;
-            pnlCard.Controls.Add(pnlAdd);
-            pnlCard.Controls.Add(lblPrice);
-            pnlCard.Controls.Add(lblIngredients);
-            pnlCard.Controls.Add(lblName);
-            pnlCard.Controls.Add(picPhoto);
+            pnlCard.Controls.Add(tableLayoutPanel1);
             pnlCard.CornerRadius = 14;
             pnlCard.Dock = DockStyle.Fill;
             pnlCard.FillColor = Color.White;
             pnlCard.GradientEnd = Color.FromArgb(6, 182, 212);
             pnlCard.GradientStart = Color.FromArgb(124, 58, 237);
             pnlCard.Location = new Point(0, 0);
+            pnlCard.Margin = new Padding(4, 5, 4, 5);
             pnlCard.Name = "pnlCard";
-            pnlCard.Size = new Size(320, 290);
+            pnlCard.Size = new Size(457, 213);
             pnlCard.TabIndex = 0;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 5;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 119F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Controls.Add(lblName, 1, 1);
+            tableLayoutPanel1.Controls.Add(pnlAdd, 3, 4);
+            tableLayoutPanel1.Controls.Add(lblIngredients, 1, 2);
+            tableLayoutPanel1.Controls.Add(lblPrice, 1, 4);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 6;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Size = new Size(457, 213);
+            tableLayoutPanel1.TabIndex = 7;
+            // 
+            // lblName
+            // 
+            lblName.AutoSize = true;
+            tableLayoutPanel1.SetColumnSpan(lblName, 2);
+            lblName.Dock = DockStyle.Fill;
+            lblName.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblName.Location = new Point(20, 20);
+            lblName.Margin = new Padding(0);
+            lblName.Name = "lblName";
+            lblName.Size = new Size(377, 40);
+            lblName.TabIndex = 2;
+            lblName.Text = "ItemName";
+            lblName.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // pnlAdd
             // 
@@ -69,9 +105,10 @@
             pnlAdd.FillColor = Color.FromArgb(243, 238, 255);
             pnlAdd.GradientEnd = Color.FromArgb(6, 182, 212);
             pnlAdd.GradientStart = Color.FromArgb(124, 58, 237);
-            pnlAdd.Location = new Point(270, 250);
+            pnlAdd.Location = new Point(397, 153);
+            pnlAdd.Margin = new Padding(0);
             pnlAdd.Name = "pnlAdd";
-            pnlAdd.Size = new Size(28, 28);
+            pnlAdd.Size = new Size(40, 40);
             pnlAdd.TabIndex = 6;
             // 
             // btnAdd
@@ -87,76 +124,64 @@
             btnAdd.Location = new Point(0, 0);
             btnAdd.Margin = new Padding(0);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(28, 28);
+            btnAdd.Size = new Size(40, 40);
             btnAdd.TabIndex = 7;
             btnAdd.Text = "+";
-            btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.TextAlign = ContentAlignment.MiddleRight;
+            btnAdd.UseVisualStyleBackColor = false;
             btnAdd.Click += btnAdd_Click;
-            // 
-            // lblPrice
-            // 
-            lblPrice.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            lblPrice.AutoSize = true;
-            lblPrice.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblPrice.ForeColor = Color.Purple;
-            lblPrice.Location = new Point(14, 255);
-            lblPrice.Name = "lblPrice";
-            lblPrice.Size = new Size(55, 23);
-            lblPrice.TabIndex = 4;
-            lblPrice.Text = "$0.00";
             // 
             // lblIngredients
             // 
+            tableLayoutPanel1.SetColumnSpan(lblIngredients, 2);
+            lblIngredients.Dock = DockStyle.Fill;
             lblIngredients.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblIngredients.ForeColor = SystemColors.GrayText;
-            lblIngredients.Location = new Point(14, 191);
+            lblIngredients.Location = new Point(20, 60);
+            lblIngredients.Margin = new Padding(0);
             lblIngredients.Name = "lblIngredients";
-            lblIngredients.Size = new Size(97, 35);
+            lblIngredients.Size = new Size(377, 20);
             lblIngredients.TabIndex = 3;
             lblIngredients.Text = "Item Ingredients";
+            lblIngredients.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // lblName
+            // lblPrice
             // 
-            lblName.AutoSize = true;
-            lblName.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblName.Location = new Point(14, 163);
-            lblName.Name = "lblName";
-            lblName.Size = new Size(72, 17);
-            lblName.TabIndex = 2;
-            lblName.Text = "ItemName";
-            // 
-            // picPhoto
-            // 
-            picPhoto.Dock = DockStyle.Top;
-            picPhoto.Location = new Point(0, 0);
-            picPhoto.Name = "picPhoto";
-            picPhoto.Size = new Size(320, 150);
-            picPhoto.SizeMode = PictureBoxSizeMode.Zoom;
-            picPhoto.TabIndex = 0;
-            picPhoto.TabStop = false;
+            lblPrice.AutoSize = true;
+            lblPrice.Dock = DockStyle.Fill;
+            lblPrice.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPrice.ForeColor = Color.Purple;
+            lblPrice.Location = new Point(20, 153);
+            lblPrice.Margin = new Padding(0);
+            lblPrice.Name = "lblPrice";
+            lblPrice.Size = new Size(119, 40);
+            lblPrice.TabIndex = 4;
+            lblPrice.Text = "$0.00";
+            lblPrice.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // ItemCard
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(pnlCard);
+            Margin = new Padding(0);
             Name = "ItemCard";
-            Size = new Size(320, 290);
+            Size = new Size(457, 213);
             pnlCard.ResumeLayout(false);
-            pnlCard.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
             pnlAdd.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)picPhoto).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private RoundedPanel pnlCard;
-        private PictureBox picPhoto;
         private Label lblName;
         private Label lblPrice;
         private Label lblIngredients;
         private RoundedPanel pnlAdd;
         private Button btnAdd;
+        private TableLayoutPanel tableLayoutPanel1;
     }
 }
