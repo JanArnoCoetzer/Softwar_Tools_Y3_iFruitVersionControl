@@ -18,7 +18,7 @@ namespace SmoothieTruckApp.DataBaseContext
             // 1. Create all table files
             foreach (var table in tables)
             {
-                DbResult createResult = DataBase.create_Table(table);
+                DbResult createResult = DataBase.CreateTable(table);
 
                 if (createResult != DbResult.Success && createResult != DbResult.DuplicateRecord)
                 {
@@ -33,7 +33,7 @@ namespace SmoothieTruckApp.DataBaseContext
                 new TableColumn("item_index FK", DataType.INTEGER),
                 new TableColumn("quantity", DataType.INTEGER)
             };
-            DbResult result = DataBase.set_table_columns("ordered_items_table", orderedItemsColumns);
+            DbResult result = DataBase.SetTableColumns("ordered_items_table", orderedItemsColumns);
             if (result != DbResult.Success) return result;
 
 
@@ -43,7 +43,7 @@ namespace SmoothieTruckApp.DataBaseContext
                 new TableColumn("name", DataType.STRING),
                 new TableColumn("price", DataType.DECIMAL)
             };
-            result = DataBase.set_table_columns("item_table", itemColumns);
+            result = DataBase.SetTableColumns("item_table", itemColumns);
             if (result != DbResult.Success) return result;
 
 
@@ -54,7 +54,7 @@ namespace SmoothieTruckApp.DataBaseContext
                 new TableColumn("stock_index FK", DataType.INTEGER),
                 new TableColumn("quantity_required", DataType.DECIMAL)
             };
-            result = DataBase.set_table_columns("recipe_table", recipeColumns);
+            result = DataBase.SetTableColumns("recipe_table", recipeColumns);
             if (result != DbResult.Success) return result;
 
 
@@ -65,7 +65,7 @@ namespace SmoothieTruckApp.DataBaseContext
                 new TableColumn("quantity", DataType.DECIMAL),
                 new TableColumn("unit", DataType.STRING)
             };
-            result = DataBase.set_table_columns("stock_table", stockColumns);
+            result = DataBase.SetTableColumns("stock_table", stockColumns);
             if (result != DbResult.Success) return result;
 
 
@@ -74,7 +74,7 @@ namespace SmoothieTruckApp.DataBaseContext
                 new TableColumn("income_index PK", DataType.INTEGER),
                 new TableColumn("order_total", DataType.DECIMAL)
             };
-            result = DataBase.set_table_columns("income_table", incomeColumns);
+            result = DataBase.SetTableColumns("income_table", incomeColumns);
             if (result != DbResult.Success) return result;
 
 

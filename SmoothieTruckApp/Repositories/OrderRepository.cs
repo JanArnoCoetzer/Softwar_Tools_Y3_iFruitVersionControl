@@ -24,7 +24,7 @@ internal static class OrderRepository
 
         int orderNumber = GetNextOrderNumber();
 
-        DbResult result = DataBase.add_new_row(IncomeTable, new[]
+        DbResult result = DataBase.AddNewRow(IncomeTable, new[]
         {
             new RowValue(DataType.DECIMAL, order.Total.ToString(CultureInfo.InvariantCulture))
         });

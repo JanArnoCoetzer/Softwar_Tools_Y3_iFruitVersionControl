@@ -43,8 +43,8 @@ public class DataBaseTests
     {
         string table = NewTable();
 
-        FileRepository.write_file(table, "hello");
-        FileRepository.read_file(table, out string content);
+        FileRepository.WriteFile(table, "hello");
+        FileRepository.ReadFile(table, out string content);
 
         Assert.Equal("hello", content);
     }
@@ -53,17 +53,17 @@ public class DataBaseTests
     public void ReadFile_MissingTable_ReturnsFileNotFound()
     {
         //database returns a result code instead of crashing when the table doesnt exist
-        Assert.Equal(FileResult.FileNotFound, FileRepository.read_file("missing_table", out _));
+        Assert.Equal(FileResult.FileNotFound, FileRepository.ReadFile("missing_table", out _));
     }
 
     [Fact]
     public void DeleteFile_ExistingTable_DeletesIt()
     {
         string table = NewTable();
-        FileRepository.create_file(table);
-        FileResult result = FileRepository.delete_file(table);
+        FileRepository.CreateFile(table);
+        FileResult result = FileRepository.DeleteFile(table);
         Assert.Equal(FileResult.Success, result);
-        Assert.Equal(FileResult.FileNotFound, FileRepository.read_file(table, out _));
+        Assert.Equal(FileResult.FileNotFound, FileRepository.ReadFile(table, out _));
         //failed
     }
 
@@ -71,7 +71,7 @@ public class DataBaseTests
     public void AddNewRow_AddsRowWithNextId()
     {
         string table = NewTable();
-        FileRepository.write_file(table, Header);
+        FileRepository.WriteFile(table, Header);
 
         //only name and price are passed in, add_new_row generates id
         AddItem(table, "Mango Tango", "9.00");
@@ -84,9 +84,9 @@ public class DataBaseTests
     public void AddNewRow_WrongType_ReturnsValidationError()
     {
         string table = NewTable();
-        FileRepository.write_file(table, Header);
+        FileRepository.WriteFile(table, Header);
 
-        DbResult result = DataBase.add_new_row(table, new[]
+        DbResult result = DataBase.AddNewRow(table, new[]
         {
             new RowValue(DataType.STRING, "Mango Tango"),
             new RowValue(DataType.DECIMAL, "abc")
@@ -100,7 +100,7 @@ public class DataBaseTests
     public void DeleteRow_RemovesFirstRow()
     {
         string table = NewTable();
-        FileRepository.write_file(table, Header);
+        FileRepository.WriteFile(table, Header);
         AddItem(table, "Mango Tango", "9.00");
         AddItem(table, "Green Machine", "10.00");
         DataBase.DeleteRow(table, 0);
@@ -112,7 +112,7 @@ public class DataBaseTests
     public void DeleteRow_PositionPastEnd_ReturnsRecordNotFound()
     {
         string table = NewTable();
-        FileRepository.write_file(table, Header);
+        FileRepository.WriteFile(table, Header);
         AddItem(table, "Mango Tango", "9.00");
         AddItem(table, "Green Machine", "10.00");
 
@@ -127,7 +127,7 @@ public class DataBaseTests
 
     private static void AddItem(string table, string name, string price)
     {
-        DbResult result = DataBase.add_new_row(table, new[]
+        DbResult result = DataBase.AddNewRow(table, new[]
         {
             new RowValue(DataType.STRING, name),
             new RowValue(DataType.DECIMAL, price)
@@ -138,7 +138,7 @@ public class DataBaseTests
 
     private static string[] ReadLines(string table)
     {
-        FileRepository.read_file(table, out string content);
+        FileRepository.ReadFile(table, out string content);
         return content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
     }
 }

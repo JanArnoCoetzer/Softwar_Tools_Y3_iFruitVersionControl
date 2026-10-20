@@ -25,7 +25,7 @@ internal static class MenuItemRepository
 
     public static bool Add(string name, decimal price,string catagoryname,string catagorycolor)
     {
-        DbResult result = DataBase.add_new_row(TableName, new[]
+        DbResult result = DataBase.AddNewRow(TableName, new[]
         {
             new RowValue(DataType.STRING, name),
             new RowValue(DataType.DECIMAL, price.ToString(CultureInfo.InvariantCulture)),

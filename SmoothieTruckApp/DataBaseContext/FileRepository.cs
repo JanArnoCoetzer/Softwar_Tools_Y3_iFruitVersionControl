@@ -7,7 +7,11 @@ namespace SmoothieTruckApp.DataBaseContext
 {
     internal static class FileRepository
     {
-        private static readonly string RootDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..", "..", "..", "DataBase", "DB_Tables");
+        private static readonly string RootDirectory = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "..", "..", "..",
+            "DataBase",
+            "DB_Tables");
 
         static FileRepository()
         {
@@ -20,21 +24,20 @@ namespace SmoothieTruckApp.DataBaseContext
             }
             catch (Exception)
             {
-               
+                // Intentionally suppress startup directory-creation failures.
             }
         }
 
-        public static FileResult create_file(string fileName)
+        public static FileResult CreateFile(string fileName)
         {
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (!TablePathUtility.TryGetSafeTablePath(
+                    RootDirectory, fileName, out string fullPath))
             {
                 return FileResult.InvalidPath;
             }
 
             try
             {
-                string fullPath = Path.Combine(RootDirectory, fileName);
-
                 if (File.Exists(fullPath))
                 {
                     return FileResult.FileAlreadyExists;
@@ -54,39 +57,23 @@ namespace SmoothieTruckApp.DataBaseContext
             }
         }
 
-        public static FileResult delete_file(string fileName)
+        public static FileResult DeleteFile(string fileName)
         {
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (!TablePathUtility.TryGetSafeTablePath(
+                    RootDirectory, fileName, out string fullPath))
             {
                 return FileResult.InvalidPath;
             }
 
             try
             {
-
-                string absoluteRoot = Path.GetFullPath(RootDirectory);
-                string combinedPath = Path.Combine(absoluteRoot, fileName);
-                string fullPath = Path.GetFullPath(combinedPath);
-
-
-                if (!absoluteRoot.EndsWith(Path.DirectorySeparatorChar.ToString()))
+                if (!File.Exists(fullPath))
                 {
-                    absoluteRoot += Path.DirectorySeparatorChar;
+                    return FileResult.FileNotFound;
                 }
 
-
-                if (!fullPath.StartsWith(absoluteRoot, StringComparison.OrdinalIgnoreCase))
-                {
-                    return FileResult.InvalidPath;
-                }
-
-                if (File.Exists(fullPath))
-                {
-                    File.Delete(fullPath);
-                    return FileResult.Success;
-                }
-
-                return FileResult.FileNotFound;
+                File.Delete(fullPath);
+                return FileResult.Success;
             }
             catch (IOException)
             {
@@ -98,19 +85,20 @@ namespace SmoothieTruckApp.DataBaseContext
             }
         }
 
-        public static FileResult read_file(string fileName, out string fileContent)
+        public static FileResult ReadFile(
+            string fileName,
+            out string fileContent)
         {
             fileContent = string.Empty;
 
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (!TablePathUtility.TryGetSafeTablePath(
+                    RootDirectory, fileName, out string fullPath))
             {
                 return FileResult.InvalidPath;
             }
 
             try
             {
-                string fullPath = Path.Combine(RootDirectory, fileName);
-
                 if (!File.Exists(fullPath))
                 {
                     return FileResult.FileNotFound;
@@ -129,18 +117,23 @@ namespace SmoothieTruckApp.DataBaseContext
             }
         }
 
-        public static FileResult write_file(string fileName, string content)
+        public static FileResult WriteFile(
+            string fileName,
+            string content)
         {
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (!TablePathUtility.TryGetSafeTablePath(
+                    RootDirectory, fileName, out string fullPath))
             {
                 return FileResult.InvalidPath;
             }
 
             try
             {
-                string fullPath = Path.Combine(RootDirectory, fileName);
+                File.WriteAllText(
+                    fullPath,
+                    content ?? string.Empty,
+                    Encoding.UTF8);
 
-                File.WriteAllText(fullPath, content ?? string.Empty, Encoding.UTF8);
                 return FileResult.Success;
             }
             catch (IOException)

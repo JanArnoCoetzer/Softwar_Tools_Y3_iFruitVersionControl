@@ -11,7 +11,7 @@ internal static class TableAccess
     {
         var rows = new List<object[]>();
 
-        if (FileRepository.read_file(tableName, out string content) != FileResult.Success)
+        if (FileRepository.ReadFile(tableName, out string content) != FileResult.Success)
         {
             return rows;
         }
@@ -42,19 +42,19 @@ internal static class TableAccess
 
     public static bool AppendRow(string tableName, object[] values)
     {
-        if (FileRepository.read_file(tableName, out string content) != FileResult.Success || string.IsNullOrWhiteSpace(content))
+        if (FileRepository.ReadFile(tableName, out string content) != FileResult.Success || string.IsNullOrWhiteSpace(content))
         {
             return false;
         }
 
         string newContent = content.TrimEnd() + Environment.NewLine + Serializer.SerializeRow(values) + Environment.NewLine;
 
-        return FileRepository.write_file(tableName, newContent) == FileResult.Success;
+        return FileRepository.WriteFile(tableName, newContent) == FileResult.Success;
     }
 
     public static bool UpdateRow(string tableName, int id, object[] values)
     {
-        if (FileRepository.read_file(tableName, out string content) != FileResult.Success)
+        if (FileRepository.ReadFile(tableName, out string content) != FileResult.Success)
         {
             return false;
         }
@@ -77,7 +77,7 @@ internal static class TableAccess
                 lines[i] = Serializer.SerializeRow(values);
                 string newContent = string.Join(Environment.NewLine, lines) + Environment.NewLine;
 
-                return FileRepository.write_file(tableName, newContent) == FileResult.Success;
+                return FileRepository.WriteFile(tableName, newContent) == FileResult.Success;
             }
         }
 
