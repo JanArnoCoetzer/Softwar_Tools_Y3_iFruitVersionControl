@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace SmoothieTruckApp.DataBaseContext.TableDefinitions
+namespace SmoothieTruckApp.DataBaseContext.Serialization
 {
     internal class TableSerializer
     {

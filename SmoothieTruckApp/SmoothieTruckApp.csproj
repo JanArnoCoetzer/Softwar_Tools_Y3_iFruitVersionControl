@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DataBaseContext\DB_Utility\" />
     <Folder Include="DataBase\DB_Tables\" />
   </ItemGroup>
 

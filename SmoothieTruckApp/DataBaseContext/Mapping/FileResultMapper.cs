@@ -1,9 +1,15 @@
 ﻿using SmoothieTruckApp.DataBaseContext.TableDefinitions;
 
-namespace SmoothieTruckApp.DataBaseContext
+namespace SmoothieTruckApp.DataBaseContext.Mapping
 {
+    /// <summary>
+    /// Converts low-level File System statuses (FileResult) into high-level Database operation statuses (DbResult).
+    /// </summary>
     internal static class FileResultMapper
     {
+        /// <summary>
+        /// Maps file outcomes from table creation routines to database execution statuses.
+        /// </summary>
         public static DbResult ToCreateTableResult(
             FileResult fileResult)
         {
@@ -28,6 +34,9 @@ namespace SmoothieTruckApp.DataBaseContext
             }
         }
 
+        /// <summary>
+        /// Translates file erasure outcomes into corresponding table deletion responses.
+        /// </summary>
         public static DbResult ToDeleteTableResult(
             FileResult fileResult)
         {
@@ -49,6 +58,9 @@ namespace SmoothieTruckApp.DataBaseContext
             }
         }
 
+        /// <summary>
+        /// Maps file-reading states into descriptive table lookup or integrity errors.
+        /// </summary>
         public static DbResult ToReadResult(
             FileResult fileResult)
         {
@@ -71,6 +83,9 @@ namespace SmoothieTruckApp.DataBaseContext
             }
         }
 
+        /// <summary>
+        /// Standardizes file storage updates or writes into high-level transaction results.
+        /// </summary>
         public static DbResult ToWriteResult(
             FileResult fileResult)
         {

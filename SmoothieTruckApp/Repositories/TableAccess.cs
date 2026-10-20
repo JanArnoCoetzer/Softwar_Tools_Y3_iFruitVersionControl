@@ -1,4 +1,5 @@
 using SmoothieTruckApp.DataBaseContext;
+using SmoothieTruckApp.DataBaseContext.Serialization;
 using SmoothieTruckApp.DataBaseContext.TableDefinitions;
 
 namespace SmoothieTruckApp.Repositories;

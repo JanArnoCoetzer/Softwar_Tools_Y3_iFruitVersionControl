@@ -1,144 +1,106 @@
 using SmoothieTruckApp.DataBaseContext;
+using SmoothieTruckApp.DataBaseContext.Domain;
+using SmoothieTruckApp.DataBaseContext.Serialization;
+using SmoothieTruckApp.DataBaseContext.Storage;
 using SmoothieTruckApp.DataBaseContext.TableDefinitions;
+using Xunit;
 
-public class DataBaseTests
+public class DatabaseTests
 {
-    //same header as the item_table file
-    private const string Header = "item_index PK:INTEGER | name:STRING | price:DECIMAL";
+    private readonly DatabaseEngine database;
+    private readonly Table table;
 
-    private readonly TableSerializer serializer = new();
-
-    private readonly TableColumn[] columns =
+    public DatabaseTests()
     {
-        new TableColumn("item_index PK", DataType.INTEGER),
-        new TableColumn("name", DataType.STRING),
-        new TableColumn("price", DataType.DECIMAL)
-    };
+        database = new DatabaseEngine(
+            new InMemoryStorageProvider(),
+            new TableDocumentSerializer(new TableSerializer()));
 
-    [Fact]
-    public void SerializeRow_JoinsValuesWithPipe()
-    {
-        Assert.Equal("1|Mango Tango|9.50", serializer.SerializeRow(new object[] { 1, "Mango Tango", 9.50m }));
-    }
-
-    [Fact]
-    public void DeserializeRow_ReturnsCorrectTypes()
-    {
-        //checking the text comes back as int, string and decimal, not all strings
-        object[] row = serializer.DeserializeRow("1|Mango Tango|9.50", columns);
-
-        Assert.Equal(1, row[0]);
-        Assert.Equal("Mango Tango", row[1]);
-        Assert.Equal(9.50m, row[2]);
-    }
-
-    [Fact]
-    public void SerializeHeader_MatchesTableFile()
-    {
-        Assert.Equal(Header, serializer.SerializeHeader(columns));
-    }
-
-    [Fact]
-    public void WriteThenRead_ReturnsSameText()
-    {
-        string table = NewTable();
-
-        FileRepository.WriteFile(table, "hello");
-        FileRepository.ReadFile(table, out string content);
-
-        Assert.Equal("hello", content);
-    }
-
-    [Fact]
-    public void ReadFile_MissingTable_ReturnsFileNotFound()
-    {
-        //database returns a result code instead of crashing when the table doesnt exist
-        Assert.Equal(FileResult.FileNotFound, FileRepository.ReadFile("missing_table", out _));
-    }
-
-    [Fact]
-    public void DeleteFile_ExistingTable_DeletesIt()
-    {
-        string table = NewTable();
-        FileRepository.CreateFile(table);
-        FileResult result = FileRepository.DeleteFile(table);
-        Assert.Equal(FileResult.Success, result);
-        Assert.Equal(FileResult.FileNotFound, FileRepository.ReadFile(table, out _));
-        //failed
-    }
-
-    [Fact]
-    public void AddNewRow_AddsRowWithNextId()
-    {
-        string table = NewTable();
-        FileRepository.WriteFile(table, Header);
-
-        //only name and price are passed in, add_new_row generates id
-        AddItem(table, "Mango Tango", "9.00");
-        AddItem(table, "Green Machine", "10.00");
-
-        Assert.Equal(new[] { Header, "1|Mango Tango|9.00", "2|Green Machine|10.00" }, ReadLines(table));
-    }
-
-    [Fact]
-    public void AddNewRow_WrongType_ReturnsValidationError()
-    {
-        string table = NewTable();
-        FileRepository.WriteFile(table, Header);
-
-        DbResult result = DataBase.AddNewRow(table, new[]
+        table = new Table("items", new TableSchema(new[]
         {
-            new RowValue(DataType.STRING, "Mango Tango"),
-            new RowValue(DataType.DECIMAL, "abc")
-        });
+            new TableColumn("id PK", DataType.INTEGER),
+            new TableColumn("name", DataType.STRING),
+            new TableColumn("price", DataType.DECIMAL)
+        }));
+    }
+
+    [Fact]
+    public void SaveAndLoad_PreservesRowValues()
+    {
+        Assert.Equal(DbResult.Success, table.AddRow(Item("Mango", "9.50")));
+        Assert.Equal(DbResult.Success, database.SaveTable(table));
+
+        Assert.Equal(
+            DbResult.Success,
+            database.LoadTable("items", out Table loaded));
+
+        Row row = Assert.Single(loaded.Rows);
+
+        Assert.Equal(1, row.Id);
+        Assert.Equal("Mango", row.GetValue(1));
+        Assert.Equal(9.50m, row.GetValue(2));
+    }
+
+    [Fact]
+    public void AddRow_AssignsSequentialIds()
+    {
+        Assert.Equal(DbResult.Success, table.AddRow(Item("Mango", "9.00")));
+        Assert.Equal(DbResult.Success, table.AddRow(Item("Berry", "10.00")));
+
+        Assert.Equal(1, table.Rows[0].Id);
+        Assert.Equal(2, table.Rows[1].Id);
+    }
+
+    [Fact]
+    public void AddRow_InvalidPrice_DoesNotAddRecord()
+    {
+        DbResult result = table.AddRow(Item("Mango", "abc"));
 
         Assert.Equal(DbResult.ValidationError, result);
-        Assert.Equal(new[] { Header }, ReadLines(table));
+        Assert.Empty(table.Rows);
     }
 
     [Fact]
-    public void DeleteRow_RemovesFirstRow()
+    public void AddRowWithId_DuplicateId_IsRejected()
     {
-        string table = NewTable();
-        FileRepository.WriteFile(table, Header);
-        AddItem(table, "Mango Tango", "9.00");
-        AddItem(table, "Green Machine", "10.00");
-        DataBase.DeleteRow(table, 0);
+        Assert.Equal(
+            DbResult.Success,
+            table.AddRowWithId(7, Item("Mango", "9.00")));
 
-        Assert.Equal(new[] { Header, "2|Green Machine|10.00" }, ReadLines(table));
+        Assert.Equal(
+            DbResult.DuplicateRecord,
+            table.AddRowWithId(7, Item("Berry", "10.00")));
+
+        Assert.Single(table.Rows);
     }
 
     [Fact]
-    public void DeleteRow_PositionPastEnd_ReturnsRecordNotFound()
+    public void DeleteRowById_RemovesRecord()
     {
-        string table = NewTable();
-        FileRepository.WriteFile(table, Header);
-        AddItem(table, "Mango Tango", "9.00");
-        AddItem(table, "Green Machine", "10.00");
+        Assert.Equal(DbResult.Success, table.AddRow(Item("Mango", "9.00")));
 
-        DbResult result = DataBase.DeleteRow(table, 5);
+        Assert.Equal(DbResult.Success, table.DeleteRowById(1));
 
-        Assert.Equal(DbResult.RecordNotFound, result);
-        Assert.Equal(new[] { Header, "1|Mango Tango|9.00", "2|Green Machine|10.00" }, ReadLines(table));
+        Assert.Empty(table.Rows);
     }
 
-    //guid gives every test its own random table name so tests dont clash with each other or the real tables
-    private static string NewTable() => "test_" + Guid.NewGuid().ToString("N");
-
-    private static void AddItem(string table, string name, string price)
+    [Fact]
+    public void DeleteTable_RemovesStoredTable()
     {
-        DbResult result = DataBase.AddNewRow(table, new[]
+        Assert.Equal(DbResult.Success, database.SaveTable(table));
+        Assert.Equal(DbResult.Success, database.DeleteTable("items"));
+
+        Assert.Equal(
+            DbResult.TableNotFound,
+            database.LoadTable("items", out _));
+    }
+
+    private static RowValue[] Item(string name, string price)
+    {
+        return new[]
         {
             new RowValue(DataType.STRING, name),
             new RowValue(DataType.DECIMAL, price)
-        });
-
-        Assert.Equal(DbResult.Success, result);
-    }
-
-    private static string[] ReadLines(string table)
-    {
-        FileRepository.ReadFile(table, out string content);
-        return content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+        };
     }
 }
