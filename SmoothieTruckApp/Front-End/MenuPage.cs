@@ -1,5 +1,6 @@
 ﻿using SmoothieTruckApp.Models;
 using SmoothieTruckApp.Repositories;
+using SmoothieTruckApp.Services;
 using MenuItem = SmoothieTruckApp.Models.MenuItem;
 using System;
 using System.Collections.Generic;
@@ -82,6 +83,14 @@ namespace SmoothieTruckApp.Front_End
         {
             if (currentOrder.Lines.Count == 0) return;
 
+            List<string> shortages = StockService.FindShortages(currentOrder);
+
+            if (shortages.Count > 0)
+            {
+                MessageBox.Show($"Not enough stock for: {string.Join(", ", shortages)}", "Out of stock", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             int savedOrderNumber = OrderRepository.Save(currentOrder);
 
             if (savedOrderNumber == 0)
@@ -89,6 +98,8 @@ namespace SmoothieTruckApp.Front_End
                 MessageBox.Show("The order could not be saved.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            StockService.ReduceStock(currentOrder);
 
             currentOrder.Id = savedOrderNumber;
             MessageBox.Show(currentOrder.GetReceipt(), "Receipt", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -1,1 +1,18 @@
 ﻿stock_index PK:INTEGER | name:STRING | quantity:DECIMAL | unit:STRING
+1|Mango|10.00|kg
+2|Pineapple|6.00|kg
+3|Passion Fruit|3.00|kg
+4|Coconut Milk|8.00|l
+5|Strawberry|6.00|kg
+6|Blueberry|4.00|kg
+7|Acai|3.00|kg
+8|Oat Milk|8.00|l
+9|Spinach|3.00|kg
+10|Kale|3.00|kg
+11|Banana|6.00|kg
+12|Ginger|1.00|kg
+13|Almond Milk|8.00|l
+14|Orange|6.00|kg
+15|Turmeric|0.50|kg
+16|Honey|2.00|l
+17|Ice|20.00|kg

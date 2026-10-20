@@ -51,4 +51,36 @@ internal static class TableAccess
 
         return FileRepository.write_file(tableName, newContent) == FileResult.Success;
     }
+
+    public static bool UpdateRow(string tableName, int id, object[] values)
+    {
+        if (FileRepository.read_file(tableName, out string content) != FileResult.Success)
+        {
+            return false;
+        }
+
+        string[] lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+        if (lines.Length == 0)
+        {
+            return false;
+        }
+
+        TableColumn[] columns = Serializer.DeserializeHeader(lines[0]);
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            object[] row = Serializer.DeserializeRow(lines[i], columns);
+
+            if (row.Length > 0 && row[0] is int rowId && rowId == id)
+            {
+                lines[i] = Serializer.SerializeRow(values);
+                string newContent = string.Join(Environment.NewLine, lines) + Environment.NewLine;
+
+                return FileRepository.write_file(tableName, newContent) == FileResult.Success;
+            }
+        }
+
+        return false;
+    }
 }
