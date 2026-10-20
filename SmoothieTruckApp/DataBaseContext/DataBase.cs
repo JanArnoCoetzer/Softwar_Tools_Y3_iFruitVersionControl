@@ -318,9 +318,7 @@ namespace SmoothieTruckApp.DataBaseContext
             }
             else
             {
-                // --- OVERWRITE LOGIC ---
                 // If a row already exists at this index position, replace it directly.
-                // This deletes the old row data line and sets the new row at the exact position.
                 databaseLines[lineTargetIndex] = serializedNewRow;
             }
 
@@ -361,22 +359,27 @@ namespace SmoothieTruckApp.DataBaseContext
             string headerLine = databaseLines[0];
             TableColumn[] schemaColumns = serializer.DeserializeHeader(headerLine);
 
-            int maxId = 0;
+            // Use a HashSet for performance
+            System.Collections.Generic.HashSet<int> existingIds = new System.Collections.Generic.HashSet<int>();
 
-            // Read existing records (skipping header line at index 0)
+            // Read lines (skipping header line at index 0)
             for (int j = 1; j < databaseLines.Length; j++)
             {
                 object[] deserializedRow = serializer.DeserializeRow(databaseLines[j], schemaColumns);
                 if (deserializedRow.Length > 0 && deserializedRow[0] is int currentId)
                 {
-                    if (currentId > maxId)
-                    {
-                        maxId = currentId;
-                    }
+                    existingIds.Add(currentId);
                 }
             }
 
-            return maxId + 1;
+            // Find the first sequential positive integer that doesn't exist yet
+            int candidateId = 1;
+            while (existingIds.Contains(candidateId))
+            {
+                candidateId++;
+            }
+
+            return candidateId;
         }
 
         private static bool TryValidateAndParse(DataType type, string rawValue, out object result)
