@@ -1,6 +1,17 @@
-﻿item_index PK:INTEGER | name:STRING | price:DECIMAL | catagoryname:STRING | catagorycolor:STRING
-
+﻿item_index PK:INTEGER | name:STRING | price:DECIMAL | categoryname:STRING | categorycolor:STRING
 1|Tropical Sunrise|9.50|Fruit|#f5b244
 2|Berry Blast|8.75|Berry|#9252a0
 3|Green Machine|10.00|Green|#52915e
-4|Mango Tango|9.00|Fruit|#ea944a
+4|Mango Tango|9.00|Fruit|#f5b244
+5|Citrus Splash|8.50|Fruit|#f5b244
+6|Blueberry Bliss|9.25|Berry|#9252a0
+7|Kale Kickstart|10.50|Green|#52915e
+8|Dragonfruit Dream|11.00|Exotic|#e0417b
+9|Strawberry Fields|8.75|Berry|#9252a0
+10|Avocado Dream|10.50|Green|#52915e
+11|Pineapple Express|9.25|Fruit|#f5b244
+12|Açaí Power|12.00|Exotic|#e0417b
+13|Raspberry Rush|8.75|Berry|#9252a0
+14|Chilled Watermelon|9.00|Fruit|#f5b244
+15|Spinach Surge|10.00|Green|#52915e
+16|Passionfruit Paradise|11.50|Exotic|#e0417b

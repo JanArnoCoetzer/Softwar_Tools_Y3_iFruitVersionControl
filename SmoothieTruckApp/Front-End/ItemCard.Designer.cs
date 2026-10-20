@@ -60,7 +60,7 @@
             pnlCard.GradientAngle = 90F;
             pnlCard.GradientEnd = Color.White;
             pnlCard.GradientHardness = 1F;
-            pnlCard.GradientPosition = 0.4F;
+            pnlCard.GradientPosition = 0.27124F;
             pnlCard.GradientStart = Color.FromArgb(246, 247, 252);
             pnlCard.Location = new Point(0, 0);
             pnlCard.Margin = new Padding(4, 5, 4, 5);
@@ -81,9 +81,9 @@
             tableLayoutPanel1.Margin = new Padding(0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 3F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new Size(457, 306);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -92,7 +92,7 @@
             tableLayoutPanel2.BackColor = Color.Transparent;
             tableLayoutPanel2.ColumnCount = 4;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 103F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel2.Controls.Add(rbCatagoryNameBackground, 1, 1);
@@ -103,10 +103,8 @@
             tableLayoutPanel2.RowCount = 3;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.Size = new Size(457, 121);
+            tableLayoutPanel2.Size = new Size(457, 80);
             tableLayoutPanel2.TabIndex = 8;
             // 
             // rbCatagoryNameBackground
@@ -115,13 +113,14 @@
             rbCatagoryNameBackground.BorderColor = Color.FromArgb(229, 231, 235);
             rbCatagoryNameBackground.Controls.Add(txtCatagoryLabel);
             rbCatagoryNameBackground.CornerRadius = 8;
+            rbCatagoryNameBackground.Dock = DockStyle.Fill;
             rbCatagoryNameBackground.FillColor = Color.FromArgb(146, 82, 160);
             rbCatagoryNameBackground.GradientEnd = Color.FromArgb(6, 182, 212);
             rbCatagoryNameBackground.GradientStart = Color.FromArgb(124, 58, 237);
-            rbCatagoryNameBackground.Location = new Point(20, 20);
-            rbCatagoryNameBackground.Margin = new Padding(0);
+            rbCatagoryNameBackground.Location = new Point(20, 22);
+            rbCatagoryNameBackground.Margin = new Padding(0, 2, 0, 2);
             rbCatagoryNameBackground.Name = "rbCatagoryNameBackground";
-            rbCatagoryNameBackground.Size = new Size(97, 34);
+            rbCatagoryNameBackground.Size = new Size(80, 36);
             rbCatagoryNameBackground.TabIndex = 0;
             // 
             // txtCatagoryLabel
@@ -130,8 +129,9 @@
             txtCatagoryLabel.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             txtCatagoryLabel.ForeColor = Color.White;
             txtCatagoryLabel.Location = new Point(0, 0);
+            txtCatagoryLabel.Margin = new Padding(0);
             txtCatagoryLabel.Name = "txtCatagoryLabel";
-            txtCatagoryLabel.Size = new Size(97, 34);
+            txtCatagoryLabel.Size = new Size(80, 36);
             txtCatagoryLabel.TabIndex = 0;
             txtCatagoryLabel.Text = "Berry";
             txtCatagoryLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -148,7 +148,7 @@
             tableLayoutPanel3.Controls.Add(lblPrice, 1, 3);
             tableLayoutPanel3.Controls.Add(pnlAdd, 2, 3);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(0, 124);
+            tableLayoutPanel3.Location = new Point(0, 83);
             tableLayoutPanel3.Margin = new Padding(0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 5;
@@ -157,7 +157,7 @@
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.Size = new Size(457, 182);
+            tableLayoutPanel3.Size = new Size(457, 223);
             tableLayoutPanel3.TabIndex = 9;
             // 
             // lblIngredients
@@ -194,7 +194,7 @@
             lblPrice.Dock = DockStyle.Fill;
             lblPrice.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPrice.ForeColor = Color.Purple;
-            lblPrice.Location = new Point(20, 122);
+            lblPrice.Location = new Point(20, 163);
             lblPrice.Margin = new Padding(0);
             lblPrice.Name = "lblPrice";
             lblPrice.Size = new Size(377, 40);
@@ -213,7 +213,7 @@
             pnlAdd.FillColor = Color.FromArgb(243, 238, 255);
             pnlAdd.GradientEnd = Color.FromArgb(6, 182, 212);
             pnlAdd.GradientStart = Color.FromArgb(124, 58, 237);
-            pnlAdd.Location = new Point(397, 122);
+            pnlAdd.Location = new Point(397, 163);
             pnlAdd.Margin = new Padding(0);
             pnlAdd.Name = "pnlAdd";
             pnlAdd.Size = new Size(40, 40);
@@ -243,7 +243,7 @@
             // 
             CatagoryDivisionLine.BackColor = Color.FromArgb(123, 45, 139);
             CatagoryDivisionLine.Dock = DockStyle.Fill;
-            CatagoryDivisionLine.Location = new Point(0, 121);
+            CatagoryDivisionLine.Location = new Point(0, 80);
             CatagoryDivisionLine.Margin = new Padding(0);
             CatagoryDivisionLine.Name = "CatagoryDivisionLine";
             CatagoryDivisionLine.Size = new Size(457, 3);

@@ -40,9 +40,21 @@ internal static class MenuItemRepository
     {
         if (GetAll().Count > 0) return;
 
-        Add("Tropical Sunrise", 9.50m,"Fruit", "#f5b244");
-        Add("Berry Blast", 8.75m,"Berry", "#9252a0");
-        Add("Green Machine", 10.00m,"Green", "#52915e");
-        Add("Mango Tango", 9.00m,"Fruit", "#ea944a");
+        Add("Tropical Sunrise", 9.50m, "Fruit", "#f5b244");
+        Add("Berry Blast", 8.75m, "Berry", "#9252a0");
+        Add("Green Machine", 10.00m, "Green", "#52915e");
+        Add("Mango Tango", 9.00m, "Fruit", "#f5b244");
+        Add("Citrus Splash", 8.50m, "Fruit", "#f5b244");
+        Add("Blueberry Bliss", 9.25m, "Berry", "#9252a0");
+        Add("Kale Kickstart", 10.50m, "Green", "#52915e");
+        Add("Dragonfruit Dream", 11.00m, "Exotic", "#e0417b");
+        Add("Strawberry Fields", 8.75m, "Berry", "#9252a0");
+        Add("Avocado Dream", 10.50m, "Green", "#52915e");
+        Add("Pineapple Express", 9.25m, "Fruit", "#f5b244");
+        Add("Açaí Power", 12.00m, "Exotic", "#e0417b");
+        Add("Raspberry Rush", 8.75m, "Berry", "#9252a0");
+        Add("Chilled Watermelon", 9.00m, "Fruit", "#f5b244");
+        Add("Spinach Surge", 10.00m, "Green", "#52915e");
+        Add("Passionfruit Paradise", 11.50m, "Exotic", "#e0417b");
     }
 }
