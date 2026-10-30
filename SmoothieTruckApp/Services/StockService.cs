@@ -1,5 +1,6 @@
 using SmoothieTruckApp.Models;
 using SmoothieTruckApp.Repositories;
+using MenuItem = SmoothieTruckApp.Models.MenuItem;
 
 namespace SmoothieTruckApp.Services;
 
@@ -41,6 +42,20 @@ internal static class StockService
     public static List<string> FindShortages(Order order)
     {
         return FindShortages(order, RecipeRepository.GetAll(), StockRepository.GetAll());
+    }
+
+    public static bool CanAddOne(Order order, MenuItem item, List<RecipeIngredient> recipes, List<StockItem> stock)
+    {
+        var withOneMore = new Order();
+
+        foreach (OrderLine line in order.Lines)
+        {
+            withOneMore.AddItem(line.Item, line.Quantity);
+        }
+
+        withOneMore.AddItem(item);
+
+        return FindShortages(withOneMore, recipes, stock).Count == 0;
     }
 
     public static void ReduceStock(Order order)

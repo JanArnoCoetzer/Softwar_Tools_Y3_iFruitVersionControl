@@ -1,3 +1,5 @@
+using SmoothieTruckApp.DataBaseContext;
+using SmoothieTruckApp.DataBaseContext.TableDefinitions;
 using SmoothieTruckApp.Models;
 
 namespace SmoothieTruckApp.Repositories;
@@ -19,8 +21,30 @@ internal static class StockRepository
             .ToList();
     }
 
+    public static bool Add(string name, decimal quantity, string unit)
+    {
+        DbResult result = DataBase.AddNewRow(TableName, new[]
+        {
+            TableAccess.Text(name),
+            TableAccess.Number(quantity),
+            TableAccess.Text(unit)
+        });
+
+        return result == DbResult.Success;
+    }
+
     public static bool Update(StockItem item)
     {
-        return TableAccess.UpdateRow(TableName, item.Id, new object[] { item.Id, item.Name, item.Quantity, item.Unit });
+        return TableAccess.ReplaceRow(TableName, item.Id, new[]
+        {
+            TableAccess.Text(item.Name),
+            TableAccess.Number(item.Quantity),
+            TableAccess.Text(item.Unit)
+        });
+    }
+
+    public static bool Delete(int stockId)
+    {
+        return TableAccess.DeleteRow(TableName, stockId);
     }
 }

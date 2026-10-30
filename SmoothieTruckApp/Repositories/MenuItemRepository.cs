@@ -1,4 +1,4 @@
-using System.Globalization;
+ï»¿using System.Globalization;
 using SmoothieTruckApp.DataBaseContext;
 using SmoothieTruckApp.DataBaseContext.TableDefinitions;
 using MenuItem = SmoothieTruckApp.Models.MenuItem;
@@ -51,7 +51,7 @@ internal static class MenuItemRepository
         Add("Strawberry Fields", 8.75m, "Berry", "#9252a0");
         Add("Avocado Dream", 10.50m, "Green", "#52915e");
         Add("Pineapple Express", 9.25m, "Fruit", "#f5b244");
-        Add("Açaí Power", 12.00m, "Exotic", "#e0417b");
+        Add("AÃ§aÃ­ Power", 12.00m, "Exotic", "#e0417b");
         Add("Raspberry Rush", 8.75m, "Berry", "#9252a0");
         Add("Chilled Watermelon", 9.00m, "Fruit", "#f5b244");
         Add("Spinach Surge", 10.00m, "Green", "#52915e");

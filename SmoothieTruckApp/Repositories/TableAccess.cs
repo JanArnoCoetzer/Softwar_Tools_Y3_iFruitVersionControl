@@ -1,4 +1,6 @@
+using System.Globalization;
 using SmoothieTruckApp.DataBaseContext;
+using SmoothieTruckApp.DataBaseContext.Domain;
 using SmoothieTruckApp.DataBaseContext.Serialization;
 using SmoothieTruckApp.DataBaseContext.TableDefinitions;
 
@@ -53,35 +55,47 @@ internal static class TableAccess
         return FileRepository.WriteFile(tableName, newContent) == FileResult.Success;
     }
 
-    public static bool UpdateRow(string tableName, int id, object[] values)
+    public static bool ReplaceRow(string tableName, int id, RowValue[] values)
     {
-        if (FileRepository.ReadFile(tableName, out string content) != FileResult.Success)
+        DatabaseEngine engine = DefaultDatabaseContext.Engine;
+
+        if (engine.LoadTable(tableName, out Table table) != DbResult.Success)
         {
             return false;
         }
 
-        string[] lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-        if (lines.Length == 0)
+        if (table.ReplaceRowById(id, values) != DbResult.Success)
         {
             return false;
         }
 
-        TableColumn[] columns = Serializer.DeserializeHeader(lines[0]);
+        return engine.SaveTable(table) == DbResult.Success;
+    }
 
-        for (int i = 1; i < lines.Length; i++)
+    public static bool DeleteRow(string tableName, int id)
+    {
+        DatabaseEngine engine = DefaultDatabaseContext.Engine;
+
+        if (engine.LoadTable(tableName, out Table table) != DbResult.Success)
         {
-            object[] row = Serializer.DeserializeRow(lines[i], columns);
-
-            if (row.Length > 0 && row[0] is int rowId && rowId == id)
-            {
-                lines[i] = Serializer.SerializeRow(values);
-                string newContent = string.Join(Environment.NewLine, lines) + Environment.NewLine;
-
-                return FileRepository.WriteFile(tableName, newContent) == FileResult.Success;
-            }
+            return false;
         }
 
-        return false;
+        if (table.DeleteRowById(id) != DbResult.Success)
+        {
+            return false;
+        }
+
+        return engine.SaveTable(table) == DbResult.Success;
+    }
+
+    public static RowValue Text(string value)
+    {
+        return new RowValue(DataType.STRING, value);
+    }
+
+    public static RowValue Number(decimal value)
+    {
+        return new RowValue(DataType.DECIMAL, value.ToString(CultureInfo.InvariantCulture));
     }
 }

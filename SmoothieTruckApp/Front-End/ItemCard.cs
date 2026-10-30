@@ -30,6 +30,12 @@ namespace SmoothieTruckApp.Front_End
             ItemCatagory(item.CatagoryName, item.CatagoryColor);
         }
 
+        public void SetAvailable(bool available)
+        {
+            btnAdd.Enabled = available;
+            lblPrice.Text = available ? $"${Item?.Price:0.00}" : "Out of stock";
+        }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             AddClicked?.Invoke(this, EventArgs.Empty);

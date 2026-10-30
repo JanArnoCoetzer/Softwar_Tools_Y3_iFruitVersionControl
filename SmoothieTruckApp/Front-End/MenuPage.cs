@@ -141,6 +141,21 @@ namespace SmoothieTruckApp.Front_End
             btnAddOrder.Enabled = currentOrder.ItemCount > 0;
 
             ShowOrderLines();
+            UpdateAvailability();
+        }
+
+        private void UpdateAvailability()
+        {
+            List<RecipeIngredient> recipes = RecipeRepository.GetAll();
+            List<StockItem> stock = StockRepository.GetAll();
+
+            foreach (ItemCard card in FlowMenu.Controls.OfType<ItemCard>())
+            {
+                if (card.Item != null)
+                {
+                    card.SetAvailable(StockService.CanAddOne(currentOrder, card.Item, recipes, stock));
+                }
+            }
         }
 
         private void ShowOrderLines()
