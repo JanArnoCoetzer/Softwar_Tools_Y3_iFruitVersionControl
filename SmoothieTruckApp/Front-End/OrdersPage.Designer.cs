@@ -28,18 +28,41 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ticketCard1 = new TicketCard();
+            completedCard1 = new CompletedCard();
             SuspendLayout();
+            // 
+            // ticketCard1
+            // 
+            ticketCard1.BackColor = Color.Transparent;
+            ticketCard1.Location = new Point(120, 144);
+            ticketCard1.Name = "ticketCard1";
+            ticketCard1.Size = new Size(480, 58);
+            ticketCard1.TabIndex = 0;
+            // 
+            // completedCard1
+            // 
+            completedCard1.BackColor = Color.Transparent;
+            completedCard1.Location = new Point(687, 144);
+            completedCard1.Name = "completedCard1";
+            completedCard1.Size = new Size(480, 58);
+            completedCard1.TabIndex = 1;
             // 
             // OrdersPage
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(244, 245, 247);
+            Controls.Add(completedCard1);
+            Controls.Add(ticketCard1);
             Name = "OrdersPage";
-            Size = new Size(878, 543);
+            Size = new Size(1304, 630);
             ResumeLayout(false);
         }
 
         #endregion
+
+        private TicketCard ticketCard1;
+        private CompletedCard completedCard1;
     }
 }
