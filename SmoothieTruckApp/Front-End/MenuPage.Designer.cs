@@ -60,6 +60,7 @@
             lblTicket = new Label();
             lblOrderTitle = new Label();
             pnlHeader = new Panel();
+            btnRefresh = new Button();
             lblBlends = new Label();
             lblMenuName = new Label();
             FlowMenu = new FlowLayoutPanel();
@@ -502,6 +503,7 @@
             // 
             // pnlHeader
             // 
+            pnlHeader.Controls.Add(btnRefresh);
             pnlHeader.Controls.Add(lblBlends);
             pnlHeader.Controls.Add(lblMenuName);
             pnlHeader.Dock = DockStyle.Top;
@@ -510,7 +512,18 @@
             pnlHeader.Name = "pnlHeader";
             pnlHeader.Size = new Size(1072, 100);
             pnlHeader.TabIndex = 1;
-            // 
+            //
+            // btnRefresh
+            //
+            btnRefresh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRefresh.Location = new Point(933, 30);
+            btnRefresh.Margin = new Padding(4, 5, 4, 5);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(110, 40);
+            btnRefresh.TabIndex = 2;
+            btnRefresh.Text = "Refresh";
+            btnRefresh.UseVisualStyleBackColor = true;
+            //
             // lblBlends
             // 
             lblBlends.AutoSize = true;
@@ -581,6 +594,7 @@
         private Panel pnlHeader;
         private Label lblMenuName;
         private Label lblBlends;
+        private Button btnRefresh;
         private FlowLayoutPanel FlowMenu;
         private Panel pnlOrderHeader;
         private Label lblOrderTitle;

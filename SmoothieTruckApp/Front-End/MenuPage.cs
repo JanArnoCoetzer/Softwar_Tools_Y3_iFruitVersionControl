@@ -16,6 +16,8 @@ namespace SmoothieTruckApp.Front_End
     public partial class MenuPage : UserControl
     {
         private readonly Order currentOrder = new();
+        private List<RecipeIngredient> recipes = new();
+        private List<StockItem> stock = new();
 
         public MenuPage()
         {
@@ -24,14 +26,29 @@ namespace SmoothieTruckApp.Front_End
             btnRemove.Click += btnRemove_Click;
             btnClearAll.Click += btnClearAll_Click;
             btnAddOrder.Click += btnAddOrder_Click;
+            btnRefresh.Click += btnRefresh_Click;
 
             //Force double buffering on the flow panels to prevent minor artifacts
             EnableDoubleBuffering(FlowMenu);
             EnableDoubleBuffering(flowOrder);
 
             MenuItemRepository.SeedIfEmpty();
-            ShowMenu(MenuItemRepository.GetAll());
+            LoadMenu();
 
+            currentOrder.Id = OrderRepository.GetNextOrderNumber();
+            RefreshOrder();
+        }
+
+        private void LoadMenu()
+        {
+            recipes = RecipeRepository.GetAll();
+            stock = StockRepository.GetAll();
+            ShowMenu(MenuItemRepository.GetAll());
+        }
+
+        private void btnRefresh_Click(object? sender, EventArgs e)
+        {
+            LoadMenu();
             currentOrder.Id = OrderRepository.GetNextOrderNumber();
             RefreshOrder();
         }
@@ -51,9 +68,6 @@ namespace SmoothieTruckApp.Front_End
                 control.Dispose();
             }
             FlowMenu.Controls.Clear();
-
-            List<RecipeIngredient> recipes = RecipeRepository.GetAll();
-            List<StockItem> stock = StockRepository.GetAll();
 
             foreach (MenuItem item in items)
             {
@@ -105,6 +119,7 @@ namespace SmoothieTruckApp.Front_End
             }
 
             StockService.ReduceStock(currentOrder);
+            stock = StockRepository.GetAll();
 
             currentOrder.Id = savedOrderNumber;
             MessageBox.Show(currentOrder.GetReceipt(), "Receipt", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -150,9 +165,6 @@ namespace SmoothieTruckApp.Front_End
 
         private void UpdateAvailability()
         {
-            List<RecipeIngredient> recipes = RecipeRepository.GetAll();
-            List<StockItem> stock = StockRepository.GetAll();
-
             foreach (ItemCard card in FlowMenu.Controls.OfType<ItemCard>())
             {
                 if (card.Item != null)
