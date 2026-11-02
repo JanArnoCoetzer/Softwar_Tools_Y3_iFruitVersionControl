@@ -23,4 +23,14 @@ internal static class RecipeRepository
     {
         return GetAll().Where(r => r.ItemId == itemId).ToList();
     }
+
+    public static string GetIngredientNames(int itemId, List<RecipeIngredient> recipes, List<StockItem> stock)
+    {
+        IEnumerable<string> names = recipes
+            .Where(r => r.ItemId == itemId)
+            .Select(r => stock.FirstOrDefault(s => s.Id == r.StockId)?.Name)
+            .OfType<string>();
+
+        return string.Join(", ", names);
+    }
 }

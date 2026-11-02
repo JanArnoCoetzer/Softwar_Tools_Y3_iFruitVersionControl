@@ -52,6 +52,9 @@ namespace SmoothieTruckApp.Front_End
             }
             FlowMenu.Controls.Clear();
 
+            List<RecipeIngredient> recipes = RecipeRepository.GetAll();
+            List<StockItem> stock = StockRepository.GetAll();
+
             foreach (MenuItem item in items)
             {
                 var card = new ItemCard
@@ -60,6 +63,7 @@ namespace SmoothieTruckApp.Front_End
                 };
 
                 card.SetItem(item);
+                card.SetIngredients(RecipeRepository.GetIngredientNames(item.Id, recipes, stock));
 
                 card.AddClicked += ItemCard_AddClicked;
                 FlowMenu.Controls.Add(card);

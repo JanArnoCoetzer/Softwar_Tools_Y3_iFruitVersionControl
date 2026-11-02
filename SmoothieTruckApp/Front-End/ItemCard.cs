@@ -30,6 +30,11 @@ namespace SmoothieTruckApp.Front_End
             ItemCatagory(item.CatagoryName, item.CatagoryColor);
         }
 
+        public void SetIngredients(string ingredients)
+        {
+            lblIngredients.Text = ingredients;
+        }
+
         public void SetAvailable(bool available)
         {
             btnAdd.Enabled = available;

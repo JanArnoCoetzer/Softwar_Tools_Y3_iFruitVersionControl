@@ -44,6 +44,33 @@ internal static class StockService
         return FindShortages(order, RecipeRepository.GetAll(), StockRepository.GetAll());
     }
 
+    public static int? SmoothiesLeft(StockItem item, List<RecipeIngredient> recipes)
+    {
+        List<decimal> amountsUsed = recipes
+            .Where(r => r.StockId == item.Id && r.QuantityRequired > 0)
+            .Select(r => r.QuantityRequired)
+            .ToList();
+
+        if (amountsUsed.Count == 0)
+        {
+            return null;
+        }
+
+        return (int)Math.Floor(item.Quantity / amountsUsed.Max());
+    }
+
+    public static List<StockItem> GetLowStock(int minimumSmoothies = 40)
+    {
+        List<RecipeIngredient> recipes = RecipeRepository.GetAll();
+
+        return StockRepository.GetAll()
+            .Select(s => new { Item = s, Left = SmoothiesLeft(s, recipes) })
+            .Where(s => s.Left != null && s.Left < minimumSmoothies)
+            .OrderBy(s => s.Left)
+            .Select(s => s.Item)
+            .ToList();
+    }
+
     public static bool CanAddOne(Order order, MenuItem item, List<RecipeIngredient> recipes, List<StockItem> stock)
     {
         var withOneMore = new Order();
