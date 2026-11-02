@@ -2,6 +2,7 @@ using System.Globalization;
 using SmoothieTruckApp.DataBaseContext;
 using SmoothieTruckApp.DataBaseContext.TableDefinitions;
 using SmoothieTruckApp.Models;
+using MenuItem = SmoothieTruckApp.Models.MenuItem;
 
 namespace SmoothieTruckApp.Repositories;
 
@@ -43,5 +44,33 @@ internal static class OrderRepository
         }
 
         return orderNumber;
+    }
+
+    public static List<Order> GetAll()
+    {
+        Dictionary<int, MenuItem> menu = MenuItemRepository.GetAll().ToDictionary(m => m.Id);
+        List<object[]> lineRows = TableAccess.ReadRows(OrderedItemsTable);
+
+        var orders = new List<Order>();
+
+        foreach (object[] incomeRow in TableAccess.ReadRows(IncomeTable))
+        {
+            var order = new Order { Id = (int)incomeRow[0] };
+
+            foreach (object[] lineRow in lineRows.Where(l => (int)l[0] == order.Id))
+            {
+                int itemId = (int)lineRow[1];
+
+                MenuItem item = menu.TryGetValue(itemId, out MenuItem? found)
+                    ? found
+                    : new MenuItem { Id = itemId, Name = $"Item #{itemId}" };
+
+                order.Lines.Add(new OrderLine { Item = item, Quantity = (int)lineRow[2] });
+            }
+
+            orders.Add(order);
+        }
+
+        return orders;
     }
 }
