@@ -63,6 +63,46 @@ namespace SmoothieTruckApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Analytics_Hover {
+            get {
+                object obj = ResourceManager.GetObject("Analytics Hover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Analytics_Icon {
+            get {
+                object obj = ResourceManager.GetObject("Analytics Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Book_Hover {
+            get {
+                object obj = ResourceManager.GetObject("Book Hover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Book_Icon {
+            get {
+                object obj = ResourceManager.GetObject("Book Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Home_Hover {
             get {
                 object obj = ResourceManager.GetObject("Home Hover", resourceCulture);
@@ -86,6 +126,26 @@ namespace SmoothieTruckApp.Properties {
         internal static System.Drawing.Bitmap iblendfinal {
             get {
                 object obj = ResourceManager.GetObject("iblendfinal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Inventory_Hover {
+            get {
+                object obj = ResourceManager.GetObject("Inventory Hover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Inventory_Icon {
+            get {
+                object obj = ResourceManager.GetObject("Inventory Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

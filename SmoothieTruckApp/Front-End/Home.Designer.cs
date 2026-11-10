@@ -34,13 +34,16 @@
             tableLayoutPanel2 = new TableLayoutPanel();
             pnlContent = new Panel();
             panel1 = new Panel();
+            pnlAccent = new Panel();
             tableLayoutPanel3 = new TableLayoutPanel();
+            btnRevenue = new Button();
+            btnStock = new Button();
+            btnRecipeManagement = new Button();
             roundedPanel3 = new RoundedPanel();
             pictureBox1 = new PictureBox();
             btnHome = new Button();
             btnMenu = new Button();
             btnOrders = new Button();
-            pnlAccent = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
             lblAdmin = new Label();
             lblClock = new Label();
@@ -50,10 +53,10 @@
             roundedPanel1 = new RoundedPanel();
             roundedPanel2 = new RoundedPanel();
             label2 = new Label();
+            gradientLabel1 = new GradientLabel();
             ctxUser = new ContextMenuStrip(components);
             mnuExit = new ToolStripMenuItem();
             mnuFullScreen = new ToolStripMenuItem();
-            gradientLabel1 = new GradientLabel();
             tableLayoutPanel2.SuspendLayout();
             panel1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
@@ -86,7 +89,7 @@
             // 
             tableLayoutPanel2.BackColor = Color.White;
             tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 56F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.Controls.Add(pnlContent, 1, 1);
             tableLayoutPanel2.Controls.Add(panel1, 0, 1);
@@ -96,56 +99,131 @@
             tableLayoutPanel2.Margin = new Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 2;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(1871, 1100);
+            tableLayoutPanel2.Size = new Size(1310, 660);
             tableLayoutPanel2.TabIndex = 0;
             // 
             // pnlContent
             // 
             pnlContent.BackColor = Color.FromArgb(244, 245, 247);
             pnlContent.Dock = DockStyle.Fill;
-            pnlContent.Location = new Point(80, 60);
+            pnlContent.Location = new Point(56, 36);
             pnlContent.Margin = new Padding(0);
             pnlContent.Name = "pnlContent";
-            pnlContent.Size = new Size(1791, 1040);
+            pnlContent.Size = new Size(1254, 624);
             pnlContent.TabIndex = 3;
             // 
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(13, 15, 20);
+            panel1.Controls.Add(pnlAccent);
             panel1.Controls.Add(tableLayoutPanel3);
             panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(0, 60);
+            panel1.Location = new Point(0, 36);
             panel1.Margin = new Padding(0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(80, 1040);
+            panel1.Size = new Size(56, 624);
             panel1.TabIndex = 2;
             panel1.Paint += panel1_Paint_1;
+            // 
+            // pnlAccent
+            // 
+            pnlAccent.BackColor = Color.MediumPurple;
+            pnlAccent.Location = new Point(2, 0);
+            pnlAccent.Name = "pnlAccent";
+            pnlAccent.Size = new Size(3, 32);
+            pnlAccent.TabIndex = 1;
             // 
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.BackColor = Color.FromArgb(13, 15, 20);
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.Controls.Add(btnRevenue, 0, 6);
+            tableLayoutPanel3.Controls.Add(btnStock, 0, 5);
+            tableLayoutPanel3.Controls.Add(btnRecipeManagement, 0, 4);
             tableLayoutPanel3.Controls.Add(roundedPanel3, 0, 0);
             tableLayoutPanel3.Controls.Add(btnHome, 0, 1);
             tableLayoutPanel3.Controls.Add(btnMenu, 0, 2);
             tableLayoutPanel3.Controls.Add(btnOrders, 0, 3);
-            tableLayoutPanel3.Controls.Add(pnlAccent, 0, 4);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(0, 0);
+            tableLayoutPanel3.Margin = new Padding(2);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 6;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
+            tableLayoutPanel3.RowCount = 8;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(80, 1040);
+            tableLayoutPanel3.Size = new Size(56, 624);
             tableLayoutPanel3.TabIndex = 0;
             tableLayoutPanel3.Click += lblBrand_Click;
+            tableLayoutPanel3.Paint += tableLayoutPanel3_Paint;
+            // 
+            // btnRevenue
+            // 
+            btnRevenue.Cursor = Cursors.Hand;
+            btnRevenue.Dock = DockStyle.Fill;
+            btnRevenue.FlatAppearance.BorderSize = 0;
+            btnRevenue.FlatAppearance.MouseOverBackColor = Color.FromArgb(28, 22, 48);
+            btnRevenue.FlatStyle = FlatStyle.Flat;
+            btnRevenue.Font = new Font("Segoe MDL2 Assets", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnRevenue.ForeColor = Color.FromArgb(150, 154, 175);
+            btnRevenue.Image = Properties.Resources.Analytics_Icon;
+            btnRevenue.Location = new Point(3, 291);
+            btnRevenue.Name = "btnRevenue";
+            btnRevenue.Size = new Size(50, 42);
+            btnRevenue.TabIndex = 9;
+            btnRevenue.TextImageRelation = TextImageRelation.ImageAboveText;
+            btnRevenue.UseVisualStyleBackColor = true;
+            btnRevenue.Click += NavButton_Click;
+            btnRevenue.MouseEnter += NavButton_MouseEnter;
+            btnRevenue.MouseLeave += NavButton_MouseLeave;
+            // 
+            // btnStock
+            // 
+            btnStock.Cursor = Cursors.Hand;
+            btnStock.Dock = DockStyle.Fill;
+            btnStock.FlatAppearance.BorderSize = 0;
+            btnStock.FlatAppearance.MouseOverBackColor = Color.FromArgb(28, 22, 48);
+            btnStock.FlatStyle = FlatStyle.Flat;
+            btnStock.Font = new Font("Segoe MDL2 Assets", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnStock.ForeColor = Color.FromArgb(150, 154, 175);
+            btnStock.Image = Properties.Resources.Inventory_Icon;
+            btnStock.Location = new Point(3, 243);
+            btnStock.Name = "btnStock";
+            btnStock.Size = new Size(50, 42);
+            btnStock.TabIndex = 8;
+            btnStock.TextImageRelation = TextImageRelation.ImageAboveText;
+            btnStock.UseVisualStyleBackColor = true;
+            btnStock.Click += NavButton_Click;
+            btnStock.MouseEnter += NavButton_MouseEnter;
+            btnStock.MouseLeave += NavButton_MouseLeave;
+            // 
+            // btnRecipeManagement
+            // 
+            btnRecipeManagement.Cursor = Cursors.Hand;
+            btnRecipeManagement.Dock = DockStyle.Fill;
+            btnRecipeManagement.FlatAppearance.BorderSize = 0;
+            btnRecipeManagement.FlatAppearance.MouseOverBackColor = Color.FromArgb(28, 22, 48);
+            btnRecipeManagement.FlatStyle = FlatStyle.Flat;
+            btnRecipeManagement.Font = new Font("Segoe MDL2 Assets", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnRecipeManagement.ForeColor = Color.FromArgb(150, 154, 175);
+            btnRecipeManagement.Image = Properties.Resources.Book_Icon;
+            btnRecipeManagement.Location = new Point(3, 195);
+            btnRecipeManagement.Name = "btnRecipeManagement";
+            btnRecipeManagement.Size = new Size(50, 42);
+            btnRecipeManagement.TabIndex = 7;
+            btnRecipeManagement.TextImageRelation = TextImageRelation.ImageAboveText;
+            btnRecipeManagement.UseVisualStyleBackColor = true;
+            btnRecipeManagement.Click += NavButton_Click;
+            btnRecipeManagement.MouseEnter += NavButton_MouseEnter;
+            btnRecipeManagement.MouseLeave += NavButton_MouseLeave;
             // 
             // roundedPanel3
             // 
@@ -158,11 +236,10 @@
             roundedPanel3.FillColor = Color.White;
             roundedPanel3.GradientEnd = Color.FromArgb(29, 182, 216);
             roundedPanel3.GradientStart = Color.FromArgb(130, 84, 237);
-            roundedPanel3.Location = new Point(4, 5);
-            roundedPanel3.Margin = new Padding(4, 5, 4, 5);
+            roundedPanel3.Location = new Point(3, 3);
             roundedPanel3.Name = "roundedPanel3";
-            roundedPanel3.Padding = new Padding(9, 7, 9, 7);
-            roundedPanel3.Size = new Size(72, 70);
+            roundedPanel3.Padding = new Padding(6, 4, 6, 4);
+            roundedPanel3.Size = new Size(50, 42);
             roundedPanel3.TabIndex = 6;
             roundedPanel3.UseGradient = true;
             // 
@@ -170,10 +247,9 @@
             // 
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Image = Properties.Resources.iblendfinal;
-            pictureBox1.Location = new Point(9, 7);
-            pictureBox1.Margin = new Padding(4, 5, 4, 5);
+            pictureBox1.Location = new Point(6, 4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(54, 56);
+            pictureBox1.Size = new Size(38, 34);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -188,10 +264,9 @@
             btnHome.Font = new Font("Segoe MDL2 Assets", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnHome.ForeColor = Color.FromArgb(150, 154, 175);
             btnHome.Image = Properties.Resources.Home_Icon;
-            btnHome.Location = new Point(4, 85);
-            btnHome.Margin = new Padding(4, 5, 4, 5);
+            btnHome.Location = new Point(3, 51);
             btnHome.Name = "btnHome";
-            btnHome.Size = new Size(72, 70);
+            btnHome.Size = new Size(50, 42);
             btnHome.TabIndex = 0;
             btnHome.TextImageRelation = TextImageRelation.ImageAboveText;
             btnHome.UseVisualStyleBackColor = true;
@@ -209,10 +284,9 @@
             btnMenu.Font = new Font("Segoe MDL2 Assets", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnMenu.ForeColor = Color.FromArgb(150, 154, 175);
             btnMenu.Image = Properties.Resources.Menu_Icon;
-            btnMenu.Location = new Point(4, 165);
-            btnMenu.Margin = new Padding(4, 5, 4, 5);
+            btnMenu.Location = new Point(3, 99);
             btnMenu.Name = "btnMenu";
-            btnMenu.Size = new Size(72, 70);
+            btnMenu.Size = new Size(50, 42);
             btnMenu.TabIndex = 2;
             btnMenu.TextImageRelation = TextImageRelation.ImageAboveText;
             btnMenu.UseVisualStyleBackColor = true;
@@ -230,10 +304,9 @@
             btnOrders.Font = new Font("Segoe MDL2 Assets", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnOrders.ForeColor = Color.FromArgb(150, 154, 175);
             btnOrders.Image = Properties.Resources.Order_Icon;
-            btnOrders.Location = new Point(4, 245);
-            btnOrders.Margin = new Padding(4, 5, 4, 5);
+            btnOrders.Location = new Point(3, 147);
             btnOrders.Name = "btnOrders";
-            btnOrders.Size = new Size(72, 70);
+            btnOrders.Size = new Size(50, 42);
             btnOrders.TabIndex = 3;
             btnOrders.TextImageRelation = TextImageRelation.ImageAboveText;
             btnOrders.UseVisualStyleBackColor = true;
@@ -241,26 +314,17 @@
             btnOrders.MouseEnter += NavButton_MouseEnter;
             btnOrders.MouseLeave += NavButton_MouseLeave;
             // 
-            // pnlAccent
-            // 
-            pnlAccent.BackColor = Color.Purple;
-            pnlAccent.Location = new Point(4, 325);
-            pnlAccent.Margin = new Padding(4, 5, 4, 5);
-            pnlAccent.Name = "pnlAccent";
-            pnlAccent.Size = new Size(4, 50);
-            pnlAccent.TabIndex = 1;
-            // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.BackColor = Color.White;
             tableLayoutPanel1.ColumnCount = 7;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 92F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 64F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 33F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 179F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 3F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 61F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 125F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 2F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 43F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 84F));
             tableLayoutPanel1.Controls.Add(lblAdmin, 6, 0);
             tableLayoutPanel1.Controls.Add(lblClock, 3, 0);
             tableLayoutPanel1.Controls.Add(pnlAdmin, 5, 0);
@@ -268,12 +332,12 @@
             tableLayoutPanel1.Controls.Add(roundedPanel2, 1, 0);
             tableLayoutPanel1.Controls.Add(gradientLabel1, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(80, 0);
+            tableLayoutPanel1.Location = new Point(56, 0);
             tableLayoutPanel1.Margin = new Padding(0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1791, 60);
+            tableLayoutPanel1.Size = new Size(1254, 36);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // lblAdmin
@@ -282,10 +346,9 @@
             lblAdmin.Cursor = Cursors.Hand;
             lblAdmin.Dock = DockStyle.Fill;
             lblAdmin.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            lblAdmin.Location = new Point(1675, 0);
-            lblAdmin.Margin = new Padding(4, 0, 4, 0);
+            lblAdmin.Location = new Point(1173, 0);
             lblAdmin.Name = "lblAdmin";
-            lblAdmin.Size = new Size(112, 60);
+            lblAdmin.Size = new Size(78, 36);
             lblAdmin.TabIndex = 3;
             lblAdmin.Text = "Admin ▾";
             lblAdmin.TextAlign = ContentAlignment.MiddleLeft;
@@ -297,10 +360,9 @@
             lblClock.Dock = DockStyle.Fill;
             lblClock.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             lblClock.ForeColor = Color.FromArgb(148, 147, 165);
-            lblClock.Location = new Point(1432, 0);
-            lblClock.Margin = new Padding(4, 0, 4, 0);
+            lblClock.Location = new Point(1003, 0);
             lblClock.Name = "lblClock";
-            lblClock.Size = new Size(171, 60);
+            lblClock.Size = new Size(119, 36);
             lblClock.TabIndex = 1;
             lblClock.Text = "Clock";
             lblClock.TextAlign = ContentAlignment.MiddleRight;
@@ -315,11 +377,10 @@
             pnlAdmin.FillColor = Color.White;
             pnlAdmin.GradientEnd = Color.FromArgb(29, 182, 216);
             pnlAdmin.GradientStart = Color.FromArgb(107, 78, 234);
-            pnlAdmin.IsCircle = true;
-            pnlAdmin.Location = new Point(1616, 5);
-            pnlAdmin.Margin = new Padding(6, 5, 6, 5);
+            pnlAdmin.Location = new Point(1131, 3);
+            pnlAdmin.Margin = new Padding(4, 3, 4, 3);
             pnlAdmin.Name = "pnlAdmin";
-            pnlAdmin.Size = new Size(49, 50);
+            pnlAdmin.Size = new Size(34, 30);
             pnlAdmin.TabIndex = 6;
             pnlAdmin.UseGradient = true;
             // 
@@ -328,10 +389,10 @@
             label1.Anchor = AnchorStyles.None;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(0, -2);
-            label1.Margin = new Padding(1, 2, 1, 2);
+            label1.Location = new Point(0, -1);
+            label1.Margin = new Padding(1);
             label1.Name = "label1";
-            label1.Size = new Size(51, 50);
+            label1.Size = new Size(36, 30);
             label1.TabIndex = 3;
             label1.Text = "A";
             label1.TextAlign = ContentAlignment.MiddleCenter;
@@ -341,10 +402,9 @@
             lblAdminLtr.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblAdminLtr.AutoSize = true;
             lblAdminLtr.ForeColor = Color.White;
-            lblAdminLtr.Location = new Point(-377, 10);
-            lblAdminLtr.Margin = new Padding(4, 0, 4, 0);
+            lblAdminLtr.Location = new Point(-264, 6);
             lblAdminLtr.Name = "lblAdminLtr";
-            lblAdminLtr.Size = new Size(24, 25);
+            lblAdminLtr.Size = new Size(15, 15);
             lblAdminLtr.TabIndex = 0;
             lblAdminLtr.Text = "A";
             // 
@@ -356,10 +416,10 @@
             roundedPanel1.FillColor = Color.FromArgb(244, 245, 247);
             roundedPanel1.GradientEnd = Color.FromArgb(246, 246, 249);
             roundedPanel1.GradientStart = Color.FromArgb(246, 246, 249);
-            roundedPanel1.Location = new Point(1607, 10);
-            roundedPanel1.Margin = new Padding(0, 10, 0, 10);
+            roundedPanel1.Location = new Point(1125, 6);
+            roundedPanel1.Margin = new Padding(0, 6, 0, 6);
             roundedPanel1.Name = "roundedPanel1";
-            roundedPanel1.Size = new Size(3, 40);
+            roundedPanel1.Size = new Size(2, 24);
             roundedPanel1.TabIndex = 7;
             // 
             // roundedPanel2
@@ -372,11 +432,11 @@
             roundedPanel2.FillColor = Color.FromArgb(240, 237, 255);
             roundedPanel2.GradientEnd = Color.FromArgb(6, 182, 212);
             roundedPanel2.GradientStart = Color.FromArgb(124, 58, 237);
-            roundedPanel2.Location = new Point(95, 17);
-            roundedPanel2.Margin = new Padding(0, 5, 0, 0);
+            roundedPanel2.Location = new Point(66, 10);
+            roundedPanel2.Margin = new Padding(0, 3, 0, 0);
             roundedPanel2.Name = "roundedPanel2";
             roundedPanel2.ShadowSize = 1;
-            roundedPanel2.Size = new Size(40, 30);
+            roundedPanel2.Size = new Size(28, 18);
             roundedPanel2.TabIndex = 8;
             // 
             // label2
@@ -387,10 +447,25 @@
             label2.Location = new Point(0, 0);
             label2.Margin = new Padding(0);
             label2.Name = "label2";
-            label2.Size = new Size(40, 30);
+            label2.Size = new Size(28, 18);
             label2.TabIndex = 4;
             label2.Text = "POS";
             label2.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // gradientLabel1
+            // 
+            gradientLabel1.BackColor = Color.Transparent;
+            gradientLabel1.Dock = DockStyle.Right;
+            gradientLabel1.FirstLetterColor = Color.FromArgb(148, 147, 165);
+            gradientLabel1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            gradientLabel1.GradientEnd = Color.FromArgb(29, 182, 216);
+            gradientLabel1.GradientStart = Color.FromArgb(107, 78, 234);
+            gradientLabel1.Location = new Point(0, 0);
+            gradientLabel1.Margin = new Padding(0);
+            gradientLabel1.Name = "gradientLabel1";
+            gradientLabel1.Size = new Size(64, 36);
+            gradientLabel1.TabIndex = 9;
+            gradientLabel1.Text = "iBlendit";
             // 
             // ctxUser
             // 
@@ -399,46 +474,29 @@
             ctxUser.Name = "contextMenuStrip1";
             ctxUser.RenderMode = ToolStripRenderMode.System;
             ctxUser.ShowImageMargin = false;
-            ctxUser.Size = new Size(139, 68);
+            ctxUser.Size = new Size(104, 48);
             // 
             // mnuExit
             // 
             mnuExit.Name = "mnuExit";
-            mnuExit.Size = new Size(138, 32);
+            mnuExit.Size = new Size(103, 22);
             mnuExit.Text = "Exit";
             mnuExit.Click += mnuExit_Click;
             // 
             // mnuFullScreen
             // 
             mnuFullScreen.Name = "mnuFullScreen";
-            mnuFullScreen.Size = new Size(138, 32);
+            mnuFullScreen.Size = new Size(103, 22);
             mnuFullScreen.Text = "FullScreen";
             mnuFullScreen.Click += mnuFullScreen_Click;
             // 
-            // gradientLabel1
-            // 
-            gradientLabel1.BackColor = Color.Transparent;
-            gradientLabel1.Dock = DockStyle.Right;
-            gradientLabel1.FirstLetterColor = Color.FromArgb(41, 44, 61);
-            gradientLabel1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            gradientLabel1.GradientEnd = Color.FromArgb(29, 182, 216);
-            gradientLabel1.GradientStart = Color.FromArgb(107, 78, 234);
-            gradientLabel1.Location = new Point(0, 0);
-            gradientLabel1.Margin = new Padding(0);
-            gradientLabel1.Name = "gradientLabel1";
-            gradientLabel1.Size = new Size(92, 60);
-            gradientLabel1.TabIndex = 9;
-            gradientLabel1.Text = "iBlendit";
-            gradientLabel1.UseFirstLetterColor = true;
-            // 
             // Home
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1871, 1100);
+            ClientSize = new Size(1310, 660);
             Controls.Add(tableLayoutPanel2);
             FormBorderStyle = FormBorderStyle.None;
-            Margin = new Padding(4, 5, 4, 5);
             Name = "Home";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Home";
@@ -483,5 +541,8 @@
         private ToolStripMenuItem mnuExit;
         private ToolStripMenuItem mnuFullScreen;
         private GradientLabel gradientLabel1;
+        private Button btnRecipeManagement;
+        private Button btnRevenue;
+        private Button btnStock;
     }
 }

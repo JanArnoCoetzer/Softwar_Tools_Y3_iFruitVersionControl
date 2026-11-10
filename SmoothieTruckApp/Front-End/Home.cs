@@ -18,11 +18,20 @@ namespace SmoothieTruckApp.Front_End
         private readonly HomePage homePage = new();
         private readonly MenuPage menuPage = new();
         private readonly OrdersPage ordersPage = new();
+        private readonly RecipePage recipePage = new();
+        private readonly StockPage stockPage = new();
+        private readonly RevenuePage revenuePage = new();
         private Button? activeButton;
         private bool isFullScreen = false;
         private Rectangle previousBounds;
         private FormBorderStyle previousBorderStyle;
         private FormWindowState previousWindowState;
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            UpdateAccentPosition();
+        }
 
         // --- NATIVE WINDOWS API HOOKS FOR ROUNDING & SHADOWS ---
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -116,14 +125,17 @@ namespace SmoothieTruckApp.Front_End
         {
             if (b == btnHome) return coloured ? Properties.Resources.Home_Hover : Properties.Resources.Home_Icon;
             if (b == btnMenu) return coloured ? Properties.Resources.Menu_Hover : Properties.Resources.Menu_Icon;
-            return coloured ? Properties.Resources.Order_Hover : Properties.Resources.Order_Icon;
+            if (b == btnOrders) return coloured ? Properties.Resources.Order_Hover : Properties.Resources.Order_Icon;
+            if (b == btnRecipeManagement) return coloured ? Properties.Resources.Book_Hover : Properties.Resources.Book_Icon;
+            if (b == btnStock) return coloured ? Properties.Resources.Inventory_Hover : Properties.Resources.Inventory_Icon;
+            return coloured ? Properties.Resources.Analytics_Hover : Properties.Resources.Analytics_Icon;
         }
 
         private void NavButton_Click(object sender, EventArgs e)
         {
             activeButton = (Button)sender;
 
-            foreach (var b in new[] { btnHome, btnMenu, btnOrders })
+            foreach (var b in new[] { btnHome, btnMenu, btnOrders, btnRecipeManagement, btnStock, btnRevenue })
             {
                 bool isActive = b == activeButton;
 
@@ -136,7 +148,10 @@ namespace SmoothieTruckApp.Front_End
 
             if (activeButton == btnHome) ShowPage(homePage);
             else if (activeButton == btnMenu) ShowPage(menuPage);
-            else ShowPage(ordersPage);
+            else if (activeButton == btnOrders) ShowPage(ordersPage);
+            else if (activeButton == btnRecipeManagement) ShowPage(recipePage);
+            else if (activeButton == btnStock) ShowPage(stockPage);
+            else ShowPage(revenuePage);
         }
 
         private void UpdateAccentPosition()
@@ -212,6 +227,11 @@ namespace SmoothieTruckApp.Front_End
 
                 isFullScreen = false;
             }
+        }
+
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
