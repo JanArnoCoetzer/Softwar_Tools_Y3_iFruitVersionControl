@@ -11,11 +11,6 @@ using System.ComponentModel;
 
 namespace SmoothieTruckApp.Front_End
 {
-    // The "Blend Station" page: In Progress tickets on the left, Completed on the right.
-    //
-    // Controls this code expects (names matter):
-    //   lblStationSub, flowInProgress, flowCompleted (FlowLayoutPanels),
-    //   lblInProgressCount, lblCompletedCount
     public partial class OrdersPage : UserControl
     {
         public OrdersPage()
@@ -26,15 +21,12 @@ namespace SmoothieTruckApp.Front_End
             flowInProgress.ClientSizeChanged += (s, e) => FitCards(flowInProgress);
             flowCompleted.ClientSizeChanged += (s, e) => FitCards(flowCompleted);
 
-            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;   // keep the designer clean
+            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
 
             lblStationSub.Text = $"Live order queue · {DateTime.Now:dddd, MMMM d}";
             AddSampleData();      // TEMPORARY - delete this line once real tickets come from the database
         }
 
-        // ---- What your teammates call ------------------------------------------------------
-
-        // Adds an in-progress ticket. orderType is "Walk-up" or "Pre-order".
         public TicketCard AddTicket(string ticketNo, string orderType, int minutes,
                                     params (string Name, int Qty)[] items)
         {
@@ -49,7 +41,6 @@ namespace SmoothieTruckApp.Front_End
             return card;
         }
 
-        // Adds a finished ticket (newest ends up on top)
         public void AddCompleted(string ticketNo, string orderType, string itemsSummary,
                                  DateTime completedAt, int waitMinutes)
         {
@@ -62,12 +53,8 @@ namespace SmoothieTruckApp.Front_End
             UpdateCounts();
         }
 
-        // ---- Moving a ticket across -----------------------------------------------------------
-
-        // Visual move only. The person connecting the database should also save the status change here.
         private void MarkComplete(TicketCard card)
         {
-            // Wait until the click has finished before removing the card that raised it
             BeginInvoke(new Action(() =>
             {
                 AddCompleted(card.TicketNo, card.OrderType, card.ItemsSummary, DateTime.Now, card.Minutes);
@@ -89,15 +76,12 @@ namespace SmoothieTruckApp.Front_End
                 c.Width = flow.ClientSize.Width - c.Margin.Horizontal;
         }
 
-        // ---- Sample data (matches the mockup) -------------------------------------------------
-
         private void AddSampleData()
         {
             AddTicket("Ticket 41", "Walk-up", 2, ("Tropical Sunrise", 1), ("Berry Blast", 1));
             AddTicket("Ticket 42", "Pre-order", 6, ("Green Machine", 1), ("Mango Tango", 1));
             AddTicket("Ticket 43", "Walk-up", 11, ("Berry Blast", 1));
 
-            // Oldest first, because each new one goes to the top
             AddCompleted("Ticket 37", "Walk-up", "Green Machine, Tropical Sunrise, Berry Blast ×2", At(12, 29), 33);
             AddCompleted("Ticket 38", "Walk-up", "Mango Tango ×2, Berry Blast", At(12, 37), 25);
             AddCompleted("Ticket 39", "Pre-order", "Tropical Sunrise ×2, Green Machine", At(12, 44), 19);
@@ -107,7 +91,12 @@ namespace SmoothieTruckApp.Front_End
 
         private void lblInProgress_Click(object sender, EventArgs e)
         {
-           
+
+        }
+
+        private void OrdersPage_Load(object sender, EventArgs e)
+        {
+
         }
     }
 

@@ -31,10 +31,10 @@
             pnlOrdersHeader = new Panel();
             flowLegend = new FlowLayoutPanel();
             pnlDotGreen = new RoundedPanel();
-            pnlDotAmber = new RoundedPanel();
-            pnlDotRed = new RoundedPanel();
             lblTime = new Label();
+            pnlDotAmber = new RoundedPanel();
             lblTime2 = new Label();
+            pnlDotRed = new RoundedPanel();
             lblTime3 = new Label();
             lblStationSub = new Label();
             lblStationTitle = new Label();
@@ -106,6 +106,18 @@
             pnlDotGreen.Size = new Size(8, 8);
             pnlDotGreen.TabIndex = 0;
             // 
+            // lblTime
+            // 
+            lblTime.AutoSize = true;
+            lblTime.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTime.ForeColor = Color.FromArgb(75, 85, 99);
+            lblTime.Location = new Point(20, 0);
+            lblTime.Margin = new Padding(0, 0, 6, 0);
+            lblTime.Name = "lblTime";
+            lblTime.Size = new Size(46, 13);
+            lblTime.TabIndex = 3;
+            lblTime.Text = "≤ 4 min";
+            // 
             // pnlDotAmber
             // 
             pnlDotAmber.BackColor = Color.Transparent;
@@ -121,6 +133,18 @@
             pnlDotAmber.Size = new Size(8, 8);
             pnlDotAmber.TabIndex = 1;
             // 
+            // lblTime2
+            // 
+            lblTime2.AutoSize = true;
+            lblTime2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTime2.ForeColor = Color.FromArgb(75, 85, 99);
+            lblTime2.Location = new Point(92, 0);
+            lblTime2.Margin = new Padding(0, 0, 6, 0);
+            lblTime2.Name = "lblTime2";
+            lblTime2.Size = new Size(47, 13);
+            lblTime2.TabIndex = 4;
+            lblTime2.Text = "5–8 min";
+            // 
             // pnlDotRed
             // 
             pnlDotRed.BackColor = Color.Transparent;
@@ -135,30 +159,6 @@
             pnlDotRed.Name = "pnlDotRed";
             pnlDotRed.Size = new Size(8, 8);
             pnlDotRed.TabIndex = 2;
-            // 
-            // lblTime
-            // 
-            lblTime.AutoSize = true;
-            lblTime.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblTime.ForeColor = Color.FromArgb(75, 85, 99);
-            lblTime.Location = new Point(20, 0);
-            lblTime.Margin = new Padding(0, 0, 6, 0);
-            lblTime.Name = "lblTime";
-            lblTime.Size = new Size(46, 13);
-            lblTime.TabIndex = 3;
-            lblTime.Text = "≤ 4 min";
-            // 
-            // lblTime2
-            // 
-            lblTime2.AutoSize = true;
-            lblTime2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblTime2.ForeColor = Color.FromArgb(75, 85, 99);
-            lblTime2.Location = new Point(92, 0);
-            lblTime2.Margin = new Padding(0, 0, 6, 0);
-            lblTime2.Name = "lblTime2";
-            lblTime2.Size = new Size(47, 13);
-            lblTime2.TabIndex = 4;
-            lblTime2.Text = "5–8 min";
             // 
             // lblTime3
             // 
@@ -371,6 +371,7 @@
             Name = "OrdersPage";
             Padding = new Padding(20, 18, 20, 8);
             Size = new Size(1000, 650);
+            Load += OrdersPage_Load;
             pnlOrdersHeader.ResumeLayout(false);
             pnlOrdersHeader.PerformLayout();
             flowLegend.ResumeLayout(false);

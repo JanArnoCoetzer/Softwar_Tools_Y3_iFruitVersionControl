@@ -8,16 +8,10 @@ using System.Windows.Forms;
 
 namespace SmoothieTruckApp.Front_End
 {
-    // One in-progress ticket. Click anywhere on the header to expand/collapse the item list.
-    //
-    // Controls this code expects (names matter):
-    //   pnlTicketHeader (Panel), pnlTimer (RoundedPanel), lblTimer, lblTicketNo, lblOrderType,
-    //   lblPreorder, lblBlendCount, btnChevron (Button), pnlBodyLine (Panel),
-    //   flowItems (FlowLayoutPanel), pnlComplete (Panel), btnComplete (Button)
     public partial class TicketCard : UserControl
     {
-        private const int CollapsedHeight = 58;   // 52px card + 3px shadow margin top and bottom
-        private const int LineHeight = 26;        // each TicketLine is 24 tall + 2px margin
+        private const int CollapsedHeight = 58;
+        private const int LineHeight = 26;       
 
         private readonly List<(string Name, int Qty)> lines = new();
 
@@ -26,25 +20,20 @@ namespace SmoothieTruckApp.Front_End
         public string OrderType { get; private set; } = "";
         public int Minutes { get; private set; }
 
-        // "Tropical Sunrise, Berry Blast ×2" - used when the ticket moves to Completed
         public string ItemsSummary => string.Join(", ",
             lines.Select(l => l.Qty > 1 ? $"{l.Name} ×{l.Qty}" : l.Name));
 
-        // Raised when "Blends Ready - Mark Complete" is clicked
         public event EventHandler? CompleteClicked;
 
         public TicketCard()
         {
             InitializeComponent();
-            btnChevron.Text = "";                  // chevron down (Segoe MDL2 Assets)
-            HookToggle(pnlTicketHeader);                 // header + everything on it toggles the dropdown
+            btnChevron.Text = "";                  
+            HookToggle(pnlTicketHeader);                
             btnComplete.Click += (s, e) => CompleteClicked?.Invoke(this, EventArgs.Empty);
             Resize += (s, e) => FitLines();
         }
 
-        // ---- What your teammates call ------------------------------------------------------
-
-        // orderType is "Walk-up" or "Pre-order" (pre-orders get the purple pill)
         public void SetTicket(string ticketNo, string orderType, int minutes, int blendCount)
         {
             TicketNo = ticketNo;
@@ -71,7 +60,6 @@ namespace SmoothieTruckApp.Front_End
             UpdateHeight();
         }
 
-        // Green up to 4 min, amber 5-8, red over 8 (matches the legend on the page)
         public void SetWaitMinutes(int minutes)
         {
             Minutes = minutes;
@@ -86,14 +74,12 @@ namespace SmoothieTruckApp.Front_End
             lblTimer.Text = $"● {minutes} min";     // ● 2 min
         }
 
-        // ---- Dropdown ----------------------------------------------------------------------
-
         public void Toggle() => SetExpanded(!IsExpanded);
 
         public void SetExpanded(bool expanded)
         {
             IsExpanded = expanded;
-            btnChevron.Text = expanded ? "" : "";   // chevron up / down
+            btnChevron.Text = expanded ? "" : "";
             UpdateHeight();
         }
 
@@ -113,7 +99,6 @@ namespace SmoothieTruckApp.Front_End
                 : CollapsedHeight;
         }
 
-        // Keeps the item rows as wide as the list
         private void FitLines()
         {
             int w = flowItems.ClientSize.Width - flowItems.Padding.Horizontal;
