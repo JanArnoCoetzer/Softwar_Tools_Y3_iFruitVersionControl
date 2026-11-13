@@ -30,6 +30,11 @@ internal static class TableAccess
 
         for (int i = 1; i < lines.Length; i++)
         {
+            if (string.IsNullOrWhiteSpace(lines[i]))
+            {
+                continue;
+            }
+
             rows.Add(Serializer.DeserializeRow(lines[i], columns));
         }
 
