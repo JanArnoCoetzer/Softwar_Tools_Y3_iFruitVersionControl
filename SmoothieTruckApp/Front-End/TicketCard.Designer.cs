@@ -40,8 +40,6 @@
             lblBlendCount = new Label();
             flowTitle = new FlowLayoutPanel();
             lblTicketNo = new Label();
-            lblOrderType = new Label();
-            lblPreorder = new Label();
             pnlTimer = new RoundedPanel();
             lblTimer = new Label();
             pnlCard.SuspendLayout();
@@ -190,8 +188,6 @@
             flowTitle.AutoSize = true;
             flowTitle.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             flowTitle.Controls.Add(lblTicketNo);
-            flowTitle.Controls.Add(lblOrderType);
-            flowTitle.Controls.Add(lblPreorder);
             flowTitle.Location = new Point(82, 9);
             flowTitle.Margin = new Padding(0);
             flowTitle.Name = "flowTitle";
@@ -210,33 +206,6 @@
             lblTicketNo.Size = new Size(59, 15);
             lblTicketNo.TabIndex = 2;
             lblTicketNo.Text = "Ticket 41";
-            // 
-            // lblOrderType
-            // 
-            lblOrderType.AutoSize = true;
-            lblOrderType.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblOrderType.ForeColor = Color.FromArgb(75, 85, 99);
-            lblOrderType.Location = new Point(63, 2);
-            lblOrderType.Margin = new Padding(0, 2, 6, 0);
-            lblOrderType.Name = "lblOrderType";
-            lblOrderType.Size = new Size(57, 13);
-            lblOrderType.TabIndex = 3;
-            lblOrderType.Text = "· Walk-up";
-            // 
-            // lblPreorder
-            // 
-            lblPreorder.AutoSize = true;
-            lblPreorder.BackColor = Color.FromArgb(243, 238, 255);
-            lblPreorder.Font = new Font("Segoe UI", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblPreorder.ForeColor = Color.FromArgb(124, 58, 237);
-            lblPreorder.Location = new Point(126, 1);
-            lblPreorder.Margin = new Padding(0, 1, 0, 0);
-            lblPreorder.Name = "lblPreorder";
-            lblPreorder.Padding = new Padding(4, 1, 4, 1);
-            lblPreorder.Size = new Size(51, 14);
-            lblPreorder.TabIndex = 4;
-            lblPreorder.Text = "Pre-order";
-            lblPreorder.Visible = false;
             // 
             // pnlTimer
             // 
@@ -292,8 +261,6 @@
         private FlowLayoutPanel flowTitle;
         private RoundedPanel pnlTimer;
         private Label lblTimer;
-        private Label lblPreorder;
-        private Label lblOrderType;
         private Label lblTicketNo;
         private Label lblBlendCount;
         private Button btnChevron;

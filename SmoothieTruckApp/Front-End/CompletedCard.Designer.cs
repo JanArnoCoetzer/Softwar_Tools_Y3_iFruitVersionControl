@@ -34,7 +34,6 @@
             lblCheck = new Label();
             flowDoneTitle = new FlowLayoutPanel();
             lblDoneTicket = new Label();
-            lblDoneType = new Label();
             lblDoneItems = new Label();
             lblDoneTime = new Label();
             lblDoneWait = new Label();
@@ -105,7 +104,6 @@
             flowDoneTitle.AutoSize = true;
             flowDoneTitle.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             flowDoneTitle.Controls.Add(lblDoneTicket);
-            flowDoneTitle.Controls.Add(lblDoneType);
             flowDoneTitle.Location = new Point(56, 9);
             flowDoneTitle.Margin = new Padding(0);
             flowDoneTitle.Name = "flowDoneTitle";
@@ -124,18 +122,6 @@
             lblDoneTicket.Size = new Size(59, 15);
             lblDoneTicket.TabIndex = 2;
             lblDoneTicket.Text = "Ticket 39";
-            // 
-            // lblDoneType
-            // 
-            lblDoneType.AutoSize = true;
-            lblDoneType.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblDoneType.ForeColor = Color.FromArgb(75, 85, 99);
-            lblDoneType.Location = new Point(63, 2);
-            lblDoneType.Margin = new Padding(0, 2, 0, 0);
-            lblDoneType.Name = "lblDoneType";
-            lblDoneType.Size = new Size(57, 13);
-            lblDoneType.TabIndex = 3;
-            lblDoneType.Text = "· Walk-up";
             // 
             // lblDoneItems
             // 
@@ -193,7 +179,6 @@
         private RoundedPanel pnlCard;
         private Panel pnlDoneInner;
         private RoundedPanel pnlCheck;
-        private Label lblDoneType;
         private Label lblDoneTicket;
         private FlowLayoutPanel flowDoneTitle;
         private Label lblCheck;

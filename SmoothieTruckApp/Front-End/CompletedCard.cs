@@ -11,7 +11,7 @@ namespace SmoothieTruckApp.Front_End
     // One finished ticket in the Completed column.
     //
     // Controls this code expects (names matter):
-    //   lblCheck, lblDoneTicket, lblDoneType, lblDoneItems, lblDoneTime, lblDoneWait
+    //   lblCheck, lblDoneTicket, lblDoneItems, lblDoneTime, lblDoneWait
     public partial class CompletedCard : UserControl
     {
         public CompletedCard()
@@ -20,11 +20,10 @@ namespace SmoothieTruckApp.Front_End
             lblCheck.Text = "";                    // tick (Segoe MDL2 Assets)
         }
 
-        public void SetCompleted(string ticketNo, string orderType, string itemsSummary,
+        public void SetCompleted(string ticketNo, string itemsSummary,
                                  DateTime completedAt, int waitMinutes)
         {
             lblDoneTicket.Text = ticketNo;
-            lblDoneType.Text = "· " + orderType;
             lblDoneItems.Text = itemsSummary;
             lblDoneTime.Text = completedAt.ToString("h:mm tt");
             lblDoneWait.Text = $"{waitMinutes} min wait";
