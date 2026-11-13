@@ -17,7 +17,6 @@ namespace SmoothieTruckApp.Front_End
 
         public bool IsExpanded { get; private set; }
         public string TicketNo { get; private set; } = "";
-        public string OrderType { get; private set; } = "";
         public int Minutes { get; private set; }
 
         public string ItemsSummary => string.Join(", ",
@@ -34,15 +33,11 @@ namespace SmoothieTruckApp.Front_End
             Resize += (s, e) => FitLines();
         }
 
-        public void SetTicket(string ticketNo, string orderType, int minutes, int blendCount)
+        public void SetTicket(string ticketNo, int minutes, int blendCount)
         {
             TicketNo = ticketNo;
-            OrderType = orderType;
 
-            bool preOrder = orderType == "Pre-order";
             lblTicketNo.Text = ticketNo;
-            lblOrderType.Text = preOrder ? "·" : "· " + orderType;
-            lblPreorder.Visible = preOrder;
             lblBlendCount.Text = $"{blendCount} blend{(blendCount == 1 ? "" : "s")}";
 
             SetWaitMinutes(minutes);

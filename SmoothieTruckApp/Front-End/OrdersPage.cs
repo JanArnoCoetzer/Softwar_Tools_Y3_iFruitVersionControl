@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using SmoothieTruckApp.DataBaseContext;
 using SmoothieTruckApp.Models;
+using SmoothieTruckApp.Repositories;
+using SmoothieTruckApp.Services;
 using System.ComponentModel;
 
 namespace SmoothieTruckApp.Front_End
@@ -24,14 +26,56 @@ namespace SmoothieTruckApp.Front_End
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
 
             lblStationSub.Text = $"Live order queue · {DateTime.Now:dddd, MMMM d}";
-            AddSampleData();      // TEMPORARY - delete this line once real tickets come from the database
+            //reloads each time the page is opened so new orders show up
+            ParentChanged += (s, e) =>
+            {
+                if (Parent != null) LoadOrders();
+            };
         }
 
-        public TicketCard AddTicket(string ticketNo, string orderType, int minutes,
+        private void LoadOrders()
+        {
+            ClearCards(flowInProgress);
+            ClearCards(flowCompleted);
+
+            List<Order> orders = OrderRepository.GetAll();
+            List<Order> queue = QueueService.GetInProgress(orders);
+            Dictionary<int, int> waits = QueueService.CalculateWaitTimes(queue);
+
+            foreach (Order order in queue)
+            {
+                TicketCard card = AddTicket($"Ticket {order.Id}", waits[order.Id],
+                    order.Lines.Select(l => (l.Item.Name, l.Quantity)).ToArray());
+                card.Tag = order.Id;
+            }
+
+            foreach (var done in QueueService.GetCompleted(orders))
+            {
+                AddCompleted($"Ticket {done.Order.Id}", ItemsSummary(done.Order), done.CompletedAt, done.WaitMinutes);
+            }
+
+            UpdateCounts();
+        }
+
+        private static void ClearCards(FlowLayoutPanel flow)
+        {
+            foreach (Control c in flow.Controls.Cast<Control>().ToList())
+            {
+                flow.Controls.Remove(c);
+                c.Dispose();
+            }
+        }
+
+        private static string ItemsSummary(Order order)
+        {
+            return string.Join(", ", order.Lines.Select(l => l.Quantity > 1 ? $"{l.Item.Name} ×{l.Quantity}" : l.Item.Name));
+        }
+
+        public TicketCard AddTicket(string ticketNo, int minutes,
                                     params (string Name, int Qty)[] items)
         {
             var card = new TicketCard { Margin = new Padding(0, 0, 0, 10) };
-            card.SetTicket(ticketNo, orderType, minutes, items.Sum(i => i.Qty));
+            card.SetTicket(ticketNo, minutes, items.Sum(i => i.Qty));
             foreach (var item in items) card.AddLine(item.Name, item.Qty);
             card.CompleteClicked += (s, e) => MarkComplete(card);
 
@@ -41,11 +85,11 @@ namespace SmoothieTruckApp.Front_End
             return card;
         }
 
-        public void AddCompleted(string ticketNo, string orderType, string itemsSummary,
+        public void AddCompleted(string ticketNo, string itemsSummary,
                                  DateTime completedAt, int waitMinutes)
         {
             var done = new CompletedCard { Margin = new Padding(0, 0, 0, 10) };
-            done.SetCompleted(ticketNo, orderType, itemsSummary, completedAt, waitMinutes);
+            done.SetCompleted(ticketNo, itemsSummary, completedAt, waitMinutes);
 
             flowCompleted.Controls.Add(done);
             flowCompleted.Controls.SetChildIndex(done, 0);
@@ -57,10 +101,12 @@ namespace SmoothieTruckApp.Front_End
         {
             BeginInvoke(new Action(() =>
             {
-                AddCompleted(card.TicketNo, card.OrderType, card.ItemsSummary, DateTime.Now, card.Minutes);
-                flowInProgress.Controls.Remove(card);
-                card.Dispose();
-                UpdateCounts();
+                if (card.Tag is int orderId)
+                {
+                    QueueService.Complete(orderId, card.Minutes);
+                }
+
+                LoadOrders();
             }));
         }
 
@@ -75,19 +121,6 @@ namespace SmoothieTruckApp.Front_End
             foreach (Control c in flow.Controls)
                 c.Width = flow.ClientSize.Width - c.Margin.Horizontal;
         }
-
-        private void AddSampleData()
-        {
-            AddTicket("Ticket 41", "Walk-up", 2, ("Tropical Sunrise", 1), ("Berry Blast", 1));
-            AddTicket("Ticket 42", "Pre-order", 6, ("Green Machine", 1), ("Mango Tango", 1));
-            AddTicket("Ticket 43", "Walk-up", 11, ("Berry Blast", 1));
-
-            AddCompleted("Ticket 37", "Walk-up", "Green Machine, Tropical Sunrise, Berry Blast ×2", At(12, 29), 33);
-            AddCompleted("Ticket 38", "Walk-up", "Mango Tango ×2, Berry Blast", At(12, 37), 25);
-            AddCompleted("Ticket 39", "Pre-order", "Tropical Sunrise ×2, Green Machine", At(12, 44), 19);
-        }
-
-        private static DateTime At(int hour, int minute) => DateTime.Today.AddHours(hour).AddMinutes(minute);
 
         private void lblInProgress_Click(object sender, EventArgs e)
         {
