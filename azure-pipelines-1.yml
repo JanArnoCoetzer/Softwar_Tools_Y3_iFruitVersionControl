@@ -1,0 +1,30 @@
+trigger:
+- main
+
+pr:
+- main
+
+pool:
+  vmImage: windows-latest
+
+variables:
+  buildConfiguration: Release
+
+stages:
+- stage: Build_And_Test
+  jobs:
+  - job: Build
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        version: 10.x
+
+    - script: dotnet build SmoothieTruckApp/SmoothieTruckApp.slnx -c $(buildConfiguration)
+      displayName: Build
+
+    - task: DotNetCoreCLI@2
+      displayName: Test
+      inputs:
+        command: test
+        projects: SmoothieTruckApp.Tests/SmoothieTruckApp.Tests.csproj
+        arguments: -c $(buildConfiguration)
