@@ -68,3 +68,23 @@ stages:
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)/iBlendit.zip
         artifact: iBlendit
+
+- stage: Deploy
+  dependsOn: Build_And_Test
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - job: Deploy
+    steps:
+    - download: current
+      artifact: iBlendit
+
+    - task: UniversalPackages@0
+      displayName: Publish To Azure Artifacts
+      inputs:
+        command: publish
+        publishDirectory: $(Pipeline.Workspace)/iBlendit
+        vstsFeedPublish: iFruitStudio/iblendit-releases
+        vstsFeedPackagePublish: iblendit
+        versionOption: custom
+        versionPublish: 1.0.$(Build.BuildId)
+        packagePublishDescription: iBlendit release from build $(Build.BuildNumber)
