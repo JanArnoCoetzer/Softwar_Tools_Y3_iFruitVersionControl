@@ -19,6 +19,14 @@ stages:
       inputs:
         version: 10.x
 
+    - script: dotnet tool install dotnet-sonarscanner --tool-path $(Agent.TempDirectory)/sonar
+      displayName: Install SonarScanner
+
+    - script: $(Agent.TempDirectory)/sonar/dotnet-sonarscanner begin /k:"ifruit_iBlendit" /o:"ifruit" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.token="%SONAR_TOKEN%"
+      displayName: Prepare SonarCloud
+      env:
+        SONAR_TOKEN: $(SONAR_TOKEN)
+
     - script: dotnet build SmoothieTruckApp/SmoothieTruckApp.slnx -c $(buildConfiguration)
       displayName: Build
 
@@ -27,4 +35,14 @@ stages:
       inputs:
         command: test
         projects: SmoothieTruckApp.Tests/SmoothieTruckApp.Tests.csproj
-        arguments: -c $(buildConfiguration)
+        arguments: -c $(buildConfiguration) --collect "XPlat Code Coverage"
+
+    - task: PublishCodeCoverageResults@2
+      displayName: Publish Coverage
+      inputs:
+        summaryFileLocation: $(Agent.TempDirectory)/**/coverage.cobertura.xml
+
+    - script: $(Agent.TempDirectory)/sonar/dotnet-sonarscanner end /d:sonar.token="%SONAR_TOKEN%"
+      displayName: Run SonarCloud Analysis
+      env:
+        SONAR_TOKEN: $(SONAR_TOKEN)
