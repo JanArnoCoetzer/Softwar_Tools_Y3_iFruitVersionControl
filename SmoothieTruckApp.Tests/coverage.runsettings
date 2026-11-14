@@ -4,6 +4,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
+          <Format>cobertura,opencover</Format>
           <ExcludeByFile>**/Front-End/**,**/Program.cs,**/Properties/**</ExcludeByFile>
         </Configuration>
       </DataCollector>

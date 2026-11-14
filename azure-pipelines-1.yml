@@ -22,7 +22,7 @@ stages:
     - script: dotnet tool install dotnet-sonarscanner --tool-path $(Agent.TempDirectory)/sonar
       displayName: Install SonarScanner
 
-    - script: $(Agent.TempDirectory)/sonar/dotnet-sonarscanner begin /k:"ifruit_iBlendit" /o:"ifruit" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.token="%SONAR_TOKEN%" /d:sonar.coverage.exclusions="**/Front-End/**,**/Program.cs,**/Properties/**"
+    - script: $(Agent.TempDirectory)/sonar/dotnet-sonarscanner begin /k:"ifruit_iBlendit" /o:"ifruit" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.token="%SONAR_TOKEN%" /d:sonar.coverage.exclusions="**/Front-End/**,**/Program.cs,**/Properties/**" /d:sonar.cs.opencover.reportsPaths="$(Agent.TempDirectory)/**/coverage.opencover.xml"
       displayName: Prepare SonarCloud
       env:
         SONAR_TOKEN: $(SONAR_TOKEN)
@@ -46,3 +46,45 @@ stages:
       displayName: Run SonarCloud Analysis
       env:
         SONAR_TOKEN: $(SONAR_TOKEN)
+
+    - script: dotnet publish SmoothieTruckApp/SmoothieTruckApp.csproj -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/app/bin/Release/net10.0-windows
+      displayName: Publish App
+
+    - task: CopyFiles@2
+      displayName: Copy Database
+      inputs:
+        SourceFolder: SmoothieTruckApp/DataBase/DB_Tables
+        TargetFolder: $(Build.ArtifactStagingDirectory)/app/DataBase/DB_Tables
+
+    - task: ArchiveFiles@2
+      displayName: Zip App
+      inputs:
+        rootFolderOrFile: $(Build.ArtifactStagingDirectory)/app
+        includeRootFolder: false
+        archiveFile: $(Build.ArtifactStagingDirectory)/iBlendit.zip
+
+    - task: PublishPipelineArtifact@1
+      displayName: Upload Artifact
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/iBlendit.zip
+        artifact: iBlendit
+
+- stage: Deploy
+  dependsOn: Build_And_Test
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - job: Deploy
+    steps:
+    - download: current
+      artifact: iBlendit
+
+    - task: UniversalPackages@0
+      displayName: Publish To Azure Artifacts
+      inputs:
+        command: publish
+        publishDirectory: $(Pipeline.Workspace)/iBlendit
+        vstsFeedPublish: iFruitStudio/iblendit-releases
+        vstsFeedPackagePublish: iblendit
+        versionOption: custom
+        versionPublish: 1.0.$(Build.BuildId)
+        packagePublishDescription: iBlendit release from build $(Build.BuildNumber)
