@@ -59,6 +59,7 @@ namespace SmoothieTruckApp.Front_End
                     RecipeCard card = AddRecipe(
                         recipe.Name,
                         recipe.Category,
+                        recipe.Price,
                         "Loaded from database",
                         recipe.Ingredients.ToArray());
 
@@ -101,8 +102,9 @@ namespace SmoothieTruckApp.Front_End
         public RecipeCard AddRecipe(
             string name,
             string category,
+            decimal price,
             string lastUpdated,
-            params (string Name, int Grams)[] items)
+            params (string Name, int Amount, string Unit)[] items)
         {
             var card = new RecipeCard
             {
@@ -113,6 +115,7 @@ namespace SmoothieTruckApp.Front_End
                 flowRecipes.Controls.Count + 1,
                 name,
                 category,
+                price,
                 lastUpdated,
                 items);
 
@@ -140,6 +143,7 @@ namespace SmoothieTruckApp.Front_End
                     card.ItemId,
                     card.RecipeName,
                     card.RecipeCategory,
+                    card.RecipePrice,
                     card.Ingredients);
             }
             catch (Exception ex)
@@ -195,6 +199,7 @@ namespace SmoothieTruckApp.Front_End
             RecipeCard card = AddRecipe(
                 "New recipe",
                 "Uncategorised",
+                0m,
                 "Just now");
 
             card.SetEditing(true);

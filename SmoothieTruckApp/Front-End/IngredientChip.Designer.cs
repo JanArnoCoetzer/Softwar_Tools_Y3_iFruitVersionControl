@@ -34,6 +34,7 @@
             lblChipName = new Label();
             pnlChipDivider = new Panel();
             lblChipGrams = new Label();
+            lblChipRemove = new Label();
             pnlChip.SuspendLayout();
             flowChipInner.SuspendLayout();
             SuspendLayout();
@@ -61,6 +62,7 @@
             flowChipInner.Controls.Add(lblChipName);
             flowChipInner.Controls.Add(pnlChipDivider);
             flowChipInner.Controls.Add(lblChipGrams);
+            flowChipInner.Controls.Add(lblChipRemove);
             flowChipInner.Location = new Point(9, 0);
             flowChipInner.Margin = new Padding(0);
             flowChipInner.Name = "flowChipInner";
@@ -115,7 +117,21 @@
             lblChipGrams.Size = new Size(21, 12);
             lblChipGrams.TabIndex = 4;
             lblChipGrams.Text = "60g";
-            // 
+            //
+            // lblChipRemove
+            //
+            lblChipRemove.AutoSize = true;
+            lblChipRemove.Cursor = Cursors.Hand;
+            lblChipRemove.Font = new Font("Segoe UI", 6.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblChipRemove.ForeColor = Color.FromArgb(220, 38, 38);
+            lblChipRemove.Location = new Point(99, 6);
+            lblChipRemove.Margin = new Padding(6, 6, 0, 0);
+            lblChipRemove.Name = "lblChipRemove";
+            lblChipRemove.Size = new Size(13, 12);
+            lblChipRemove.TabIndex = 5;
+            lblChipRemove.Text = "✕";
+            lblChipRemove.Visible = false;
+            //
             // IngredientChip
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -140,5 +156,6 @@
         private Label lblChipGrams;
         private Panel pnlChipDivider;
         private Label lblChipName;
+        private Label lblChipRemove;
     }
 }

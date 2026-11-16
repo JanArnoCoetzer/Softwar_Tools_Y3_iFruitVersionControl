@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace SmoothieTruckApp.Front_End
@@ -17,11 +19,12 @@ namespace SmoothieTruckApp.Front_End
 
         private bool isEditing;
 
-        private readonly List<(string Name, int Grams)> ingredients = new();
-        private List<(string Name, int Grams)> snapshot = new();
+        private readonly List<(string Name, int Amount, string Unit)> ingredients = new();
+        private List<(string Name, int Amount, string Unit)> snapshot = new();
 
         private string recipeNameSnapshot = string.Empty;
         private string categorySnapshot = string.Empty;
+        private string priceSnapshot = string.Empty;
 
         public event EventHandler<RecipeSaveEventArgs>? SaveClicked;
         public event EventHandler? RemoveClicked;
@@ -34,8 +37,9 @@ namespace SmoothieTruckApp.Front_End
         public bool IsEditing => isEditing;
         public string RecipeName => lblRecipeName.Text.Trim();
         public string RecipeCategory => txtCatagory.Text.Trim();
+        public decimal RecipePrice => TryGetPrice(out decimal price) ? price : 0m;
 
-        public IReadOnlyList<(string Name, int Grams)> Ingredients =>
+        public IReadOnlyList<(string Name, int Amount, string Unit)> Ingredients =>
             ingredients;
 
         public RecipeCard()
@@ -47,6 +51,7 @@ namespace SmoothieTruckApp.Front_End
 
             Height = CollapsedHeight;
             pnlEditForm.Visible = false;
+            cboUnit.SelectedIndex = 0;
 
             UpdateTextFieldsEditing(false);
 
@@ -73,20 +78,22 @@ namespace SmoothieTruckApp.Front_End
             int number,
             string name,
             string category,
+            decimal price,
             string lastUpdated,
-            params (string Name, int Grams)[] items)
+            params (string Name, int Amount, string Unit)[] items)
         {
             SetNumber(number);
 
             lblRecipeName.Text = name;
             txtCatagory.Text = category.ToUpperInvariant();
+            txtPrice.Text = price.ToString("0.00", CultureInfo.InvariantCulture);
             lblRecipeTime.Text = lastUpdated;
 
             ClearIngredients();
 
             foreach (var item in items)
             {
-                AddIngredient(item.Name, item.Grams);
+                AddIngredient(item.Name, item.Amount, item.Unit);
             }
         }
 
@@ -95,12 +102,26 @@ namespace SmoothieTruckApp.Front_End
             lblNumber.Text = number.ToString("00");
         }
 
-        public void AddIngredient(string name, int grams)
+        public void AddIngredient(string name, int amount, string unit)
         {
-            ingredients.Add((name, grams));
+            //same name replaces the old amount instead of adding a second one
+            int index = ingredients.FindIndex(i =>
+                string.Equals(i.Name, name, StringComparison.OrdinalIgnoreCase));
+
+            if (index >= 0)
+            {
+                ingredients[index] = (ingredients[index].Name, amount, unit);
+
+                FindChip(ingredients[index].Name)?.SetIngredient(ingredients[index].Name, amount, unit);
+                return;
+            }
+
+            ingredients.Add((name, amount, unit));
 
             var chip = new IngredientChip();
-            chip.SetIngredient(name, grams);
+            chip.SetIngredient(name, amount, unit);
+            chip.SetRemovable(isEditing);
+            chip.RemoveClicked += Chip_RemoveClicked;
 
             flowChips.Controls.Add(chip);
         }
@@ -127,9 +148,10 @@ namespace SmoothieTruckApp.Front_End
             {
                 recipeNameSnapshot = lblRecipeName.Text;
                 categorySnapshot = txtCatagory.Text;
+                priceSnapshot = txtPrice.Text;
 
                 snapshot =
-                    new List<(string Name, int Grams)>(ingredients);
+                    new List<(string Name, int Amount, string Unit)>(ingredients);
             }
             else
             {
@@ -138,6 +160,11 @@ namespace SmoothieTruckApp.Front_End
             }
 
             isEditing = editing;
+
+            foreach (IngredientChip chip in flowChips.Controls.OfType<IngredientChip>())
+            {
+                chip.SetRemovable(editing);
+            }
 
             UpdateTextFieldsEditing(editing);
 
@@ -226,6 +253,18 @@ namespace SmoothieTruckApp.Front_End
                 return;
             }
 
+            if (!TryGetPrice(out decimal price) || price <= 0)
+            {
+                MessageBox.Show(
+                    "Enter a price greater than 0, e.g. 9.50.",
+                    "Price required",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtPrice.Focus();
+                return;
+            }
+
             if (ingredients.Count == 0)
             {
                 MessageBox.Show(
@@ -240,6 +279,7 @@ namespace SmoothieTruckApp.Front_End
 
             lblRecipeName.Text = recipeName;
             txtCatagory.Text = category.ToUpperInvariant();
+            txtPrice.Text = price.ToString("0.00", CultureInfo.InvariantCulture);
 
             var args = new RecipeSaveEventArgs();
 
@@ -252,9 +292,10 @@ namespace SmoothieTruckApp.Front_End
 
             recipeNameSnapshot = lblRecipeName.Text;
             categorySnapshot = txtCatagory.Text;
+            priceSnapshot = txtPrice.Text;
 
             snapshot =
-                new List<(string Name, int Grams)>(ingredients);
+                new List<(string Name, int Amount, string Unit)>(ingredients);
 
             lblRecipeTime.Text = "Just now";
 
@@ -263,39 +304,68 @@ namespace SmoothieTruckApp.Front_End
 
         private void btnAddIngredient_Click(object? sender, EventArgs e)
         {
-            if (!TryGetNewIngredient(out string name, out int grams))
+            if (!TryGetNewIngredient(out string name, out int amount))
                 return;
 
-            AddIngredient(name, grams);
+            AddIngredient(name, amount, cboUnit.Text);
 
             txtIngredientName.Clear();
             txtAmount.Clear();
             txtIngredientName.Focus();
         }
 
+        private void Chip_RemoveClicked(object? sender, EventArgs e)
+        {
+            if (sender is not IngredientChip chip)
+                return;
+
+            ingredients.RemoveAll(i =>
+                string.Equals(i.Name, chip.IngredientName, StringComparison.OrdinalIgnoreCase));
+
+            flowChips.Controls.Remove(chip);
+            chip.Dispose();
+        }
+
+        private IngredientChip? FindChip(string name)
+        {
+            return flowChips.Controls
+                .OfType<IngredientChip>()
+                .FirstOrDefault(c => string.Equals(c.IngredientName, name, StringComparison.OrdinalIgnoreCase));
+        }
+
         private void RestoreSnapshot()
         {
             lblRecipeName.Text = recipeNameSnapshot;
             txtCatagory.Text = categorySnapshot;
+            txtPrice.Text = priceSnapshot;
 
             ClearIngredients();
 
             foreach (var item in snapshot)
             {
-                AddIngredient(item.Name, item.Grams);
+                AddIngredient(item.Name, item.Amount, item.Unit);
             }
+        }
+
+        private bool TryGetPrice(out decimal price)
+        {
+            return decimal.TryParse(
+                txtPrice.Text.Trim(),
+                NumberStyles.Number,
+                CultureInfo.InvariantCulture,
+                out price);
         }
 
         private bool TryGetNewIngredient(
             out string name,
-            out int grams)
+            out int amount)
         {
             name = txtIngredientName.Text.Trim();
-            grams = 0;
+            amount = 0;
 
             return name.Length > 0
-                && int.TryParse(txtAmount.Text, out grams)
-                && grams > 0;
+                && int.TryParse(txtAmount.Text, out amount)
+                && amount > 0;
         }
 
         private void UpdateAddButton()

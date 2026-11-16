@@ -12,7 +12,9 @@ internal sealed class LoadedRecipe
 
     public string Category { get; set; } = string.Empty;
 
-    public List<(string Name, int Grams)> Ingredients { get; } = new();
+    public decimal Price { get; set; }
+
+    public List<(string Name, int Amount, string Unit)> Ingredients { get; } = new();
 
     public List<string> Warnings { get; } = new();
 
@@ -39,7 +41,8 @@ internal static class RecipeLoadService
             {
                 ItemId = item.Id,
                 Name = item.Name,
-                Category = item.CatagoryName
+                Category = item.CatagoryName,
+                Price = item.Price
             };
 
             foreach (var recipeLink in recipesByItem[item.Id])
@@ -55,10 +58,11 @@ internal static class RecipeLoadService
                     continue;
                 }
 
-                if (!TryConvertToGrams(
+                if (!TryConvertForCard(
                         recipeLink.QuantityRequired,
                         stockItem.Unit,
-                        out int grams,
+                        out int amount,
+                        out string cardUnit,
                         out string error))
                 {
                     loadedRecipe.Warnings.Add(
@@ -69,7 +73,8 @@ internal static class RecipeLoadService
 
                 loadedRecipe.Ingredients.Add((
                     stockItem.Name,
-                    grams));
+                    amount,
+                    cardUnit));
             }
 
             result.Add(loadedRecipe);
@@ -78,13 +83,16 @@ internal static class RecipeLoadService
         return result;
     }
 
-    private static bool TryConvertToGrams(
+    //kg and l show as g and ml on the card
+    internal static bool TryConvertForCard(
         decimal quantity,
         string unit,
-        out int grams,
+        out int amount,
+        out string cardUnit,
         out string error)
     {
-        grams = 0;
+        amount = 0;
+        cardUnit = string.Empty;
         error = string.Empty;
 
         if (quantity <= 0)
@@ -93,11 +101,12 @@ internal static class RecipeLoadService
             return false;
         }
 
-        decimal gramsValue;
+        decimal cardValue;
 
         switch ((unit ?? string.Empty).Trim().ToLowerInvariant())
         {
             case "kg":
+            case "l":
                 // Check before multiplying to avoid overflow.
                 if (quantity > int.MaxValue / 1000m)
                 {
@@ -105,37 +114,40 @@ internal static class RecipeLoadService
                     return false;
                 }
 
-                gramsValue = quantity * 1000m;
+                cardValue = quantity * 1000m;
+                cardUnit = unit!.Trim().ToLowerInvariant() == "kg" ? "g" : "ml";
                 break;
 
             case "g":
-                gramsValue = quantity;
+            case "ml":
+                cardValue = quantity;
+                cardUnit = unit!.Trim().ToLowerInvariant();
                 break;
 
             default:
                 error =
                     $"Unit '{unit}' cannot be displayed by the " +
-                    "current grams-only recipe card.";
+                    "recipe card, use kg, g, l or ml.";
 
                 return false;
         }
 
-        if (gramsValue > int.MaxValue)
+        if (cardValue > int.MaxValue)
         {
             error = "The quantity is too large to display.";
             return false;
         }
 
-        if (gramsValue != decimal.Truncate(gramsValue))
+        if (cardValue != decimal.Truncate(cardValue))
         {
             error =
-                "The quantity contains fractional grams, but the " +
-                "current recipe card only supports whole grams.";
+                $"The quantity contains a fraction of a {cardUnit}, but the " +
+                "recipe card only supports whole amounts.";
 
             return false;
         }
 
-        grams = (int)gramsValue;
+        amount = (int)cardValue;
         return true;
     }
 }
