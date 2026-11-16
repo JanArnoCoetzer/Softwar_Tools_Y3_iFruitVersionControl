@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
+using SmoothieTruckApp.Repositories;
 
 namespace SmoothieTruckApp.Front_End
 {
@@ -19,90 +22,280 @@ namespace SmoothieTruckApp.Front_End
             flowRecipes.ClientSizeChanged += (s, e) => FitCards();
             btnAddRecipe.Click += btnAddRecipe_Click;
 
-            flowRecipes.SuspendLayout();
-            AddSampleData();  // TEMPORARY: delete this line when the database is connected
-            flowRecipes.ResumeLayout(true);
-            FitCards();
-            UpdateCount();
+            LoadRecipes();
         }
 
-        public RecipeCard AddRecipe(string name, string category, string lastUpdated,
-                                    params (string Name, int Grams)[] items)
+        public void LoadRecipes()
         {
-            var card = new RecipeCard();
-            card.Margin = new Padding(0, 0, 0, 10);
-            card.SetRecipe(flowRecipes.Controls.Count + 1, name, category, lastUpdated, items);
+            List<LoadedRecipe> recipes;
 
-            card.SaveClicked += (s, e) => RecipeSaved?.Invoke(this, card);
-            card.RemoveClicked += (s, e) => RemoveRecipe(card);
+            try
+            {
+                // Read first so a loading failure does not clear the page.
+                recipes = RecipeLoadService.LoadAll();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Could not load recipes:\n{ex.Message}",
+                    "Load failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                UpdateCount();
+                return;
+            }
+
+            var warnings = new List<string>();
+
+            flowRecipes.SuspendLayout();
+
+            try
+            {
+                ClearRecipes();
+
+                foreach (var recipe in recipes)
+                {
+                    RecipeCard card = AddRecipe(
+                        recipe.Name,
+                        recipe.Category,
+                        "Loaded from database",
+                        recipe.Ingredients.ToArray());
+
+                    // Use the actual database ID, not the display number.
+                    card.ItemId = recipe.ItemId;
+
+                    if (!recipe.CanEdit)
+                    {
+                        // Prevent incomplete ingredient lists from
+                        // overwriting the saved recipe.
+                        card.Enabled = false;
+
+                        foreach (string warning in recipe.Warnings)
+                        {
+                            warnings.Add($"{recipe.Name}: {warning}");
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                flowRecipes.ResumeLayout(true);
+                FitCards();
+                UpdateCount();
+            }
+
+            if (warnings.Count > 0)
+            {
+                MessageBox.Show(
+                    "Some recipes could not be fully displayed. " +
+                    "Affected cards have been disabled to prevent " +
+                    "saving incomplete ingredient lists.\n\n" +
+                    string.Join(Environment.NewLine, warnings),
+                    "Recipe loading warnings",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        public RecipeCard AddRecipe(
+            string name,
+            string category,
+            string lastUpdated,
+            params (string Name, int Grams)[] items)
+        {
+            var card = new RecipeCard
+            {
+                Margin = new Padding(0, 0, 0, 10)
+            };
+
+            card.SetRecipe(
+                flowRecipes.Controls.Count + 1,
+                name,
+                category,
+                lastUpdated,
+                items);
+
+            card.SaveClicked += RecipeCard_SaveClicked;
+            card.RemoveClicked += RecipeCard_RemoveClicked;
 
             flowRecipes.Controls.Add(card);
+
             FitCards();
             UpdateCount();
+
             return card;
+        }
+
+        private void RecipeCard_SaveClicked(
+            object? sender,
+            RecipeSaveEventArgs e)
+        {
+            if (sender is not RecipeCard card)
+                return;
+
+            try
+            {
+                card.ItemId = RecipeSaveService.Save(
+                    card.ItemId,
+                    card.RecipeName,
+                    card.RecipeCategory,
+                    card.Ingredients);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Save failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            e.Success = true;
+
+            UpdateCount();
+
+            // Other screens can use this event to refresh.
+            RecipeSaved?.Invoke(this, card);
+        }
+
+        private void RecipeCard_RemoveClicked(
+            object? sender,
+            EventArgs e)
+        {
+            if (sender is RecipeCard card)
+            {
+                RemoveRecipe(card);
+            }
         }
 
         public void ClearRecipes()
         {
             while (flowRecipes.Controls.Count > 0)
             {
-                Control c = flowRecipes.Controls[0];
+                Control control = flowRecipes.Controls[0];
+
+                if (control is RecipeCard card)
+                {
+                    card.SaveClicked -= RecipeCard_SaveClicked;
+                    card.RemoveClicked -= RecipeCard_RemoveClicked;
+                }
+
                 flowRecipes.Controls.RemoveAt(0);
-                c.Dispose();
+                control.Dispose();
             }
+
             UpdateCount();
         }
 
         private void btnAddRecipe_Click(object? sender, EventArgs e)
         {
-            RecipeCard card = AddRecipe("New recipe", "Uncategorised", "Just now");
+            RecipeCard card = AddRecipe(
+                "New recipe",
+                "Uncategorised",
+                "Just now");
+
             card.SetEditing(true);
         }
 
         private void RemoveRecipe(RecipeCard card)
         {
-            var answer = MessageBox.Show($"Remove \"{card.RecipeName}\"?", "Remove recipe",
-                                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (answer != DialogResult.Yes) return;
+            string message = card.ItemId.HasValue
+             ? $"Permanently delete \"{card.RecipeName}\" from the " +
+               "menu and recipe database?\n\n" +
+               "Its stock ingredients will also be deleted if no other " +
+               "recipe uses them, even if they still have stock on hand."
+             : $"Discard the unsaved recipe \"{card.RecipeName}\"?";
 
-            BeginInvoke(new Action(() =>
+            DialogResult answer = MessageBox.Show(
+                message,
+                "Remove recipe",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (answer != DialogResult.Yes)
+                return;
+
+            try
             {
-                flowRecipes.Controls.Remove(card);
+                // Unsaved cards have no database records to delete.
+                if (card.ItemId.HasValue)
+                {
+                    RecipeDeleteService.Delete(card.ItemId.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Delete failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                // Keep the card visible if deletion fails.
+                return;
+            }
+
+            flowRecipes.Controls.Remove(card);
+
+            try
+            {
+                // Notification only: database deletion has already completed.
                 RecipeRemoved?.Invoke(this, card);
+            }
+            finally
+            {
+                card.SaveClicked -= RecipeCard_SaveClicked;
+                card.RemoveClicked -= RecipeCard_RemoveClicked;
+
                 card.Dispose();
+
                 Renumber();
                 UpdateCount();
-            }));
+                FitRowsAfterRemoval();
+            }
+        }
+
+        private void FitRowsAfterRemoval()
+        {
+            FitCards();
         }
 
         private void Renumber()
         {
-            int n = 1;
-            foreach (Control c in flowRecipes.Controls)
-                if (c is RecipeCard rc) rc.SetNumber(n++);
+            int number = 1;
+
+            foreach (Control control in flowRecipes.Controls)
+            {
+                if (control is RecipeCard card)
+                {
+                    card.SetNumber(number++);
+                }
+            }
         }
 
         private void UpdateCount()
         {
-            lblRecipeSub.Text = $"{flowRecipes.Controls.Count} active recipes · Keep every blend consistent across shifts";
+            int count = flowRecipes.Controls
+                .OfType<RecipeCard>()
+                .Count();
+
+            lblRecipeSub.Text =
+                $"{count} active recipes · " +
+                "Keep every blend consistent across shifts";
         }
 
         private void FitCards()
         {
-            foreach (Control c in flowRecipes.Controls)
-                c.Width = flowRecipes.ClientSize.Width - c.Margin.Horizontal;
-        }
-
-        private void AddSampleData()
-        {
-            AddRecipe("Green Machine", "Green", "Today, 9:42 AM",
-                ("Spinach", 60), ("Kale", 35), ("Banana", 100), ("Ginger", 8), ("Almond milk", 180));
-            AddRecipe("Mango Tango", "Fruit", "Yesterday, 4:18 PM",
-                ("Mango", 140), ("Orange", 90), ("Turmeric", 4), ("Honey", 12), ("Ice", 80));
-            AddRecipe("Tropical Sunrise", "Tropical", "May 21, 11:05 AM",
-                ("Mango", 100), ("Pineapple", 110), ("Passion fruit", 45), ("Coconut milk", 170));
-            AddRecipe("Berry Blast", "Berry", "May 20, 2:30 PM",
-                ("Strawberry", 90), ("Blueberry", 70), ("Açaí", 50), ("Oat milk", 180));
+            foreach (Control control in flowRecipes.Controls)
+            {
+                control.Width = Math.Max(
+                    0,
+                    flowRecipes.ClientSize.Width -
+                    control.Margin.Horizontal);
+            }
         }
     }
 }

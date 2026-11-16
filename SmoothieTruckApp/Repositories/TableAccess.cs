@@ -71,14 +71,58 @@ internal static class TableAccess
 
     public static bool AppendRow(string tableName, object[] values)
     {
-        if (FileRepository.ReadFile(tableName, out string content) != FileResult.Success || string.IsNullOrWhiteSpace(content))
+        if (values == null ||
+            values.Length == 0 ||
+            !(values[0] is int id))
         {
             return false;
         }
 
-        string newContent = content.TrimEnd() + Environment.NewLine + Serializer.SerializeRow(values) + Environment.NewLine;
+        if (FileRepository.ReadFile(tableName, out string content)
+                != FileResult.Success ||
+            string.IsNullOrWhiteSpace(content))
+        {
+            return false;
+        }
 
-        return FileRepository.WriteFile(tableName, newContent) == FileResult.Success;
+        string[] lines = content.Split(
+            new[] { "\r\n", "\n", "\r" },
+            StringSplitOptions.RemoveEmptyEntries);
+
+        var existingIds = new System.Collections.Generic.HashSet<int>();
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            string firstColumn = lines[i].Split('|')[0].Trim();
+
+            if (!int.TryParse(firstColumn, out int existingId))
+            {
+                return false;
+            }
+
+            existingIds.Add(existingId);
+        }
+
+        while (existingIds.Contains(id))
+        {
+            if (id == int.MaxValue)
+            {
+                return false;
+            }
+
+            id++;
+        }
+
+        values[0] = id;
+
+        string newContent =
+            content.TrimEnd() +
+            Environment.NewLine +
+            Serializer.SerializeRow(values) +
+            Environment.NewLine;
+
+        return FileRepository.WriteFile(tableName, newContent)
+            == FileResult.Success;
     }
 
     public static bool ReplaceRow(string tableName, int id, RowValue[] values)

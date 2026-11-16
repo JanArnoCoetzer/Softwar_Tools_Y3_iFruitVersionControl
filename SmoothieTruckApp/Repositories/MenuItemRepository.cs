@@ -36,7 +36,7 @@ internal static class MenuItemRepository
         return result == DbResult.Success;
     }
 
-    public static void SeedIfEmpty()
+    /*public static void SeedIfEmpty()
     {
         if (GetAll().Count > 0) return;
 
@@ -56,5 +56,5 @@ internal static class MenuItemRepository
         Add("Chilled Watermelon", 9.00m, "Fruit", "#f5b244");
         Add("Spinach Surge", 10.00m, "Green", "#52915e");
         Add("Passionfruit Paradise", 11.50m, "Exotic", "#e0417b");
-    }
+    }*/
 }

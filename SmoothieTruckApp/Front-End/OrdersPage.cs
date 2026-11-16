@@ -54,9 +54,13 @@ namespace SmoothieTruckApp.Front_End
 
             foreach (Order order in queue)
             {
-                TicketCard card = AddTicket($"Ticket {order.Id}", waits[order.Id],
+                TicketCard card = AddTicket(
+                    $"Ticket {order.Id}",
+                    waits[order.Id],
                     order.Lines.Select(l => (l.Item.Name, l.Quantity)).ToArray());
+
                 card.Tag = order.Id;
+                card.SetOrderedTime(order.OrderedAt);
             }
 
             foreach (var done in QueueService.GetCompleted(orders))

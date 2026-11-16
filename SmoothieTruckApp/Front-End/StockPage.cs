@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
+using SmoothieTruckApp.Repositories;
+using System.Collections.Generic;
+using System.Linq;
+
 
 namespace SmoothieTruckApp.Front_End
 {
@@ -17,67 +23,162 @@ namespace SmoothieTruckApp.Front_End
 
             flowStock.ClientSizeChanged += (s, e) => FitRows();
 
-            flowStock.SuspendLayout();
-            AddSampleData(); // TEMPORARY: delete this line when the database is connected
-            flowStock.ResumeLayout(true);
-            FitRows();
-            UpdateAttention();
+            LoadStock();
         }
 
-        public StockRow AddItem(string name, string category, int grams)
+        public void LoadStock()
         {
-            var row = new StockRow();
-            row.Margin = new Padding(0);
-            row.SetItem(name, category, grams);
-            row.StockChanged += (s, e) =>
+            var preparedRows = new List<StockRow>();
+            var warnings = new List<string>();
+
+            try
             {
+                var stockItems = StockRepository.GetAll();
+
+                foreach (var item in stockItems.OrderBy(item => item.Id))
+                {
+                    var row = new StockRow
+                    {
+                        Margin = new Padding(0)
+                    };
+
+                    try
+                    {
+                        row.SetDatabaseItem(item);
+                        preparedRows.Add(row);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        row.Dispose();
+                        warnings.Add($"{item.Name}: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                foreach (var row in preparedRows)
+                {
+                    row.Dispose();
+                }
+
+                MessageBox.Show(
+                    $"Could not load stock:\n{ex.Message}",
+                    "Stock loading failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            flowStock.SuspendLayout();
+
+            try
+            {
+                ClearItems();
+
+                foreach (var row in preparedRows)
+                {
+                    row.StockChanged += StockRow_StockChanged;
+                    flowStock.Controls.Add(row);
+                }
+            }
+            finally
+            {
+                flowStock.ResumeLayout(true);
+                FitRows();
                 UpdateAttention();
-                StockChanged?.Invoke(this, row);
+            }
+
+            if (warnings.Count > 0)
+            {
+                MessageBox.Show(
+                    "Some stock items could not be displayed:\n\n" +
+                    string.Join(Environment.NewLine, warnings),
+                    "Stock loading warnings",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        public StockRow AddItem(
+            string name,
+            string category,
+            int grams)
+        {
+            var row = new StockRow
+            {
+                Margin = new Padding(0)
             };
 
+            row.SetItem(name, category, grams);
+            row.StockChanged += StockRow_StockChanged;
+
             flowStock.Controls.Add(row);
+
             FitRows();
             UpdateAttention();
+
             return row;
+        }
+
+        private void StockRow_StockChanged(object? sender, EventArgs e)
+        {
+            if (sender is not StockRow row)
+                return;
+
+            UpdateAttention();
+
+            // Notification only: the row has already saved the change.
+            StockChanged?.Invoke(this, row);
         }
 
         public void ClearItems()
         {
             while (flowStock.Controls.Count > 0)
             {
-                Control c = flowStock.Controls[0];
+                Control control = flowStock.Controls[0];
+
+                if (control is StockRow row)
+                {
+                    row.StockChanged -= StockRow_StockChanged;
+                }
+
                 flowStock.Controls.RemoveAt(0);
-                c.Dispose();
+                control.Dispose();
             }
+
             UpdateAttention();
         }
 
         private void UpdateAttention()
         {
             int count = 0;
-            foreach (Control c in flowStock.Controls)
-                if (c is StockRow r && r.Status != StockStatus.InStock) count++;
+
+            foreach (Control control in flowStock.Controls)
+            {
+                if (control is StockRow row &&
+                    row.Status != StockStatus.InStock)
+                {
+                    count++;
+                }
+            }
 
             pnlAttention.Visible = count > 0;
-            lblAttention.Text = count == 1 ? "1 item needs attention" : $"{count} items need attention";
+
+            lblAttention.Text = count == 1
+                ? "1 item needs attention"
+                : $"{count} items need attention";
         }
 
         private void FitRows()
         {
-            foreach (Control c in flowStock.Controls)
-                c.Width = flowStock.ClientSize.Width - c.Margin.Horizontal;
-        }
-
-        // TEMPORARY sample data copied from the mockup
-        private void AddSampleData()
-        {
-            AddItem("Spinach", "Fresh greens", 1350);
-            AddItem("Mango", "Frozen fruit", 4800);
-            AddItem("Mixed Berries", "Frozen fruit", 0);
-            AddItem("Bananas", "Fresh fruit", 3600);
-            AddItem("Almond Milk", "Milk & bases", 5400);
-            AddItem("Coconut Milk", "Milk & bases", 900);
-            AddItem("Pineapple", "Frozen fruit", 3200);
+            foreach (Control control in flowStock.Controls)
+            {
+                control.Width = Math.Max(
+                    0,
+                    flowStock.ClientSize.Width -
+                    control.Margin.Horizontal);
+            }
         }
     }
 }

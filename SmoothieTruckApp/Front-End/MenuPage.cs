@@ -32,7 +32,7 @@ namespace SmoothieTruckApp.Front_End
             EnableDoubleBuffering(FlowMenu);
             EnableDoubleBuffering(flowOrder);
 
-            MenuItemRepository.SeedIfEmpty();
+            //MenuItemRepository.SeedIfEmpty();
             LoadMenu();
 
             currentOrder.Id = OrderRepository.GetNextOrderNumber();

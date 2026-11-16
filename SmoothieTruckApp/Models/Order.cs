@@ -9,6 +9,10 @@ public class Order
 {
     public int Id { get; set; }
     public bool Complete { get; set; } = false;
+
+    public DateTime? OrderedAt { get; set; }
+    public DateTime? CompletedAt { get; set; }
+
     public List<OrderLine> Lines { get; set; } = new();
 
     public decimal Subtotal => Lines.Sum(l => l.Item.Price * l.Quantity);
@@ -64,6 +68,8 @@ public class Order
     {
         Lines.Clear();
         Complete = false;
+        OrderedAt = null;
+        CompletedAt = null;
     }
 
     public string GetReceipt()

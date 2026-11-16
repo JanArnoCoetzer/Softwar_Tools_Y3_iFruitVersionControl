@@ -30,28 +30,28 @@
         {
             pnlCard = new RoundedPanel();
             pnlRecipeInner = new Panel();
+            pnlEditForm = new Panel();
+            btnSaveChanges = new Button();
+            btnAddIngredient = new Button();
+            txtAmount = new TextBox();
+            txtIngredientName = new TextBox();
+            lblAmountCaption = new Label();
+            lblIngredientCaption = new Label();
+            pnlEditLine = new Panel();
             pnlRecipeTop = new Panel();
+            txtCatagory = new TextBox();
+            lblRecipeName = new TextBox();
             flowChips = new FlowLayoutPanel();
             btnRemoveRecipe = new Button();
             btnEditRecipe = new Button();
             lblRecipeTime = new Label();
-            lblRecipeCategory = new Label();
-            lblRecipeName = new Label();
             pnlNumber = new RoundedPanel();
             lblNumber = new Label();
-            pnlEditForm = new Panel();
-            pnlEditLine = new Panel();
-            lblIngredientCaption = new Label();
-            lblAmountCaption = new Label();
-            txtIngredientName = new TextBox();
-            txtAmount = new TextBox();
-            btnAddIngredient = new Button();
-            btnSaveChanges = new Button();
             pnlCard.SuspendLayout();
             pnlRecipeInner.SuspendLayout();
+            pnlEditForm.SuspendLayout();
             pnlRecipeTop.SuspendLayout();
             pnlNumber.SuspendLayout();
-            pnlEditForm.SuspendLayout();
             SuspendLayout();
             // 
             // pnlCard
@@ -81,20 +81,133 @@
             pnlRecipeInner.Size = new Size(954, 90);
             pnlRecipeInner.TabIndex = 0;
             // 
+            // pnlEditForm
+            // 
+            pnlEditForm.Controls.Add(btnSaveChanges);
+            pnlEditForm.Controls.Add(btnAddIngredient);
+            pnlEditForm.Controls.Add(txtAmount);
+            pnlEditForm.Controls.Add(txtIngredientName);
+            pnlEditForm.Controls.Add(lblAmountCaption);
+            pnlEditForm.Controls.Add(lblIngredientCaption);
+            pnlEditForm.Controls.Add(pnlEditLine);
+            pnlEditForm.Dock = DockStyle.Top;
+            pnlEditForm.Location = new Point(0, 90);
+            pnlEditForm.Name = "pnlEditForm";
+            pnlEditForm.Size = new Size(954, 62);
+            pnlEditForm.TabIndex = 1;
+            pnlEditForm.Visible = false;
+            // 
+            // btnSaveChanges
+            // 
+            btnSaveChanges.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSaveChanges.BackColor = Color.FromArgb(124, 58, 237);
+            btnSaveChanges.ForeColor = Color.White;
+            btnSaveChanges.Location = new Point(772, 27);
+            btnSaveChanges.Name = "btnSaveChanges";
+            btnSaveChanges.Size = new Size(75, 23);
+            btnSaveChanges.TabIndex = 6;
+            btnSaveChanges.Text = "Save Changes";
+            btnSaveChanges.UseVisualStyleBackColor = false;
+            // 
+            // btnAddIngredient
+            // 
+            btnAddIngredient.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnAddIngredient.BackColor = Color.FromArgb(243, 244, 246);
+            btnAddIngredient.ForeColor = Color.FromArgb(156, 163, 175);
+            btnAddIngredient.Location = new Point(680, 27);
+            btnAddIngredient.Name = "btnAddIngredient";
+            btnAddIngredient.Size = new Size(75, 23);
+            btnAddIngredient.TabIndex = 5;
+            btnAddIngredient.Text = "+ Add ingredient";
+            btnAddIngredient.UseVisualStyleBackColor = false;
+            // 
+            // txtAmount
+            // 
+            txtAmount.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtAmount.Location = new Point(584, 28);
+            txtAmount.Name = "txtAmount";
+            txtAmount.Size = new Size(88, 23);
+            txtAmount.TabIndex = 4;
+            txtAmount.Text = "0";
+            txtAmount.TextAlign = HorizontalAlignment.Right;
+            // 
+            // txtIngredientName
+            // 
+            txtIngredientName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtIngredientName.BorderStyle = BorderStyle.FixedSingle;
+            txtIngredientName.Location = new Point(56, 28);
+            txtIngredientName.Name = "txtIngredientName";
+            txtIngredientName.Size = new Size(520, 23);
+            txtIngredientName.TabIndex = 3;
+            txtIngredientName.Text = "e.g. Chia seeds";
+            // 
+            // lblAmountCaption
+            // 
+            lblAmountCaption.AutoSize = true;
+            lblAmountCaption.Font = new Font("Segoe UI", 6.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblAmountCaption.ForeColor = Color.FromArgb(120, 124, 145);
+            lblAmountCaption.Location = new Point(584, 10);
+            lblAmountCaption.Name = "lblAmountCaption";
+            lblAmountCaption.Size = new Size(86, 12);
+            lblAmountCaption.TabIndex = 2;
+            lblAmountCaption.Text = "AMOUNT (GRAMS)";
+            // 
+            // lblIngredientCaption
+            // 
+            lblIngredientCaption.AutoSize = true;
+            lblIngredientCaption.Font = new Font("Segoe UI", 6.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblIngredientCaption.ForeColor = Color.FromArgb(120, 124, 145);
+            lblIngredientCaption.Location = new Point(56, 10);
+            lblIngredientCaption.Name = "lblIngredientCaption";
+            lblIngredientCaption.Size = new Size(88, 12);
+            lblIngredientCaption.TabIndex = 1;
+            lblIngredientCaption.Text = "INGREDIENT NAME";
+            // 
+            // pnlEditLine
+            // 
+            pnlEditLine.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlEditLine.BackColor = Color.FromArgb(236, 238, 242);
+            pnlEditLine.Location = new Point(56, 0);
+            pnlEditLine.Name = "pnlEditLine";
+            pnlEditLine.Size = new Size(780, 1);
+            pnlEditLine.TabIndex = 0;
+            // 
             // pnlRecipeTop
             // 
+            pnlRecipeTop.Controls.Add(txtCatagory);
+            pnlRecipeTop.Controls.Add(lblRecipeName);
             pnlRecipeTop.Controls.Add(flowChips);
             pnlRecipeTop.Controls.Add(btnRemoveRecipe);
             pnlRecipeTop.Controls.Add(btnEditRecipe);
             pnlRecipeTop.Controls.Add(lblRecipeTime);
-            pnlRecipeTop.Controls.Add(lblRecipeCategory);
-            pnlRecipeTop.Controls.Add(lblRecipeName);
             pnlRecipeTop.Controls.Add(pnlNumber);
             pnlRecipeTop.Dock = DockStyle.Top;
             pnlRecipeTop.Location = new Point(0, 0);
             pnlRecipeTop.Name = "pnlRecipeTop";
             pnlRecipeTop.Size = new Size(954, 90);
             pnlRecipeTop.TabIndex = 0;
+            // 
+            // txtCatagory
+            // 
+            txtCatagory.BorderStyle = BorderStyle.None;
+            txtCatagory.Font = new Font("Segoe UI", 6.75F, FontStyle.Bold);
+            txtCatagory.ForeColor = Color.FromArgb(124, 58, 237);
+            txtCatagory.Location = new Point(56, 35);
+            txtCatagory.Name = "txtCatagory";
+            txtCatagory.Size = new Size(442, 12);
+            txtCatagory.TabIndex = 10;
+            txtCatagory.Text = "Test Catagory";
+            // 
+            // lblRecipeName
+            // 
+            lblRecipeName.BorderStyle = BorderStyle.None;
+            lblRecipeName.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblRecipeName.Location = new Point(56, 11);
+            lblRecipeName.Margin = new Padding(0);
+            lblRecipeName.Name = "lblRecipeName";
+            lblRecipeName.Size = new Size(442, 18);
+            lblRecipeName.TabIndex = 7;
+            lblRecipeName.Text = "Test Name";
             // 
             // flowChips
             // 
@@ -148,29 +261,6 @@
             lblRecipeTime.Text = "Today, 9:42 AM";
             lblRecipeTime.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // lblRecipeCategory
-            // 
-            lblRecipeCategory.AutoSize = true;
-            lblRecipeCategory.Font = new Font("Segoe UI", 6.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRecipeCategory.ForeColor = Color.FromArgb(124, 58, 237);
-            lblRecipeCategory.Location = new Point(56, 36);
-            lblRecipeCategory.Name = "lblRecipeCategory";
-            lblRecipeCategory.Size = new Size(34, 12);
-            lblRecipeCategory.TabIndex = 2;
-            lblRecipeCategory.Text = "GREEN";
-            // 
-            // lblRecipeName
-            // 
-            lblRecipeName.AutoSize = true;
-            lblRecipeName.BackColor = Color.Transparent;
-            lblRecipeName.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRecipeName.ForeColor = Color.FromArgb(17, 17, 27);
-            lblRecipeName.Location = new Point(56, 14);
-            lblRecipeName.Name = "lblRecipeName";
-            lblRecipeName.Size = new Size(100, 17);
-            lblRecipeName.TabIndex = 1;
-            lblRecipeName.Text = "Green Machine";
-            // 
             // pnlNumber
             // 
             pnlNumber.BackColor = Color.Transparent;
@@ -198,97 +288,6 @@
             lblNumber.Text = "01";
             lblNumber.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // pnlEditForm
-            // 
-            pnlEditForm.Controls.Add(btnSaveChanges);
-            pnlEditForm.Controls.Add(btnAddIngredient);
-            pnlEditForm.Controls.Add(txtAmount);
-            pnlEditForm.Controls.Add(txtIngredientName);
-            pnlEditForm.Controls.Add(lblAmountCaption);
-            pnlEditForm.Controls.Add(lblIngredientCaption);
-            pnlEditForm.Controls.Add(pnlEditLine);
-            pnlEditForm.Dock = DockStyle.Top;
-            pnlEditForm.Location = new Point(0, 90);
-            pnlEditForm.Name = "pnlEditForm";
-            pnlEditForm.Size = new Size(954, 62);
-            pnlEditForm.TabIndex = 1;
-            pnlEditForm.Visible = false;
-            // 
-            // pnlEditLine
-            // 
-            pnlEditLine.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pnlEditLine.BackColor = Color.FromArgb(236, 238, 242);
-            pnlEditLine.Location = new Point(56, 0);
-            pnlEditLine.Name = "pnlEditLine";
-            pnlEditLine.Size = new Size(780, 1);
-            pnlEditLine.TabIndex = 0;
-            // 
-            // lblIngredientCaption
-            // 
-            lblIngredientCaption.AutoSize = true;
-            lblIngredientCaption.Font = new Font("Segoe UI", 6.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblIngredientCaption.ForeColor = Color.FromArgb(120, 124, 145);
-            lblIngredientCaption.Location = new Point(56, 10);
-            lblIngredientCaption.Name = "lblIngredientCaption";
-            lblIngredientCaption.Size = new Size(88, 12);
-            lblIngredientCaption.TabIndex = 1;
-            lblIngredientCaption.Text = "INGREDIENT NAME";
-            // 
-            // lblAmountCaption
-            // 
-            lblAmountCaption.AutoSize = true;
-            lblAmountCaption.Font = new Font("Segoe UI", 6.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAmountCaption.ForeColor = Color.FromArgb(120, 124, 145);
-            lblAmountCaption.Location = new Point(584, 10);
-            lblAmountCaption.Name = "lblAmountCaption";
-            lblAmountCaption.Size = new Size(86, 12);
-            lblAmountCaption.TabIndex = 2;
-            lblAmountCaption.Text = "AMOUNT (GRAMS)";
-            // 
-            // txtIngredientName
-            // 
-            txtIngredientName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtIngredientName.BorderStyle = BorderStyle.FixedSingle;
-            txtIngredientName.Location = new Point(56, 28);
-            txtIngredientName.Name = "txtIngredientName";
-            txtIngredientName.Size = new Size(520, 23);
-            txtIngredientName.TabIndex = 3;
-            txtIngredientName.Text = "e.g. Chia seeds";
-            // 
-            // txtAmount
-            // 
-            txtAmount.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtAmount.Location = new Point(584, 28);
-            txtAmount.Name = "txtAmount";
-            txtAmount.Size = new Size(88, 23);
-            txtAmount.TabIndex = 4;
-            txtAmount.Text = "0";
-            txtAmount.TextAlign = HorizontalAlignment.Right;
-            // 
-            // btnAddIngredient
-            // 
-            btnAddIngredient.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnAddIngredient.BackColor = Color.FromArgb(243, 244, 246);
-            btnAddIngredient.ForeColor = Color.FromArgb(156, 163, 175);
-            btnAddIngredient.Location = new Point(680, 27);
-            btnAddIngredient.Name = "btnAddIngredient";
-            btnAddIngredient.Size = new Size(75, 23);
-            btnAddIngredient.TabIndex = 5;
-            btnAddIngredient.Text = "+ Add ingredient";
-            btnAddIngredient.UseVisualStyleBackColor = false;
-            // 
-            // btnSaveChanges
-            // 
-            btnSaveChanges.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSaveChanges.BackColor = Color.FromArgb(124, 58, 237);
-            btnSaveChanges.ForeColor = Color.White;
-            btnSaveChanges.Location = new Point(772, 27);
-            btnSaveChanges.Name = "btnSaveChanges";
-            btnSaveChanges.Size = new Size(75, 23);
-            btnSaveChanges.TabIndex = 6;
-            btnSaveChanges.Text = "Save Changes";
-            btnSaveChanges.UseVisualStyleBackColor = false;
-            // 
             // RecipeCard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -299,11 +298,11 @@
             Size = new Size(960, 96);
             pnlCard.ResumeLayout(false);
             pnlRecipeInner.ResumeLayout(false);
+            pnlEditForm.ResumeLayout(false);
+            pnlEditForm.PerformLayout();
             pnlRecipeTop.ResumeLayout(false);
             pnlRecipeTop.PerformLayout();
             pnlNumber.ResumeLayout(false);
-            pnlEditForm.ResumeLayout(false);
-            pnlEditForm.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -313,11 +312,10 @@
         private Panel pnlRecipeInner;
         private Panel pnlRecipeTop;
         private RoundedPanel pnlNumber;
-        private Label lblRecipeName;
+        private Label textBox1;
         private Label lblNumber;
         private Button btnEditRecipe;
         private Label lblRecipeTime;
-        private Label lblRecipeCategory;
         private Button btnRemoveRecipe;
         private FlowLayoutPanel flowChips;
         private Panel pnlEditForm;
@@ -328,5 +326,7 @@
         private TextBox txtIngredientName;
         private Button btnSaveChanges;
         private Button btnAddIngredient;
+        private TextBox lblRecipeName;
+        private TextBox txtCatagory;
     }
 }

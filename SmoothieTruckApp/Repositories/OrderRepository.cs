@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using SmoothieTruckApp.DataBaseContext;
 using SmoothieTruckApp.DataBaseContext.TableDefinitions;
 using SmoothieTruckApp.Models;
@@ -17,40 +20,37 @@ internal static class OrderRepository
 
     public static int Save(Order order)
     {
-
-
         if (order.Lines.Count == 0)
         {
-
             return 0;
         }
 
         int orderNumber = GetNextOrderNumber();
 
+        order.OrderedAt ??= DateTime.Now;
+
+        string orderedAt = FormatTimestamp(order.OrderedAt);
+        string completedAt = FormatTimestamp(order.CompletedAt);
 
         foreach (OrderLine line in order.Lines)
         {
-           
-
             bool appended = TableAccess.AppendRow(
                 OrderedItemsTable,
                 new object[]
                 {
-                orderNumber,
-                line.Item.Id,
-                line.Quantity,
-                false
+                    orderNumber,
+                    line.Item.Id,
+                    line.Quantity,
+                    order.Complete,
+                    orderedAt,
+                    completedAt
                 });
-
-          
 
             if (!appended)
             {
                 return 0;
             }
         }
-
-       
 
         return orderNumber;
     }
@@ -62,34 +62,25 @@ internal static class OrderRepository
 
         List<object[]> lineRows = TableAccess.ReadRows(OrderedItemsTable);
 
-        foreach (object[] row in lineRows)
-        {
-            System.Diagnostics.Debug.WriteLine(
-                $"Row columns: {row.Length}, Values: {string.Join(" | ", row)}");
-
-            if (row.Length > 3)
-            {
-                System.Diagnostics.Debug.WriteLine(
-                    $"Complete value: {row[3]}, Type: {row[3]?.GetType().FullName}");
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("Complete column is missing.");
-            }
-        }
-
-
         var orders = new List<Order>();
 
         foreach (var orderRows in lineRows.GroupBy(row => (int)row[0]))
         {
+            object[] firstRow = orderRows.First();
+
+            bool complete = orderRows.All(row =>
+                row.Length > 3 &&
+                bool.TryParse(row[3]?.ToString(), out bool value) &&
+                value);
+
             var order = new Order
             {
                 Id = orderRows.Key,
-                Complete = orderRows.All(row =>
-                    row.Length > 3 &&
-                    bool.TryParse(row[3]?.ToString(), out bool complete) &&
-                    complete)
+                Complete = complete,
+                OrderedAt = ReadTimestamp(firstRow, 4),
+                CompletedAt = complete
+                    ? ReadTimestamp(firstRow, 5)
+                    : null
             };
 
             foreach (object[] lineRow in orderRows)
@@ -98,7 +89,11 @@ internal static class OrderRepository
 
                 MenuItem item = menu.TryGetValue(itemId, out MenuItem? found)
                     ? found
-                    : new MenuItem { Id = itemId, Name = $"Item #{itemId}" };
+                    : new MenuItem
+                    {
+                        Id = itemId,
+                        Name = $"Item #{itemId}"
+                    };
 
                 order.Lines.Add(new OrderLine
                 {
@@ -127,19 +122,75 @@ internal static class OrderRepository
             return false;
         }
 
+        string orderedAt = row.Length > 4
+            ? row[4]?.ToString() ?? string.Empty
+            : string.Empty;
+
+        // Preserve an existing completion timestamp.
+        DateTime completedAt = ReadTimestamp(row, 5) ?? DateTime.Now;
+
         bool success = TableAccess.ReplaceRow(
             OrderedItemsTable,
             orderId,
             new[]
             {
-            new RowValue(DataType.INTEGER, ((int)row[1]).ToString()),
-            new RowValue(DataType.INTEGER, ((int)row[2]).ToString()),
-            new RowValue(DataType.BOOLEAN, bool.TrueString)
+                new RowValue(
+                    DataType.INTEGER,
+                    ((int)row[1]).ToString(CultureInfo.InvariantCulture)),
+
+                new RowValue(
+                    DataType.INTEGER,
+                    ((int)row[2]).ToString(CultureInfo.InvariantCulture)),
+
+                new RowValue(
+                    DataType.BOOLEAN,
+                    bool.TrueString),
+
+                new RowValue(
+                    DataType.STRING,
+                    orderedAt),
+
+                new RowValue(
+                    DataType.STRING,
+                    FormatTimestamp(completedAt))
             });
 
         System.Diagnostics.Debug.WriteLine(
-            $"MarkComplete: ReplaceRow returned {success}.");
+            $"MarkComplete: Order={orderId}, " +
+            $"CompletedAt={FormatTimestamp(completedAt)}, " +
+            $"Success={success}");
 
         return success;
+    }
+
+    private static string FormatTimestamp(DateTime? timestamp)
+    {
+        return timestamp?.ToString(
+            "O",
+            CultureInfo.InvariantCulture)
+            ?? string.Empty;
+    }
+
+    private static DateTime? ReadTimestamp(object[] row, int index)
+    {
+        if (index >= row.Length)
+        {
+            return null;
+        }
+
+        string? raw = row[index]?.ToString();
+
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return null;
+        }
+
+        return DateTime.TryParse(
+            raw,
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.RoundtripKind,
+            out DateTime timestamp)
+            ? timestamp
+            : null;
     }
 }
