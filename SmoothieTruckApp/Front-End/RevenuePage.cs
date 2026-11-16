@@ -1,18 +1,143 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace SmoothieTruckApp.Front_End
 {
     public partial class RevenuePage : UserControl
     {
+        private static readonly Color Purple = Color.FromArgb(124, 58, 237);
+        private static readonly Color Grey = Color.FromArgb(120, 124, 145);
+        private static readonly Color[] BarColors =
+        {
+            Color.FromArgb(124, 58, 237),   // purple
+            Color.FromArgb(6, 182, 212),    // cyan
+            Color.FromArgb(245, 158, 11),   // amber
+            Color.FromArgb(249, 115, 22),   // orange
+        };
+
+        private bool showingWeek = true;
+
+        public event EventHandler<bool>? PeriodChanged;
+
         public RevenuePage()
         {
             InitializeComponent();
+
+            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+                return;
+
+            btnWeek.Click += (s, e) => SetPeriod(true);
+            btnMonth.Click += (s, e) => SetPeriod(false);
+            flowBlends.ClientSizeChanged += (s, e) => FitRows();
+
+            lblRevenueSub.Text = $"Sales performance for {DateTime.Now:dddd, MMMM d}";
+
+            statTotalSales.SetIcon("$", Color.FromArgb(237, 233, 254), Color.FromArgb(124, 58, 237));
+            statTotalSales.SetHighlight(true);
+            statAvgOrder.SetIcon("#", Color.FromArgb(207, 250, 254), Color.FromArgb(8, 145, 178));
+            statTopBlend.SetIcon("★", Color.FromArgb(254, 243, 226), Color.FromArgb(217, 119, 6));
+
+            AddSampleData();   // TEMPORARY: delete this line when the database is connected
+            ApplyPeriodStyle();
+        }
+
+        public void SetTotalSales(string value, string delta, string subText)
+        {
+            statTotalSales.SetStat("Total Daily Sales", value, subText, delta);
+        }
+
+
+        public void SetAverageOrder(string value, string subText)
+        {
+            statAvgOrder.SetStat("Average Order Value", value, subText);
+        }
+
+ 
+        public void SetTopBlend(string name, string subText)
+        {
+            statTopBlend.SetStat("Top Selling Blend", name, subText);
+        }
+
+        public void SetTrend(string[] labels, double[] values, string totalText)
+        {
+            lineTrend.SetData(labels, values);
+            lblWeekTotal.Text = totalText;
+        }
+
+        public void SetTopBlends(params (string Name, int Units, decimal Revenue)[] blends)
+        {
+            flowBlends.SuspendLayout();
+
+            while (flowBlends.Controls.Count > 0)
+            {
+                Control c = flowBlends.Controls[0];
+                flowBlends.Controls.RemoveAt(0);
+                c.Dispose();
+            }
+
+            int maxUnits = 0;
+            foreach (var b in blends) maxUnits = Math.Max(maxUnits, b.Units);
+
+            for (int i = 0; i < blends.Length; i++)
+            {
+                var row = new BlendRankRow();
+                row.Margin = new Padding(0);
+                double percent = maxUnits > 0 ? blends[i].Units * 100.0 / maxUnits : 0;
+                row.SetBlend(i + 1, blends[i].Name, blends[i].Units, blends[i].Revenue,
+                             percent, BarColors[i % BarColors.Length]);
+                flowBlends.Controls.Add(row);
+            }
+
+            flowBlends.ResumeLayout(true);
+            FitRows();
+        }
+
+
+        private void SetPeriod(bool week)
+        {
+            if (week == showingWeek) return;
+            showingWeek = week;
+            ApplyPeriodStyle();
+            PeriodChanged?.Invoke(this, week);
+        }
+
+        private void ApplyPeriodStyle()
+        {
+            pnlWeek.FillColor = showingWeek ? Purple : Color.White;
+            btnWeek.ForeColor = showingWeek ? Color.White : Grey;
+            pnlMonth.FillColor = showingWeek ? Color.White : Purple;
+            btnMonth.ForeColor = showingWeek ? Grey : Color.White;
+            pnlWeek.Invalidate();
+            pnlMonth.Invalidate();
+
+            lblWeekCaption.Text = showingWeek ? "WEEK TOTAL" : "MONTH TOTAL";
+            lblTrendSub.Text = showingWeek ? "Daily sales this week" : "Daily sales this month";
+        }
+
+        private void FitRows()
+        {
+            foreach (Control c in flowBlends.Controls)
+                c.Width = flowBlends.ClientSize.Width - c.Margin.Horizontal;
+        }
+
+        // TEMPORARY sample data copied from the mockup
+        private void AddSampleData()
+        {
+            SetTotalSales("$1,284.50", "+12.8%", "from last Monday");
+            SetAverageOrder("$18.35", "70 completed orders");
+            SetTopBlend("Berry Blast", "24 sold · $210.00 revenue");
+
+            SetTrend(new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" },
+                     new[] { 800.0, 950.0, 900.0, 1100.0, 1300.0, 1500.0, 1090.0 },
+                     "$7,640");
+
+            SetTopBlends(
+                ("Berry Blast", 24, 210.00m),
+                ("Green Machine", 19, 190.00m),
+                ("Tropical Sunrise", 15, 142.50m),
+                ("Mango Tango", 12, 108.00m));
         }
     }
 }
