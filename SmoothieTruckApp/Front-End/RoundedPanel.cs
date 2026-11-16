@@ -102,7 +102,7 @@ namespace SmoothieTruckApp
                      ControlStyles.OptimizedDoubleBuffer |
                      ControlStyles.ResizeRedraw |
                      ControlStyles.SupportsTransparentBackColor, true);
-            BackColor = Color.Transparent;
+                     DoubleBuffered = true;
         }
 
         protected override void OnPaint(PaintEventArgs e)

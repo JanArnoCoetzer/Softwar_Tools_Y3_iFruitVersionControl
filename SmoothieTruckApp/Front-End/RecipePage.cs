@@ -19,7 +19,10 @@ namespace SmoothieTruckApp.Front_End
             flowRecipes.ClientSizeChanged += (s, e) => FitCards();
             btnAddRecipe.Click += btnAddRecipe_Click;
 
-            AddSampleData();   // TEMPORARY: delete this line when the database is connected
+            flowRecipes.SuspendLayout();
+            AddSampleData();  // TEMPORARY: delete this line when the database is connected
+            flowRecipes.ResumeLayout(true);
+            FitCards();
             UpdateCount();
         }
 

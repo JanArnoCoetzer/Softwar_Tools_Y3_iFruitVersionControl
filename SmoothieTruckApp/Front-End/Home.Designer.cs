@@ -125,7 +125,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(56, 624);
             panel1.TabIndex = 2;
-            panel1.Paint += panel1_Paint_1;
             // 
             // pnlAccent
             // 
@@ -162,7 +161,6 @@
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.Size = new Size(56, 624);
             tableLayoutPanel3.TabIndex = 0;
-            tableLayoutPanel3.Click += lblBrand_Click;
             tableLayoutPanel3.Paint += tableLayoutPanel3_Paint;
             // 
             // btnRevenue

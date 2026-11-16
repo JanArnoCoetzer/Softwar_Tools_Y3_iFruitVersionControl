@@ -57,6 +57,7 @@ namespace SmoothieTruckApp.Front_End
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassStyle |= CS_DROPSHADOW;
+                cp.ExStyle |= 0x02000000;
                 return cp;
             }
         }
@@ -116,9 +117,11 @@ namespace SmoothieTruckApp.Front_End
 
         private void ShowPage(UserControl page)
         {
+            pnlContent.SuspendLayout();
             pnlContent.Controls.Clear();
             page.Dock = DockStyle.Fill;
             pnlContent.Controls.Add(page);
+            pnlContent.ResumeLayout(true);
         }
 
         private Image GetIcon(Button b, bool coloured)
@@ -183,10 +186,6 @@ namespace SmoothieTruckApp.Front_End
             b.Image = GetIcon(b, b == activeButton);
         }
 
-        private void Logo_Click(object sender, EventArgs e) { }
-        private void lblBrand_Click(object sender, EventArgs e) { }
-        private void pnlContent_Paint(object sender, PaintEventArgs e) { }
-        private void panel1_Paint_1(object sender, PaintEventArgs e) { }
 
         private void lblAdmin_Click(object sender, EventArgs e)
         {
