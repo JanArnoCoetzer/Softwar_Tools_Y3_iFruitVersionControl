@@ -4,6 +4,7 @@
     {
         INTEGER,
         STRING,
-        DECIMAL
+        DECIMAL,
+        BOOLEAN
     }
 }

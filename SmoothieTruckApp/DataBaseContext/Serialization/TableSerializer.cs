@@ -44,7 +44,6 @@ namespace SmoothieTruckApp.DataBaseContext.Serialization
 
             for (int i = 0; i < columns.Length; i++)
             {
-
                 if (i >= splitParts.Length)
                 {
                     parsedObjects[i] = GetDefaultValue(columns[i].VarType);
@@ -58,19 +57,31 @@ namespace SmoothieTruckApp.DataBaseContext.Serialization
                     switch (columns[i].VarType)
                     {
                         case DataType.INTEGER:
-                            parsedObjects[i] = int.TryParse(rawValue, out int intResult) ? intResult : 0;
+                            parsedObjects[i] = int.TryParse(rawValue, out int intResult)
+                                ? intResult
+                                : 0;
                             break;
 
                         case DataType.DECIMAL:
-                            parsedObjects[i] = decimal.TryParse(rawValue, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal decResult)
+                            parsedObjects[i] = decimal.TryParse(
+                                rawValue,
+                                NumberStyles.Any,
+                                CultureInfo.InvariantCulture,
+                                out decimal decResult)
                                 ? decResult
                                 : 0.0m;
                             break;
 
+                        case DataType.BOOLEAN:
+                            parsedObjects[i] = bool.TryParse(rawValue, out bool boolResult)
+                                ? boolResult
+                                : false;
+                            break;
+
                         case DataType.STRING:
                         default:
-
-                            parsedObjects[i] = rawValue.Replace(EscapedPipe, Delimiter.ToString());
+                            parsedObjects[i] = rawValue.Replace(
+                                EscapedPipe, Delimiter.ToString());
                             break;
                     }
                 }
@@ -91,22 +102,38 @@ namespace SmoothieTruckApp.DataBaseContext.Serialization
             }
 
             string[] tokens = headerLine.Split(Delimiter);
-            List<TableColumn> columns = new List<TableColumn>();
+            var columns = new List<TableColumn>();
 
             foreach (string token in tokens)
             {
-                if (string.IsNullOrWhiteSpace(token)) continue;
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    continue;
+                }
 
                 int colonIndex = token.IndexOf(':');
-                if (colonIndex == -1) continue;
+
+                if (colonIndex == -1)
+                {
+                    throw new FormatException(
+                        $"Invalid column definition: '{token.Trim()}'.");
+                }
 
                 string columnName = token.Substring(0, colonIndex).Trim();
                 string columnTypeStr = token.Substring(colonIndex + 1).Trim();
 
-                if (Enum.TryParse(columnTypeStr, out DataType dataType))
+                if (!Enum.TryParse(
+                        columnTypeStr,
+                        ignoreCase: true,
+                        out DataType dataType)
+                    || !Enum.IsDefined(typeof(DataType), dataType))
                 {
-                    columns.Add(new TableColumn(columnName, dataType));
+                    throw new FormatException(
+                        $"Unsupported data type '{columnTypeStr}' " +
+                        $"for column '{columnName}'.");
                 }
+
+                columns.Add(new TableColumn(columnName, dataType));
             }
 
             return columns.ToArray();
@@ -127,9 +154,11 @@ namespace SmoothieTruckApp.DataBaseContext.Serialization
             {
                 DataType.INTEGER => 0,
                 DataType.DECIMAL => 0.0m,
+                DataType.BOOLEAN => false,
                 DataType.STRING => string.Empty,
                 _ => string.Empty
             };
         }
     }
+    
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SmoothieTruckApp.Models;
@@ -7,7 +8,9 @@ namespace SmoothieTruckApp.Models;
 public class Order
 {
     public int Id { get; set; }
+    public bool Complete { get; set; } = false;
     public List<OrderLine> Lines { get; set; } = new();
+
     public decimal Subtotal => Lines.Sum(l => l.Item.Price * l.Quantity);
     public decimal Tax => Math.Round(Subtotal * 0.08m, 2);
     public decimal Total => Subtotal + Tax;
@@ -17,7 +20,8 @@ public class Order
     {
         if (quantity <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be at least 1.");
+            throw new ArgumentOutOfRangeException(
+                nameof(quantity), "Quantity must be at least 1.");
         }
 
         OrderLine? existing = Lines.FirstOrDefault(l => l.Item.Id == item.Id);
@@ -59,6 +63,7 @@ public class Order
     public void Clear()
     {
         Lines.Clear();
+        Complete = false;
     }
 
     public string GetReceipt()
@@ -70,7 +75,8 @@ public class Order
 
         foreach (OrderLine line in Lines)
         {
-            receipt.AppendLine($"{line.Quantity} × {line.Item.Name}   ${line.LineTotal:0.00}");
+            receipt.AppendLine(
+                $"{line.Quantity} × {line.Item.Name}   ${line.LineTotal:0.00}");
         }
 
         receipt.AppendLine();

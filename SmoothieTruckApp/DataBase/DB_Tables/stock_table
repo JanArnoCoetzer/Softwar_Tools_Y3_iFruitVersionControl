@@ -1,18 +1,18 @@
 ﻿stock_index PK:INTEGER | name:STRING | quantity:DECIMAL | unit:STRING
-1|Mango|24.25|kg
-2|Pineapple|12.20|kg
-3|Passion Fruit|9.85|kg
-4|Coconut Milk|29.40|l
-5|Strawberry|35.00|kg
-6|Blueberry|22.50|kg
-7|Acai|15.00|kg
-8|Oat Milk|40.00|l
-9|Spinach|14.90|kg
-10|Kale|8.90|kg
-11|Banana|30.76|kg
-12|Ginger|1.98|kg
-13|Almond Milk|29.60|l
-14|Orange|39.70|kg
-15|Turmeric|0.48|kg
-16|Honey|2.46|l
-17|Ice|22.30|kg
+1|Mango|20.95|kg
+2|Pineapple|10.20|kg
+3|Passion Fruit|8.85|kg
+4|Coconut Milk|25.40|l
+5|Strawberry|34.55|kg
+6|Blueberry|22.20|kg
+7|Acai|14.85|kg
+8|Oat Milk|39.40|l
+9|Spinach|14.60|kg
+10|Kale|8.60|kg
+11|Banana|30.04|kg
+12|Ginger|1.92|kg
+13|Almond Milk|28.40|l
+14|Orange|39.40|kg
+15|Turmeric|0.46|kg
+16|Honey|2.42|l
+17|Ice|22.10|kg

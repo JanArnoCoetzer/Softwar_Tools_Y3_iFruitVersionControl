@@ -62,52 +62,62 @@ namespace SmoothieTruckApp.DataBaseContext.Domain
 
         public bool IsValidRecord(object[] values)
         {
-            if (values == null ||
-                values.Length != columns.Length ||
-                columns[0].VarType != DataType.INTEGER ||
+
+            System.Diagnostics.Debug.WriteLine("-------------------------------------------");
+            if (values == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Validation failed: values are null.");
+                return false;
+            }
+
+            if (columns.Length == 0 || values.Length != columns.Length)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"Validation failed: Column count={columns.Length}, Value count={values.Length}");
+                return false;
+            }
+
+            if (columns[0].VarType != DataType.INTEGER ||
                 !(values[0] is int id) ||
                 id < 0)
             {
+                System.Diagnostics.Debug.WriteLine(
+                    $"Validation failed: Invalid ID. Schema type={columns[0].VarType}, " +
+                    $"Value={values[0]}, Runtime type={values[0]?.GetType().FullName ?? "null"}");
                 return false;
             }
 
             for (int i = 0; i < columns.Length; i++)
             {
-                switch (columns[i].VarType)
+                bool valid = columns[i].VarType switch
                 {
-                    case DataType.INTEGER:
-                        if (!(values[i] is int))
-                        {
-                            return false;
-                        }
-                        break;
+                    DataType.INTEGER => values[i] is int,
+                    DataType.DECIMAL => values[i] is decimal,
+                    DataType.STRING => values[i] is string,
+                    DataType.BOOLEAN => values[i] is bool,
+                    _ => false
+                };
 
-                    case DataType.DECIMAL:
-                        if (!(values[i] is decimal))
-                        {
-                            return false;
-                        }
-                        break;
+                if (!valid)
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                        $"Validation failed: Column={i}, " +
+                        $"Expected={columns[i].VarType}, " +
+                        $"Value={values[i]}, " +
+                        $"Runtime type={values[i]?.GetType().FullName ?? "null"}");
 
-                    case DataType.STRING:
-                        if (!(values[i] is string))
-                        {
-                            return false;
-                        }
-                        break;
-
-                    default:
-                        return false;
+                    return false;
                 }
             }
 
+            System.Diagnostics.Debug.WriteLine("IsValidRecord: Success.");
             return true;
         }
 
         private static bool TryParse(
-            DataType type,
-            string raw,
-            out object value)
+    DataType type,
+    string raw,
+    out object value)
         {
             value = null;
 
@@ -134,6 +144,14 @@ namespace SmoothieTruckApp.DataBaseContext.Domain
                         out decimal number))
                     {
                         value = number;
+                        return true;
+                    }
+                    return false;
+
+                case DataType.BOOLEAN:
+                    if (bool.TryParse(raw, out bool boolean))
+                    {
+                        value = boolean;
                         return true;
                     }
                     return false;

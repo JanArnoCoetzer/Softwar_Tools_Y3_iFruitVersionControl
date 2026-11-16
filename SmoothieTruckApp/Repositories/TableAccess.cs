@@ -14,19 +14,32 @@ internal static class TableAccess
     {
         var rows = new List<object[]>();
 
-        if (FileRepository.ReadFile(tableName, out string content) != FileResult.Success)
+        FileResult result = FileRepository.ReadFile(tableName, out string content);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"ReadRows: Table={tableName}, Read result={result}");
+
+        if (result != FileResult.Success)
         {
             return rows;
         }
 
-        string[] lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+        string[] lines = content.Split(
+            new[] { "\r\n", "\n" },
+            StringSplitOptions.RemoveEmptyEntries);
 
         if (lines.Length == 0)
         {
+            System.Diagnostics.Debug.WriteLine("Table file is empty.");
             return rows;
         }
 
+        System.Diagnostics.Debug.WriteLine($"Raw header: {lines[0]}");
+
         TableColumn[] columns = Serializer.DeserializeHeader(lines[0]);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"Deserialized header column count: {columns.Length}");
 
         for (int i = 1; i < lines.Length; i++)
         {
@@ -35,7 +48,15 @@ internal static class TableAccess
                 continue;
             }
 
-            rows.Add(Serializer.DeserializeRow(lines[i], columns));
+            System.Diagnostics.Debug.WriteLine($"Raw row {i}: {lines[i]}");
+
+            object[] row = Serializer.DeserializeRow(lines[i], columns);
+
+            System.Diagnostics.Debug.WriteLine(
+                $"Deserialized row {i}: Columns={row.Length}, " +
+                $"Values={string.Join(" | ", row)}");
+
+            rows.Add(row);
         }
 
         return rows;
@@ -62,19 +83,37 @@ internal static class TableAccess
 
     public static bool ReplaceRow(string tableName, int id, RowValue[] values)
     {
+        System.Diagnostics.Debug.WriteLine(
+            $"ReplaceRow started. Table: {tableName}, ID: {id}, Value count: {values.Length}");
+
         DatabaseEngine engine = DefaultDatabaseContext.Engine;
 
-        if (engine.LoadTable(tableName, out Table table) != DbResult.Success)
+        DbResult loadResult = engine.LoadTable(tableName, out Table table);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"ReplaceRow: LoadTable returned {loadResult}");
+
+        if (loadResult != DbResult.Success)
         {
             return false;
         }
 
-        if (table.ReplaceRowById(id, values) != DbResult.Success)
+        DbResult replaceResult = table.ReplaceRowById(id, values);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"ReplaceRow: ReplaceRowById returned {replaceResult}");
+
+        if (replaceResult != DbResult.Success)
         {
             return false;
         }
 
-        return engine.SaveTable(table) == DbResult.Success;
+        DbResult saveResult = engine.SaveTable(table);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"ReplaceRow: SaveTable returned {saveResult}");
+
+        return saveResult == DbResult.Success;
     }
 
     public static bool DeleteRow(string tableName, int id)

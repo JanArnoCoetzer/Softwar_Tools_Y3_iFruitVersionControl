@@ -17,16 +17,18 @@ namespace SmoothieTruckApp.Front_End
         public CompletedCard()
         {
             InitializeComponent();
-            lblCheck.Text = "";                    // tick (Segoe MDL2 Assets)
+            lblCheck.Text = "\uE73E"; 
         }
 
         public void SetCompleted(string ticketNo, string itemsSummary,
-                                 DateTime completedAt, int waitMinutes)
+                                 DateTime? completedAt, int? waitMinutes)
         {
             lblDoneTicket.Text = ticketNo;
             lblDoneItems.Text = itemsSummary;
-            lblDoneTime.Text = completedAt.ToString("h:mm tt");
-            lblDoneWait.Text = $"{waitMinutes} min wait";
+            lblDoneTime.Text = completedAt?.ToString("h:mm tt") ?? "Time unknown";
+            lblDoneWait.Text = waitMinutes.HasValue
+                ? $"{waitMinutes.Value} min wait"
+                : "Wait unknown";
         }
     }
 }

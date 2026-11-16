@@ -10,6 +10,7 @@ using SmoothieTruckApp.Models;
 using SmoothieTruckApp.Repositories;
 using SmoothieTruckApp.Services;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace SmoothieTruckApp.Front_End
 {
@@ -35,12 +36,21 @@ namespace SmoothieTruckApp.Front_End
 
         private void LoadOrders()
         {
+
+
             ClearCards(flowInProgress);
             ClearCards(flowCompleted);
 
             List<Order> orders = OrderRepository.GetAll();
             List<Order> queue = QueueService.GetInProgress(orders);
             Dictionary<int, int> waits = QueueService.CalculateWaitTimes(queue);
+
+            foreach (Order order in orders)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"Loaded order: {order.Id}, Complete: {order.Complete}, Lines: {order.Lines.Count}");
+            }
+
 
             foreach (Order order in queue)
             {
@@ -86,9 +96,13 @@ namespace SmoothieTruckApp.Front_End
         }
 
         public void AddCompleted(string ticketNo, string itemsSummary,
-                                 DateTime completedAt, int waitMinutes)
+                         DateTime? completedAt, int? waitMinutes)
         {
-            var done = new CompletedCard { Margin = new Padding(0, 0, 0, 10) };
+            var done = new CompletedCard
+            {
+                Margin = new Padding(0, 0, 0, 10)
+            };
+
             done.SetCompleted(ticketNo, itemsSummary, completedAt, waitMinutes);
 
             flowCompleted.Controls.Add(done);
@@ -101,11 +115,23 @@ namespace SmoothieTruckApp.Front_End
         {
             BeginInvoke(new Action(() =>
             {
-                if (card.Tag is int orderId)
+                if (card.Tag is not int orderId)
                 {
-                    QueueService.Complete(orderId, card.Minutes);
+                    return;
                 }
 
+                if (!OrderRepository.MarkComplete(orderId))
+                {
+                    MessageBox.Show(
+                        "The order could not be marked as complete.",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+
+                    return;
+                }
+
+                QueueService.Complete(orderId, card.Minutes);
                 LoadOrders();
             }));
         }

@@ -12,17 +12,32 @@ internal static class QueueService
     public static List<Order> GetInProgress(List<Order> orders)
     {
         return orders
-            .Where(o => !completed.ContainsKey(o.Id))
+            .Where(o => !o.Complete)
             .OrderBy(o => o.Id)
             .ToList();
     }
 
-    public static List<(Order Order, DateTime CompletedAt, int WaitMinutes)> GetCompleted(List<Order> orders)
+    public static List<(Order Order, DateTime? CompletedAt, int? WaitMinutes)>
+     GetCompleted(List<Order> orders)
     {
         return orders
-            .Where(o => completed.ContainsKey(o.Id))
-            .Select(o => (o, completed[o.Id].CompletedAt, completed[o.Id].WaitMinutes))
-            .OrderBy(c => c.CompletedAt)
+            .Where(o => o.Complete)
+            .Select(o =>
+            {
+                if (completed.TryGetValue(o.Id, out var details))
+                {
+                    return (
+                        Order: o,
+                        CompletedAt: (DateTime?)details.CompletedAt,
+                        WaitMinutes: (int?)details.WaitMinutes);
+                }
+
+                return (
+                    Order: o,
+                    CompletedAt: (DateTime?)null,
+                    WaitMinutes: (int?)null);
+            })
+            .OrderBy(c => c.Order.Id)
             .ToList();
     }
 
