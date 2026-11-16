@@ -34,6 +34,9 @@
             btnSaveChanges = new Button();
             btnAddIngredient = new Button();
             txtAmount = new TextBox();
+            cboUnit = new ComboBox();
+            txtPrice = new TextBox();
+            lblPriceCaption = new Label();
             txtIngredientName = new TextBox();
             lblAmountCaption = new Label();
             lblIngredientCaption = new Label();
@@ -86,6 +89,9 @@
             pnlEditForm.Controls.Add(btnSaveChanges);
             pnlEditForm.Controls.Add(btnAddIngredient);
             pnlEditForm.Controls.Add(txtAmount);
+            pnlEditForm.Controls.Add(cboUnit);
+            pnlEditForm.Controls.Add(txtPrice);
+            pnlEditForm.Controls.Add(lblPriceCaption);
             pnlEditForm.Controls.Add(txtIngredientName);
             pnlEditForm.Controls.Add(lblAmountCaption);
             pnlEditForm.Controls.Add(lblIngredientCaption);
@@ -126,18 +132,50 @@
             txtAmount.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtAmount.Location = new Point(584, 28);
             txtAmount.Name = "txtAmount";
-            txtAmount.Size = new Size(88, 23);
+            txtAmount.Size = new Size(48, 23);
             txtAmount.TabIndex = 4;
             txtAmount.Text = "0";
             txtAmount.TextAlign = HorizontalAlignment.Right;
-            // 
+            //
+            // cboUnit
+            //
+            cboUnit.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cboUnit.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboUnit.Items.AddRange(new object[] { "g", "ml" });
+            cboUnit.Location = new Point(636, 28);
+            cboUnit.Name = "cboUnit";
+            cboUnit.Size = new Size(40, 23);
+            cboUnit.TabIndex = 5;
+            //
+            // txtPrice
+            //
+            txtPrice.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtPrice.Location = new Point(484, 28);
+            txtPrice.Name = "txtPrice";
+            txtPrice.Size = new Size(92, 23);
+            txtPrice.TabIndex = 2;
+            txtPrice.Text = "0.00";
+            txtPrice.TextAlign = HorizontalAlignment.Right;
+            //
+            // lblPriceCaption
+            //
+            lblPriceCaption.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblPriceCaption.AutoSize = true;
+            lblPriceCaption.Font = new Font("Segoe UI", 6.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPriceCaption.ForeColor = Color.FromArgb(120, 124, 145);
+            lblPriceCaption.Location = new Point(484, 10);
+            lblPriceCaption.Name = "lblPriceCaption";
+            lblPriceCaption.Size = new Size(34, 12);
+            lblPriceCaption.TabIndex = 7;
+            lblPriceCaption.Text = "PRICE";
+            //
             // txtIngredientName
             // 
             txtIngredientName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtIngredientName.BorderStyle = BorderStyle.FixedSingle;
             txtIngredientName.Location = new Point(56, 28);
             txtIngredientName.Name = "txtIngredientName";
-            txtIngredientName.Size = new Size(520, 23);
+            txtIngredientName.Size = new Size(420, 23);
             txtIngredientName.TabIndex = 3;
             txtIngredientName.Text = "e.g. Chia seeds";
             // 
@@ -148,9 +186,9 @@
             lblAmountCaption.ForeColor = Color.FromArgb(120, 124, 145);
             lblAmountCaption.Location = new Point(584, 10);
             lblAmountCaption.Name = "lblAmountCaption";
-            lblAmountCaption.Size = new Size(86, 12);
+            lblAmountCaption.Size = new Size(46, 12);
             lblAmountCaption.TabIndex = 2;
-            lblAmountCaption.Text = "AMOUNT (GRAMS)";
+            lblAmountCaption.Text = "AMOUNT";
             // 
             // lblIngredientCaption
             // 
@@ -323,6 +361,9 @@
         private Label lblIngredientCaption;
         private Panel pnlEditLine;
         private TextBox txtAmount;
+        private ComboBox cboUnit;
+        private TextBox txtPrice;
+        private Label lblPriceCaption;
         private TextBox txtIngredientName;
         private Button btnSaveChanges;
         private Button btnAddIngredient;

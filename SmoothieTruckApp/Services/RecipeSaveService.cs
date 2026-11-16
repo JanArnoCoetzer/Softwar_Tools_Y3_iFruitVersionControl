@@ -21,19 +21,44 @@ internal static class RecipeSaveService
         int? itemId,
         string name,
         string category,
-        IReadOnlyList<(string Name, int Grams)> ingredients)
+        decimal price,
+        IReadOnlyList<(string Name, int Amount, string Unit)> ingredients)
     {
         lock (SaveLock)
         {
-            return SaveInternal(itemId, name, category, ingredients);
+            return SaveInternal(itemId, name, category, price, ingredients);
         }
+    }
+
+    //card amounts are g or ml, stock is stored in kg/g or l/ml
+    internal static decimal ToStockQuantity(
+        string ingredientName,
+        int amount,
+        string cardUnit,
+        string stockUnit)
+    {
+        string unit = cardUnit.Trim().ToLowerInvariant();
+
+        return (unit, stockUnit.Trim().ToLowerInvariant()) switch
+        {
+            ("g", "kg") or ("ml", "l") => amount / 1000m,
+            ("g", "g") or ("ml", "ml") => amount,
+
+            _ => throw new InvalidOperationException(
+                $"'{ingredientName}' is stocked in '{stockUnit}', " +
+                $"so it can't be entered in '{cardUnit}'. " +
+                (stockUnit.Trim().ToLowerInvariant() is "l" or "ml"
+                    ? "Use ml."
+                    : "Use g."))
+        };
     }
 
     private static int SaveInternal(
         int? itemId,
         string name,
         string category,
-        IReadOnlyList<(string Name, int Grams)> ingredients)
+        decimal price,
+        IReadOnlyList<(string Name, int Amount, string Unit)> ingredients)
     {
         name = name.Trim();
         category = category.Trim();
@@ -44,15 +69,26 @@ internal static class RecipeSaveService
         if (string.IsNullOrWhiteSpace(category))
             throw new InvalidOperationException("Enter a category.");
 
+        if (price <= 0)
+            throw new InvalidOperationException(
+                "Enter a price greater than 0.");
+
         if (ingredients.Count == 0)
             throw new InvalidOperationException(
                 "Add at least one ingredient.");
 
         if (ingredients.Any(i =>
-                string.IsNullOrWhiteSpace(i.Name) || i.Grams <= 0))
+                string.IsNullOrWhiteSpace(i.Name) || i.Amount <= 0))
         {
             throw new InvalidOperationException(
                 "Each ingredient needs a name and a positive amount.");
+        }
+
+        if (ingredients.Any(i =>
+                i.Unit?.Trim().ToLowerInvariant() is not ("g" or "ml")))
+        {
+            throw new InvalidOperationException(
+                "Each ingredient amount must be in g or ml.");
         }
 
         // Capture the files before making changes.
@@ -88,16 +124,27 @@ internal static class RecipeSaveService
                 .GroupBy(
                     i => i.Name.Trim(),
                     StringComparer.OrdinalIgnoreCase)
-                .Select(group => (
-                    Name: group.Key,
-                    Grams: group.Sum(i => (decimal)i.Grams)))
+                .Select(group =>
+                {
+                    if (group.Select(i => i.Unit.Trim().ToLowerInvariant()).Distinct().Count() > 1)
+                    {
+                        throw new InvalidOperationException(
+                            $"'{group.Key}' is entered in both g and ml. Use one unit.");
+                    }
+
+                    return (
+                        Name: group.Key,
+                        Amount: group.Sum(i => i.Amount),
+                        Unit: group.First().Unit.Trim().ToLowerInvariant());
+                })
                 .ToList();
 
             // Resolve ingredients and units before writing anything.
             var resolved = new List<(
                 string Name,
                 int? StockId,
-                decimal QuantityRequired)>();
+                decimal QuantityRequired,
+                string NewStockUnit)>();
 
             foreach (var ingredient in requestedIngredients)
             {
@@ -117,32 +164,25 @@ internal static class RecipeSaveService
 
                 if (matches.Count == 0)
                 {
+                    //new stock is kept in kg or l like the rest of the stock table
+                    string newUnit = ingredient.Unit == "ml" ? "l" : "kg";
+
                     resolved.Add((
                         ingredient.Name,
                         null,
-                        ingredient.Grams / 1000m));
+                        ToStockQuantity(ingredient.Name, ingredient.Amount, ingredient.Unit, newUnit),
+                        newUnit));
 
                     continue;
                 }
 
                 var existing = matches[0];
 
-                decimal quantityRequired =
-                    existing.Unit.Trim().ToLowerInvariant() switch
-                    {
-                        "kg" => ingredient.Grams / 1000m,
-                        "g" => ingredient.Grams,
-
-                        _ => throw new InvalidOperationException(
-                            $"'{existing.Name}' uses '{existing.Unit}', " +
-                            "but this recipe form accepts grams only. " +
-                            "Add a unit selector before saving this ingredient.")
-                    };
-
                 resolved.Add((
                     existing.Name,
                     existing.Id,
-                    quantityRequired));
+                    ToStockQuantity(existing.Name, ingredient.Amount, ingredient.Unit, existing.Unit),
+                    existing.Unit));
             }
 
             int savedItemId;
@@ -152,7 +192,7 @@ internal static class RecipeSaveService
                 var existingItem = menuItems.Single(
                     i => i.Id == itemId.Value);
 
-                // Preserve the existing price and category colour.
+                // Preserve the existing category colour.
                 Require(
                     TableAccess.ReplaceRow(
                         "item_table",
@@ -160,7 +200,7 @@ internal static class RecipeSaveService
                         new[]
                         {
                             TableAccess.Text(name),
-                            TableAccess.Number(existingItem.Price),
+                            TableAccess.Number(price),
                             TableAccess.Text(category),
                             TableAccess.Text(
                                 System.Drawing.ColorTranslator.ToHtml(
@@ -179,7 +219,7 @@ internal static class RecipeSaveService
                 Require(
                     MenuItemRepository.Add(
                         name,
-                        0.00m,
+                        price,
                         category,
                         "#7C3AED"),
                     "Could not create the menu item.");
@@ -211,7 +251,7 @@ internal static class RecipeSaveService
                         StockRepository.Add(
                             ingredient.Name,
                             0m,
-                            "kg"),
+                            ingredient.NewStockUnit),
                         $"Could not create '{ingredient.Name}' in stock.");
 
                     stockId = StockRepository.GetAll()

@@ -46,6 +46,8 @@ public class QueueServiceTests
     public void Complete_MovesOrderToCompleted()
     {
         var orders = new List<Order> { MakeOrder(301, 2), MakeOrder(302, 1) };
+        //complete now comes from the db, MarkComplete sets it there
+        orders[0].Complete = true;
 
         QueueService.Complete(301, 8);
 
@@ -58,16 +60,12 @@ public class QueueServiceTests
     }
 
     [Fact]
-    public void GetCompleted_SortsByTimeCompleted()
+    public void GetCompleted_SortsByTicketNumber()
     {
-        var orders = new List<Order> { MakeOrder(401, 1), MakeOrder(402, 1) };
+        var orders = new List<Order> { MakeOrder(402, 1), MakeOrder(401, 1) };
+        orders.ForEach(o => o.Complete = true);
 
-        QueueService.Complete(402, 4);
-        //small gap so the two completed times are different
-        Thread.Sleep(20);
-        QueueService.Complete(401, 4);
-
-        Assert.Equal(new List<int> { 402, 401 }, QueueService.GetCompleted(orders).Select(c => c.Order.Id).ToList());
+        Assert.Equal(new List<int> { 401, 402 }, QueueService.GetCompleted(orders).Select(c => c.Order.Id).ToList());
     }
 }
 //all tests return as successful
