@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
+using SmoothieTruckApp.Models;
+using SmoothieTruckApp.Repositories;
+using SmoothieTruckApp.Services;
 
 namespace SmoothieTruckApp.Front_End
 {
@@ -16,6 +22,8 @@ namespace SmoothieTruckApp.Front_End
             Color.FromArgb(245, 158, 11),   // amber
             Color.FromArgb(249, 115, 22),   // orange
         };
+
+        private static readonly CultureInfo Money = CultureInfo.GetCultureInfo("en-US");
 
         private bool showingWeek = true;
 
@@ -39,8 +47,64 @@ namespace SmoothieTruckApp.Front_End
             statAvgOrder.SetIcon("#", Color.FromArgb(207, 250, 254), Color.FromArgb(8, 145, 178));
             statTopBlend.SetIcon("★", Color.FromArgb(254, 243, 226), Color.FromArgb(217, 119, 6));
 
-            AddSampleData();   // TEMPORARY: delete this line when the database is connected
+            //reload every time the page is opened so new completed orders show
+            ParentChanged += (s, e) =>
+            {
+                if (Parent != null) LoadRevenue();
+            };
+
             ApplyPeriodStyle();
+        }
+
+        public void LoadRevenue()
+        {
+            List<Order> orders;
+
+            try
+            {
+                orders = OrderRepository.GetAll();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not load orders:\n{ex.Message}", "Load failed",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            DateTime today = DateTime.Today;
+            DateTime tomorrow = today.AddDays(1);
+
+            //today is compared with the same day last week
+            decimal todaySales = RevenueService.TotalSales(orders, today, tomorrow);
+            decimal lastWeekSales = RevenueService.TotalSales(orders, today.AddDays(-7), today.AddDays(-6));
+            decimal? change = RevenueService.PercentChange(todaySales, lastWeekSales);
+
+            SetTotalSales(todaySales.ToString("C", Money),
+                change.HasValue ? $"{(change.Value >= 0 ? "+" : "")}{change.Value}%" : "",
+                $"from last {today:dddd}");
+
+            int todayCount = RevenueService.Sales(orders, today, tomorrow).Count;
+            SetAverageOrder(RevenueService.AverageOrder(orders, today, tomorrow).ToString("C", Money),
+                $"{todayCount} completed orders");
+
+            DateTime start = showingWeek ? RevenueService.WeekStart(today) : RevenueService.MonthStart(today);
+            int days = showingWeek ? 7 : DateTime.DaysInMonth(today.Year, today.Month);
+            DateTime end = start.AddDays(days);
+
+            var top = RevenueService.TopBlends(orders, start, end, 4);
+
+            if (top.Count > 0)
+                SetTopBlend(top[0].Name, $"{top[0].Units} sold · {top[0].Revenue.ToString("C", Money)} revenue");
+            else
+                SetTopBlend("None yet", showingWeek ? "No sales this week" : "No sales this month");
+
+            SetTopBlends(top.ToArray());
+
+            var daily = RevenueService.DailyTotals(orders, start, days);
+
+            SetTrend(daily.Select(d => showingWeek ? d.Day.ToString("ddd", Money) : d.Day.Day.ToString()).ToArray(),
+                daily.Select(d => (double)d.Total).ToArray(),
+                daily.Sum(d => d.Total).ToString("C0", Money));
         }
 
         public void SetTotalSales(string value, string delta, string subText)
@@ -100,6 +164,7 @@ namespace SmoothieTruckApp.Front_End
             if (week == showingWeek) return;
             showingWeek = week;
             ApplyPeriodStyle();
+            LoadRevenue();
             PeriodChanged?.Invoke(this, week);
         }
 
@@ -120,24 +185,6 @@ namespace SmoothieTruckApp.Front_End
         {
             foreach (Control c in flowBlends.Controls)
                 c.Width = flowBlends.ClientSize.Width - c.Margin.Horizontal;
-        }
-
-        // TEMPORARY sample data copied from the mockup
-        private void AddSampleData()
-        {
-            SetTotalSales("$1,284.50", "+12.8%", "from last Monday");
-            SetAverageOrder("$18.35", "70 completed orders");
-            SetTopBlend("Berry Blast", "24 sold · $210.00 revenue");
-
-            SetTrend(new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" },
-                     new[] { 800.0, 950.0, 900.0, 1100.0, 1300.0, 1500.0, 1090.0 },
-                     "$7,640");
-
-            SetTopBlends(
-                ("Berry Blast", 24, 210.00m),
-                ("Green Machine", 19, 190.00m),
-                ("Tropical Sunrise", 15, 142.50m),
-                ("Mango Tango", 12, 108.00m));
         }
     }
 }
