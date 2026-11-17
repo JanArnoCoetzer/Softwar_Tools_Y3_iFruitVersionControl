@@ -319,7 +319,7 @@
             lblWeekTotal.Name = "lblWeekTotal";
             lblWeekTotal.Size = new Size(120, 22);
             lblWeekTotal.TabIndex = 3;
-            lblWeekTotal.Text = "$7,640";
+            lblWeekTotal.Text = "€7,640";
             lblWeekTotal.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblWeekCaption

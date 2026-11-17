@@ -25,7 +25,7 @@ namespace SmoothieTruckApp.Front_End
             lblRank.Text = rank.ToString();
             lblBlendName.Text = name;
             lblBlendSold.Text = $"{unitsSold} sold";
-            lblRevenue.Text = $"${revenue:N2}";
+            lblRevenue.Text = $"€{revenue:N2}";
 
             pnlBarFill.FillColor = barColor;
             percent = Math.Max(0, Math.Min(100, percentOfTop));

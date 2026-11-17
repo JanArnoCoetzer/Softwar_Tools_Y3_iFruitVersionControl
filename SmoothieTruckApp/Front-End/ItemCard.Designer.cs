@@ -199,7 +199,7 @@
             lblPrice.Name = "lblPrice";
             lblPrice.Size = new Size(377, 40);
             lblPrice.TabIndex = 7;
-            lblPrice.Text = "$0.00";
+            lblPrice.Text = "€0.00";
             lblPrice.TextAlign = ContentAlignment.BottomLeft;
             // 
             // pnlAdd

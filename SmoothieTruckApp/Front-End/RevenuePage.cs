@@ -23,8 +23,6 @@ namespace SmoothieTruckApp.Front_End
             Color.FromArgb(249, 115, 22),   // orange
         };
 
-        private static readonly CultureInfo Money = CultureInfo.GetCultureInfo("en-US");
-
         private bool showingWeek = true;
 
         public event EventHandler<bool>? PeriodChanged;
@@ -42,7 +40,7 @@ namespace SmoothieTruckApp.Front_End
 
             lblRevenueSub.Text = $"Sales performance for {DateTime.Now:dddd, MMMM d}";
 
-            statTotalSales.SetIcon("$", Color.FromArgb(237, 233, 254), Color.FromArgb(124, 58, 237));
+            statTotalSales.SetIcon("€", Color.FromArgb(237, 233, 254), Color.FromArgb(124, 58, 237));
             statTotalSales.SetHighlight(true);
             statAvgOrder.SetIcon("#", Color.FromArgb(207, 250, 254), Color.FromArgb(8, 145, 178));
             statTopBlend.SetIcon("★", Color.FromArgb(254, 243, 226), Color.FromArgb(217, 119, 6));
@@ -79,12 +77,12 @@ namespace SmoothieTruckApp.Front_End
             decimal lastWeekSales = RevenueService.TotalSales(orders, today.AddDays(-7), today.AddDays(-6));
             decimal? change = RevenueService.PercentChange(todaySales, lastWeekSales);
 
-            SetTotalSales(todaySales.ToString("C", Money),
+            SetTotalSales(Euro(todaySales),
                 change.HasValue ? $"{(change.Value >= 0 ? "+" : "")}{change.Value}%" : "",
                 $"from last {today:dddd}");
 
             int todayCount = RevenueService.Sales(orders, today, tomorrow).Count;
-            SetAverageOrder(RevenueService.AverageOrder(orders, today, tomorrow).ToString("C", Money),
+            SetAverageOrder(Euro(RevenueService.AverageOrder(orders, today, tomorrow)),
                 $"{todayCount} completed orders");
 
             DateTime start = showingWeek ? RevenueService.WeekStart(today) : RevenueService.MonthStart(today);
@@ -94,7 +92,7 @@ namespace SmoothieTruckApp.Front_End
             var top = RevenueService.TopBlends(orders, start, end, 4);
 
             if (top.Count > 0)
-                SetTopBlend(top[0].Name, $"{top[0].Units} sold · {top[0].Revenue.ToString("C", Money)} revenue");
+                SetTopBlend(top[0].Name, $"{top[0].Units} sold · {Euro(top[0].Revenue)} revenue");
             else
                 SetTopBlend("None yet", showingWeek ? "No sales this week" : "No sales this month");
 
@@ -102,9 +100,14 @@ namespace SmoothieTruckApp.Front_End
 
             var daily = RevenueService.DailyTotals(orders, start, days);
 
-            SetTrend(daily.Select(d => showingWeek ? d.Day.ToString("ddd", Money) : d.Day.Day.ToString()).ToArray(),
+            SetTrend(daily.Select(d => showingWeek ? d.Day.ToString("ddd", CultureInfo.InvariantCulture) : d.Day.Day.ToString()).ToArray(),
                 daily.Select(d => (double)d.Total).ToArray(),
-                daily.Sum(d => d.Total).ToString("C0", Money));
+                Euro(daily.Sum(d => d.Total), 0));
+        }
+
+        private static string Euro(decimal value, int decimals = 2)
+        {
+            return "€" + value.ToString("N" + decimals, CultureInfo.InvariantCulture);
         }
 
         public void SetTotalSales(string value, string delta, string subText)

@@ -306,7 +306,7 @@
             lblTotal.Name = "lblTotal";
             lblTotal.Size = new Size(171, 47);
             lblTotal.TabIndex = 6;
-            lblTotal.Text = "$0.00";
+            lblTotal.Text = "€0.00";
             lblTotal.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblTotalText
@@ -340,7 +340,7 @@
             lblTax.Name = "lblTax";
             lblTax.Size = new Size(114, 27);
             lblTax.TabIndex = 3;
-            lblTax.Text = "$0.00";
+            lblTax.Text = "€0.00";
             lblTax.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblTaxText
@@ -364,7 +364,7 @@
             lblSubtotal.Name = "lblSubtotal";
             lblSubtotal.Size = new Size(114, 27);
             lblSubtotal.TabIndex = 1;
-            lblSubtotal.Text = "$0.00";
+            lblSubtotal.Text = "€0.00";
             lblSubtotal.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblSubtotalText

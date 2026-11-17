@@ -147,9 +147,9 @@ namespace SmoothieTruckApp.Front_End
         {
             lblTicket.Text = $"Ticket #{currentOrder.Id}";
             lblCount.Text = $"{currentOrder.ItemCount} Items";
-            lblSubtotal.Text = $"${currentOrder.Subtotal:0.00}";
-            lblTax.Text = $"${currentOrder.Tax:0.00}";
-            lblTotal.Text = $"${currentOrder.Total:0.00}";
+            lblSubtotal.Text = $"€{currentOrder.Subtotal:0.00}";
+            lblTax.Text = $"€{currentOrder.Tax:0.00}";
+            lblTotal.Text = $"€{currentOrder.Total:0.00}";
 
             // Toggles empty state indicator
             lblEmpty.Visible = currentOrder.ItemCount == 0;
@@ -210,7 +210,7 @@ namespace SmoothieTruckApp.Front_End
 
                 var lblLinePrice = new Label
                 {
-                    Text = $"${line.LineTotal:0.00}",
+                    Text = $"€{line.LineTotal:0.00}",
                     Dock = DockStyle.Right,
                     Width = 60,
                     TextAlign = ContentAlignment.MiddleRight

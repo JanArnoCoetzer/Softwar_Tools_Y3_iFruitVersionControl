@@ -25,7 +25,7 @@ namespace SmoothieTruckApp.Front_End
         {
             Item = item;
             lblName.Text = item.Name;
-            lblPrice.Text = $"${item.Price:0.00}";
+            lblPrice.Text = $"€{item.Price:0.00}";
             lblIngredients.Text = string.Empty;
             ItemCatagory(item.CatagoryName, item.CatagoryColor);
         }
@@ -38,7 +38,7 @@ namespace SmoothieTruckApp.Front_End
         public void SetAvailable(bool available)
         {
             btnAdd.Enabled = available;
-            lblPrice.Text = available ? $"${Item?.Price:0.00}" : "Out of stock";
+            lblPrice.Text = available ? $"€{Item?.Price:0.00}" : "Out of stock";
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

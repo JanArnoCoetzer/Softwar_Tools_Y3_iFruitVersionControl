@@ -84,7 +84,7 @@
             lblStatIcon.Name = "lblStatIcon";
             lblStatIcon.Size = new Size(32, 32);
             lblStatIcon.TabIndex = 0;
-            lblStatIcon.Text = "$";
+            lblStatIcon.Text = "€";
             lblStatIcon.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblStatCaption
@@ -107,7 +107,7 @@
             lblStatValue.Name = "lblStatValue";
             lblStatValue.Size = new Size(106, 28);
             lblStatValue.TabIndex = 2;
-            lblStatValue.Text = "$1,284.50";
+            lblStatValue.Text = "€1,284.50";
             // 
             // flowStatSub
             // 

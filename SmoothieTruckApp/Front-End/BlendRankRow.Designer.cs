@@ -96,7 +96,7 @@
             lblRevenue.Name = "lblRevenue";
             lblRevenue.Size = new Size(56, 16);
             lblRevenue.TabIndex = 3;
-            lblRevenue.Text = "$210.00";
+            lblRevenue.Text = "€210.00";
             lblRevenue.TextAlign = ContentAlignment.MiddleRight;
             // 
             // pnlBarTrack
