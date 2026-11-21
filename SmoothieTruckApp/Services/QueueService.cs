@@ -24,6 +24,15 @@ internal static class QueueService
             .Where(o => o.Complete)
             .Select(o =>
             {
+                //saved times come from the db so they still show after a restart
+                if (o.OrderedAt.HasValue && o.CompletedAt.HasValue)
+                {
+                    return (
+                        Order: o,
+                        CompletedAt: o.CompletedAt,
+                        WaitMinutes: (int?)Math.Max(0, (int)(o.CompletedAt.Value - o.OrderedAt.Value).TotalMinutes));
+                }
+
                 if (completed.TryGetValue(o.Id, out var details))
                 {
                     return (

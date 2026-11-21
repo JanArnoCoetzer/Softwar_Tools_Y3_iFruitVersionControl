@@ -216,7 +216,10 @@ namespace SmoothieTruckApp.Front_End
 
         private void UpdateDisplay()
         {
-            lblStockGrams.Text = $"{grams:N0} g";
+            //1000 g and over shows as kg
+            lblStockGrams.Text = grams >= 1000
+                ? $"{(grams / 1000m).ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)} kg"
+                : $"{grams} g";
 
             switch (Status)
             {

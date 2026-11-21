@@ -146,9 +146,9 @@
             lblStockStep.BackColor = Color.Transparent;
             lblStockStep.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblStockStep.ForeColor = Color.FromArgb(17, 17, 27);
-            lblStockStep.Location = new Point(746, 15);
+            lblStockStep.Location = new Point(743, 15);
             lblStockStep.Name = "lblStockStep";
-            lblStockStep.Size = new Size(30, 16);
+            lblStockStep.Size = new Size(36, 16);
             lblStockStep.TabIndex = 7;
             lblStockStep.Text = "100g";
             lblStockStep.TextAlign = ContentAlignment.MiddleCenter;

@@ -44,6 +44,7 @@
             lblColOnHand = new Label();
             lblColStatus = new Label();
             lblColAdjust = new Label();
+            lblColAdjustNote = new Label();
             flowStock = new FlowLayoutPanel();
             pnlStockHeader.SuspendLayout();
             pnlAttention.SuspendLayout();
@@ -193,6 +194,7 @@
             // pnlColumnHeader
             // 
             pnlColumnHeader.BackColor = Color.FromArgb(249, 250, 252);
+            pnlColumnHeader.Controls.Add(lblColAdjustNote);
             pnlColumnHeader.Controls.Add(lblColAdjust);
             pnlColumnHeader.Controls.Add(lblColStatus);
             pnlColumnHeader.Controls.Add(lblColOnHand);
@@ -200,7 +202,7 @@
             pnlColumnHeader.Dock = DockStyle.Top;
             pnlColumnHeader.Location = new Point(3, 65);
             pnlColumnHeader.Name = "pnlColumnHeader";
-            pnlColumnHeader.Size = new Size(954, 30);
+            pnlColumnHeader.Size = new Size(954, 40);
             pnlColumnHeader.TabIndex = 1;
             // 
             // lblColIngredient
@@ -239,15 +241,27 @@
             lblColAdjust.Size = new Size(120, 15);
             lblColAdjust.TabIndex = 3;
             lblColAdjust.Text = "STOCK ADJUSTMENT";
-            // 
+            //
+            // lblColAdjustNote
+            //
+            lblColAdjustNote.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblColAdjustNote.AutoSize = true;
+            lblColAdjustNote.Font = new Font("Segoe UI", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblColAdjustNote.ForeColor = Color.FromArgb(120, 124, 145);
+            lblColAdjustNote.Location = new Point(582, 24);
+            lblColAdjustNote.Name = "lblColAdjustNote";
+            lblColAdjustNote.Size = new Size(150, 12);
+            lblColAdjustNote.TabIndex = 4;
+            lblColAdjustNote.Text = "Each click adds or removes 100g";
+            //
             // flowStock
-            // 
+            //
             flowStock.AutoScroll = true;
             flowStock.Dock = DockStyle.Fill;
             flowStock.FlowDirection = FlowDirection.TopDown;
-            flowStock.Location = new Point(3, 95);
+            flowStock.Location = new Point(3, 105);
             flowStock.Name = "flowStock";
-            flowStock.Size = new Size(954, 464);
+            flowStock.Size = new Size(954, 454);
             flowStock.TabIndex = 2;
             flowStock.WrapContents = false;
             // 
@@ -287,6 +301,7 @@
         private Label lblInventoryTitle;
         private Panel pnlColumnHeader;
         private Label lblColAdjust;
+        private Label lblColAdjustNote;
         private Label lblColStatus;
         private Label lblColOnHand;
         private Label lblColIngredient;

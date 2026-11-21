@@ -47,7 +47,7 @@ stages:
       env:
         SONAR_TOKEN: $(SONAR_TOKEN)
 
-    - script: dotnet publish SmoothieTruckApp/SmoothieTruckApp.csproj -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/app/bin/Release/net10.0-windows
+    - script: dotnet publish SmoothieTruckApp/SmoothieTruckApp.csproj -c $(buildConfiguration) -r win-x64 --self-contained true -o $(Build.ArtifactStagingDirectory)/app/bin/Release/net10.0-windows
       displayName: Publish App
 
     - task: CopyFiles@2
@@ -88,3 +88,16 @@ stages:
         versionOption: custom
         versionPublish: 1.0.$(Build.BuildId)
         packagePublishDescription: iBlendit release from build $(Build.BuildNumber)
+
+    - task: GitHubRelease@1
+      displayName: Publish GitHub Release
+      inputs:
+        gitHubConnection: JanArnoCoetzer
+        repositoryName: JanArnoCoetzer/Softwar_Tools_Y3_iFruitVersionControl
+        action: create
+        target: $(Build.SourceVersion)
+        tagSource: userSpecifiedTag
+        tag: v1.0.$(Build.BuildId)
+        title: iBlendit 1.0.$(Build.BuildId)
+        assets: $(Pipeline.Workspace)/iBlendit/iBlendit.zip
+        addChangeLog: true
