@@ -435,3 +435,4 @@ SmoothieTruckApp.Tests/DataBase/
 SmoothieTruckApp/DataBase/DB_Tables/stock_table
 SmoothieTruckApp/DataBase/DB_Tables/ordered_items_table
 SmoothieTruckApp/DataBase/DB_Tables/income_table
+SmoothieTruckApp/DataBase/DB_Tables/*.bak

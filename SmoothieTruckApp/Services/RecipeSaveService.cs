@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SmoothieTruckApp.DataBaseContext;
 using SmoothieTruckApp.DataBaseContext.TableDefinitions;
+using SmoothieTruckApp.Services;
 
 namespace SmoothieTruckApp.Repositories;
 
@@ -63,11 +64,12 @@ internal static class RecipeSaveService
         name = name.Trim();
         category = category.Trim();
 
-        if (string.IsNullOrWhiteSpace(name))
-            throw new InvalidOperationException("Enter a recipe name.");
+        string? textError =
+            InputValidator.CheckText(name, "recipe name") ??
+            InputValidator.CheckText(category, "category");
 
-        if (string.IsNullOrWhiteSpace(category))
-            throw new InvalidOperationException("Enter a category.");
+        if (textError != null)
+            throw new InvalidOperationException(textError);
 
         if (price <= 0)
             throw new InvalidOperationException(
@@ -83,6 +85,13 @@ internal static class RecipeSaveService
             throw new InvalidOperationException(
                 "Each ingredient needs a name and a positive amount.");
         }
+
+        string? ingredientError = ingredients
+            .Select(i => InputValidator.CheckText(i.Name, "ingredient name"))
+            .FirstOrDefault(error => error != null);
+
+        if (ingredientError != null)
+            throw new InvalidOperationException(ingredientError);
 
         if (ingredients.Any(i =>
                 i.Unit?.Trim().ToLowerInvariant() is not ("g" or "ml")))

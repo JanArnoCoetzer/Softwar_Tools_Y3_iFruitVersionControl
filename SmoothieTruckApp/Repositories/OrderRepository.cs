@@ -25,6 +25,13 @@ internal static class OrderRepository
             return 0;
         }
 
+        //copy of the table so a failed save does not leave half an order
+        if (FileRepository.ReadFile(OrderedItemsTable, out string backup)
+            != FileResult.Success)
+        {
+            return 0;
+        }
+
         int orderNumber = GetNextOrderNumber();
 
         order.OrderedAt ??= DateTime.Now;
@@ -48,6 +55,7 @@ internal static class OrderRepository
 
             if (!appended)
             {
+                FileRepository.WriteFile(OrderedItemsTable, backup);
                 return 0;
             }
         }

@@ -25,8 +25,7 @@ namespace SmoothieTruckApp.DataBaseContext.Serialization
                     return decVal.ToString(CultureInfo.InvariantCulture);
                 }
 
-                string strVal = val.ToString();
-                return strVal.Replace(Delimiter.ToString(), EscapedPipe);
+                return Escape(val.ToString() ?? string.Empty);
             });
 
             return string.Join(Delimiter.ToString(), serializedValues);
@@ -80,8 +79,7 @@ namespace SmoothieTruckApp.DataBaseContext.Serialization
 
                         case DataType.STRING:
                         default:
-                            parsedObjects[i] = rawValue.Replace(
-                                EscapedPipe, Delimiter.ToString());
+                            parsedObjects[i] = Unescape(rawValue);
                             break;
                     }
                 }
@@ -146,6 +144,43 @@ namespace SmoothieTruckApp.DataBaseContext.Serialization
 
             var headerFields = columns.Select(col => $"{col.DataName}:{col.VarType}");
             return string.Join($" {Delimiter} ", headerFields);
+        }
+
+        //backslash is escaped first so \p typed by a user is not read back as a pipe
+        private static string Escape(string value)
+        {
+            return value
+                .Replace("\\", "\\\\")
+                .Replace(Delimiter.ToString(), EscapedPipe)
+                .Replace("\r", "\\r")
+                .Replace("\n", "\\n");
+        }
+
+        private static string Unescape(string value)
+        {
+            var result = new StringBuilder(value.Length);
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (value[i] != '\\' || i == value.Length - 1)
+                {
+                    result.Append(value[i]);
+                    continue;
+                }
+
+                char next = value[i + 1];
+
+                switch (next)
+                {
+                    case '\\': result.Append('\\'); i++; break;
+                    case 'p': result.Append(Delimiter); i++; break;
+                    case 'r': result.Append('\r'); i++; break;
+                    case 'n': result.Append('\n'); i++; break;
+                    default: result.Append(value[i]); break;
+                }
+            }
+
+            return result.ToString();
         }
 
         private object GetDefaultValue(DataType type)

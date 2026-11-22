@@ -7,7 +7,8 @@ internal static class AdminService
 {
     public static string? AddStock(string name, decimal quantity, string unit)
     {
-        if (string.IsNullOrWhiteSpace(name)) return "Enter a stock name.";
+        string? nameError = InputValidator.CheckText(name, "stock name");
+        if (nameError != null) return nameError;
         if (string.IsNullOrWhiteSpace(unit)) return "Enter a unit, e.g. kg or l.";
         if (quantity < 0) return "Quantity cannot be negative.";
 

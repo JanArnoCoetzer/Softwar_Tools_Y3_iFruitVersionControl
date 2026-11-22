@@ -102,24 +102,53 @@ namespace SmoothieTruckApp.DataBaseContext.Storage
                 return FileResult.InvalidPath;
             }
 
+            string tempPath = path + ".tmp";
+
             try
             {
                 Directory.CreateDirectory(rootDirectory);
 
+                //written to a temp file first so a crash cannot leave a half written table
                 File.WriteAllText(
-                    path,
+                    tempPath,
                     content ?? string.Empty,
                     Encoding.UTF8);
+
+                if (File.Exists(path))
+                {
+                    //last good copy is kept as a .bak file
+                    File.Replace(tempPath, path, path + ".bak");
+                }
+                else
+                {
+                    File.Move(tempPath, path);
+                }
 
                 return FileResult.Success;
             }
             catch (IOException)
             {
+                DeleteTempFile(tempPath);
                 return FileResult.IOError;
             }
             catch (Exception)
             {
+                DeleteTempFile(tempPath);
                 return FileResult.IOError;
+            }
+        }
+
+        private static void DeleteTempFile(string tempPath)
+        {
+            try
+            {
+                if (File.Exists(tempPath))
+                {
+                    File.Delete(tempPath);
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 
