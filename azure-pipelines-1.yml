@@ -130,6 +130,17 @@ stages:
           1.0.$(Build.BuildId)
           latest
 
+    - powershell: |
+        New-Item -ItemType Directory -Force $(Build.ArtifactStagingDirectory)/docker | Out-Null
+        "Image: rlock111/iblendit:1.0.$(Build.BuildId)`nAlso tagged: latest`nDocker Hub: https://hub.docker.com/r/rlock111/iblendit`nPull: docker pull rlock111/iblendit:1.0.$(Build.BuildId)`nRun: docker run --rm rlock111/iblendit:1.0.$(Build.BuildId)" | Out-File $(Build.ArtifactStagingDirectory)/docker/docker-image.txt -Encoding utf8
+      displayName: Write Image Info
+
+    - task: PublishPipelineArtifact@1
+      displayName: Upload Image Info
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/docker
+        artifact: docker-image
+
 - stage: Container_Deploy
   dependsOn: Docker
   jobs:
