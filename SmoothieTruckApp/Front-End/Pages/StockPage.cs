@@ -23,6 +23,11 @@ namespace SmoothieTruckApp.Front_End
 
             flowStock.ClientSizeChanged += (s, e) => FitRows();
 
+            ParentChanged += (s, e) =>
+            {
+                if (Parent != null) LoadStock();
+            };
+
             LoadStock();
         }
 
