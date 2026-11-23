@@ -112,12 +112,6 @@ stages:
     - download: current
       artifact: iBlendit
 
-    - task: ExtractFiles@1
-      displayName: Unzip App
-      inputs:
-        archiveFilePatterns: $(Pipeline.Workspace)/iBlendit/iBlendit.zip
-        destinationFolder: $(Pipeline.Workspace)/app
-
     - task: Docker@2
       displayName: Build And Push Image
       inputs:
@@ -125,7 +119,7 @@ stages:
         repository: rlock111/iblendit
         command: buildAndPush
         Dockerfile: $(Build.SourcesDirectory)/Dockerfile
-        buildContext: $(Pipeline.Workspace)/app
+        buildContext: $(Pipeline.Workspace)/iBlendit
         tags: |
           1.0.$(Build.BuildId)
           latest
