@@ -1,2 +1,26 @@
 ﻿stock_index PK:INTEGER | name:STRING | quantity:DECIMAL | unit:STRING
-
+1|Banana|18.5|kg
+2|Mango|11.64|kg
+3|Pineapple|9.3|kg
+4|Strawberries|8.4|kg
+5|Blueberries|7.2|kg
+6|Raspberries|5.5|kg
+7|Spinach|4.8|kg
+8|Kale|3.9|kg
+9|Avocado|6.2|kg
+10|Dragonfruit|4.5|kg
+11|Açaí Purée|5|kg
+12|Passionfruit Pulp|4.2|kg
+13|Watermelon|14|kg
+14|Greek Yogurt|10|kg
+15|Honey|2.4|kg
+16|Chia Seeds|1.5|kg
+17|Ginger|0.9|kg
+18|Mint|0.4|kg
+19|Ice|29.76|kg
+20|Orange Juice|15.55|kg
+21|Apple Juice|12|kg
+22|Coconut Water|14|kg
+23|Almond Milk|12|kg
+24|Oat Milk|10|kg
+25|Lime Juice|2.5|kg
