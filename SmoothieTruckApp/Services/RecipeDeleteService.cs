@@ -12,8 +12,8 @@ internal static class RecipeDeleteService
     {
         // Preserve menu items referenced by order history.
         bool usedByOrders = TableAccess
-            .ReadRows("ordered_items_table")
-            .Any(row => (int)row[1] == itemId);
+           .ReadRows("ordered_items_table")
+           .Any(row => (int)row[2] == itemId); // item_index column
 
         if (usedByOrders)
         {

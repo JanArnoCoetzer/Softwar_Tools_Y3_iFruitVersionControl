@@ -10,9 +10,10 @@ using Xunit;
 public class OrderCompletionTests
 {
     private const string OrdersTable = "ordered_items_table";
-    private const string Header = "order_index PK:INTEGER | item_index FK:INTEGER | quantity:INTEGER | complete:BOOLEAN | ordered_at:STRING | completed_at:STRING";
+    private const string Header = "line_index PK:INTEGER | order_index FK:INTEGER | item_index FK:INTEGER | quantity:INTEGER | complete:BOOLEAN | ordered_at:STRING | completed_at:STRING";
 
     private static readonly MenuItem MangoTango = new MenuItem { Id = 1, Name = "Mango Tango", Price = 9.00m };
+    private static readonly MenuItem BerryBlast = new MenuItem { Id = 2, Name = "Berry Blast", Price = 8.50m };
 
     public OrderCompletionTests()
     {
@@ -111,5 +112,54 @@ public class OrderCompletionTests
         Assert.Equal(id, Assert.Single(QueueService.GetInProgress(loaded)).Id);
         Assert.Empty(QueueService.GetCompleted(loaded));
     }
+
+    //bugfix: an order with different smoothies must load back as one ticket, not one per line
+    [Fact]
+    public void GetAll_LoadsMixedOrderAsOneTicket()
+    {
+        var order = new Order();
+        order.AddItem(MangoTango, 2);
+        order.AddItem(BerryBlast);
+
+        int id = OrderRepository.Save(order);
+
+        Order saved = Assert.Single(OrderRepository.GetAll());
+        Assert.Equal(id, saved.Id);
+        Assert.Equal(2, saved.Lines.Count);
+        Assert.Equal(3, saved.ItemCount);
+    }
+
+    //bugfix: completing a mixed order must complete every line, not just the first
+    [Fact]
+    public void MarkComplete_CompletesEveryLineOfMixedOrder()
+    {
+        var order = new Order();
+        order.AddItem(MangoTango);
+        order.AddItem(BerryBlast);
+
+        int id = OrderRepository.Save(order);
+        Assert.True(OrderRepository.MarkComplete(id));
+
+        Order saved = Assert.Single(OrderRepository.GetAll());
+        Assert.True(saved.Complete);
+        Assert.NotNull(saved.CompletedAt);
+        Assert.Empty(QueueService.GetInProgress(new List<Order> { saved }));
+    }
+
+    //bugfix: separate orders still get separate order numbers
+    [Fact]
+    public void Save_KeepsSeparateOrdersApart()
+    {
+        var first = new Order();
+        first.AddItem(MangoTango);
+        first.AddItem(BerryBlast);
+        var second = new Order();
+        second.AddItem(MangoTango);
+
+        int firstId = OrderRepository.Save(first);
+        int secondId = OrderRepository.Save(second);
+
+        Assert.NotEqual(firstId, secondId);
+        Assert.Equal(2, OrderRepository.GetAll().Count);
+    }
 }
-//all tests return as successful

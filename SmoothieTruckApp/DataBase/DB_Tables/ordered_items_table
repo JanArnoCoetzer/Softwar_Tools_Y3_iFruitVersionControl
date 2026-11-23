@@ -1,2 +1,1 @@
-﻿order_index PK:INTEGER | item_index FK:INTEGER | quantity:INTEGER | complete:BOOLEAN | ordered_at:STRING | completed_at:STRING
-
+﻿line_index PK:INTEGER | order_index FK:INTEGER | item_index FK:INTEGER | quantity:INTEGER | complete:BOOLEAN | ordered_at:STRING | completed_at:STRING

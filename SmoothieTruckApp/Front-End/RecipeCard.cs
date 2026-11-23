@@ -19,7 +19,7 @@ namespace SmoothieTruckApp.Front_End
 
         private bool isEditing;
 
-        private readonly List<(string Name, int Amount, string Unit)> ingredients = new();
+        private readonly List<(string Name, int Amount, string Unit)> ingredients = [];
         private List<(string Name, int Amount, string Unit)> snapshot = new();
 
         private string recipeNameSnapshot = string.Empty;
