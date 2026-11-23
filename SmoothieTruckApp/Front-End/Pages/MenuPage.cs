@@ -32,6 +32,11 @@ namespace SmoothieTruckApp.Front_End
             EnableDoubleBuffering(FlowMenu);
             EnableDoubleBuffering(flowOrder);
 
+            ParentChanged += (s, e) =>
+            {
+                if (Parent != null) LoadMenu();
+            };
+
             //MenuItemRepository.SeedIfEmpty();
             LoadMenu();
 

@@ -22,6 +22,11 @@ namespace SmoothieTruckApp.Front_End
             flowRecipes.ClientSizeChanged += (s, e) => FitCards();
             btnAddRecipe.Click += btnAddRecipe_Click;
 
+            ParentChanged += (s, e) =>
+            {
+                if (Parent != null) LoadRecipes();
+            };
+
             LoadRecipes();
         }
 
