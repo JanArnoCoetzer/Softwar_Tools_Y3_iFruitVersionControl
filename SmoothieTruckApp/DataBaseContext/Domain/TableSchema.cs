@@ -31,7 +31,7 @@ namespace SmoothieTruckApp.DataBaseContext.Domain
             RowValue[] values,
             out object[] parsedValues)
         {
-            parsedValues = null;
+            parsedValues = null!;
 
             if (columns[0].VarType != DataType.INTEGER ||
                 values == null ||
@@ -119,7 +119,7 @@ namespace SmoothieTruckApp.DataBaseContext.Domain
     string raw,
     out object value)
         {
-            value = null;
+            value = null!;
 
             if (raw == null)
             {

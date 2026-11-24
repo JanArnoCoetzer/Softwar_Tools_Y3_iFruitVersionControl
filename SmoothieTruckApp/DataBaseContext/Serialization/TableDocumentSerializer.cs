@@ -36,7 +36,7 @@ namespace SmoothieTruckApp.DataBaseContext.Serialization
             string content,
             out Table table)
         {
-            table = null;
+            table = null!;
 
             if (string.IsNullOrWhiteSpace(content))
             {

@@ -44,10 +44,10 @@ public class TableDocumentSerializerTests
     [InlineData("")]
     [InlineData("   ")]
     public void Deserialize_EmptyContent_ReturnsMismatchedStructure(
-        string content)
+        string? content)
     {
         DbResult result =
-            serializer.Deserialize("items", content, out Table table);
+            serializer.Deserialize("items", content!, out Table table);
 
         Assert.Equal(DbResult.MismatchedStructure, result);
         Assert.Null(table);

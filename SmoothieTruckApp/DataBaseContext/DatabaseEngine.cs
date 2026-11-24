@@ -38,7 +38,7 @@ namespace SmoothieTruckApp.DataBaseContext
 
         public DbResult LoadTable(string name, out Table table)
         {
-            table = null;
+            table = null!;
 
             if (string.IsNullOrWhiteSpace(name))
             {

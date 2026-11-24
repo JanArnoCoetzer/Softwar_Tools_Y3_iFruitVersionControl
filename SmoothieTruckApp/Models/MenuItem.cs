@@ -9,6 +9,6 @@ public class MenuItem
     public string Name { get; set; } = string.Empty;
     public decimal Price { get; set; }
 
-    public string CatagoryName { get; set; }
+    public string CatagoryName { get; set; } = string.Empty;
     public Color CatagoryColor { get; set; }
 }

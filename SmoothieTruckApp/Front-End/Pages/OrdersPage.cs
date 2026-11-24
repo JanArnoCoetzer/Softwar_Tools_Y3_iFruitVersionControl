@@ -9,7 +9,6 @@ using SmoothieTruckApp.DataBaseContext;
 using SmoothieTruckApp.Models;
 using SmoothieTruckApp.Repositories;
 using SmoothieTruckApp.Services;
-using System.ComponentModel;
 using System.Diagnostics;
 
 namespace SmoothieTruckApp.Front_End

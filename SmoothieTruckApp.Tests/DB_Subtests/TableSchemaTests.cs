@@ -56,12 +56,12 @@ public class TableSchemaTests
     [InlineData("")]
     [InlineData("abc")]
     public void ParseInput_InvalidDecimal_ReturnsValidationError(
-        string price)
+        string? price)
     {
         DbResult result = schema.ParseInput(new[]
         {
             new RowValue(DataType.STRING, "Mango"),
-            new RowValue(DataType.DECIMAL, price)
+            new RowValue(DataType.DECIMAL, price!)
         }, out _);
 
         Assert.Equal(DbResult.ValidationError, result);
