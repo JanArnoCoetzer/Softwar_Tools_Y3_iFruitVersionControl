@@ -183,7 +183,7 @@ namespace SmoothieTruckApp.DataBaseContext.Storage
             string name,
             out string path)
         {
-            path = null;
+            path = null!;
 
             if (string.IsNullOrWhiteSpace(name) ||
                 name == "." ||

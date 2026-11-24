@@ -86,7 +86,7 @@ public class FileStorageProviderTests : IDisposable
 
         Assert.Equal(
             FileResult.Success,
-            storage.WriteFile("items", null));
+            storage.WriteFile("items", null!));
 
         Assert.Equal(string.Empty, ReadText("items"));
     }
@@ -199,25 +199,25 @@ public class FileStorageProviderTests : IDisposable
     [InlineData(@"..\outside")]
     [InlineData("folder/items")]
     [InlineData(@"folder\items")]
-    public void FileOperations_InvalidName_ReturnInvalidPath(string name)
+    public void FileOperations_InvalidName_ReturnInvalidPath(string? name)
     {
         Assert.Equal(
             FileResult.InvalidPath,
-            storage.CreateFile(name));
+            storage.CreateFile(name!));
 
         Assert.Equal(
             FileResult.InvalidPath,
-            storage.ReadFile(name, out string content));
+            storage.ReadFile(name!, out string content));
 
         Assert.Equal(string.Empty, content);
 
         Assert.Equal(
             FileResult.InvalidPath,
-            storage.WriteFile(name, "test"));
+            storage.WriteFile(name!, "test"));
 
         Assert.Equal(
             FileResult.InvalidPath,
-            storage.DeleteFile(name));
+            storage.DeleteFile(name!));
 
         Assert.False(Directory.Exists(directory));
     }
@@ -249,10 +249,10 @@ public class FileStorageProviderTests : IDisposable
     [InlineData("")]
     [InlineData("   ")]
     public void Constructor_InvalidDirectory_ThrowsArgumentException(
-        string path)
+        string? path)
     {
         Assert.Throws<ArgumentException>(
-            () => new FileStorageProvider(path));
+            () => new FileStorageProvider(path!));
     }
 
     private string ReadText(string name)

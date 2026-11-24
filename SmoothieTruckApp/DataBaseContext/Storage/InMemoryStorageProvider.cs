@@ -36,7 +36,7 @@ namespace SmoothieTruckApp.DataBaseContext.Storage
                 return FileResult.InvalidPath;
             }
 
-            if (!files.TryGetValue(name, out string storedContent))
+            if (!files.TryGetValue(name, out string? storedContent))
             {
                 return FileResult.FileNotFound;
             }

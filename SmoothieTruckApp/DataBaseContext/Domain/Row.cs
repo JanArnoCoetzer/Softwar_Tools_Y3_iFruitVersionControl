@@ -18,7 +18,7 @@ namespace SmoothieTruckApp.DataBaseContext.Domain
             object[] values,
             out Row row)
         {
-            row = null;
+            row = null!;
 
             if (schema == null || !schema.IsValidRecord(values))
             {

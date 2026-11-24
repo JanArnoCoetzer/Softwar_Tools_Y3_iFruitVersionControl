@@ -97,7 +97,7 @@ namespace SmoothieTruckApp.Front_End
         }
 
         // Drags your custom form workspace across your monitor safely using native handles
-        private void Window_MouseDown(object sender, MouseEventArgs e)
+        private void Window_MouseDown(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -159,7 +159,7 @@ namespace SmoothieTruckApp.Front_End
 
         private void UpdateAccentPosition()
         {
-            if (activeButton == null)
+            if (activeButton?.Parent == null || pnlAccent.Parent == null)
                 return;
 
             // Get the selected button's position on the screen
